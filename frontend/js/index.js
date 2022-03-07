@@ -6,14 +6,11 @@ const SERVER = 'http://localhost:8080/';
 // To create a new connection to the signaling server
 socket = io.connect(SERVER);
 
-socket.on('connect', function() {
+socket.on('connect', function () {
     console.log('Connected to server');
-
-    var stream = ss.createStream();
 
     // Send an empty join message to create a new room.
 });
-
 
 
 
@@ -23,9 +20,12 @@ socket.on('connect', function() {
  * - Setup noise on audio
  * - Stream to other client
 */
-async function main(){
+var gain;
+var noiseSpread;
+var audioContext;
+async function main() {
     // Setup audio context to be able to add noise
-    const audioContext = new AudioContext();
+    audioContext = new AudioContext();
 
     // Get streammedia device from user
     const microphone = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -35,10 +35,19 @@ async function main(){
 
     // Load audio worklet processor
     await audioContext.audioWorklet.addModule('/js/white-noise-processor.js');
-    const WhiteNoiseProcessor = new AudioWorkletNode(audioContext, 'white-noise-processor');
+    const whiteNoiseNode = new AudioWorkletNode(audioContext, 'white-noise-processor',
+        {
+            processorOptions: { noise_type: "white" } //you can also pass constructor arguments
+        });
+
+    // Parameters of the whiteNoiseNode
+    gain = whiteNoiseNode.parameters.get('customGain')
+    gain.setValueAtTime(1, audioContext.currentTime);
+    noiseSpread = whiteNoiseNode.parameters.get('noiseSpread')
+    noiseSpread.setValueAtTime(0.02, audioContext.currentTime);
 
     // Connect the source to the processor and the processor to the destination
-    source.connect(WhiteNoiseProcessor).connect(audioContext.destination);
+    source.connect(whiteNoiseNode).connect(audioContext.destination);
 
     // Start the audio context
     audioContext.resume();
