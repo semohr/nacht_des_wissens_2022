@@ -44,9 +44,11 @@ function createPeerConnection() {
         pc = new RTCPeerConnection(PC_CONFIG);
         pc.onicecandidate = onIceCandidate;
         pc.ontrack = ontrack;
-        localStream.getTracks().forEach(function (track) {
-            pc.addTrack(track, localStream);
-        });
+
+        // Add local stream to peer connection
+        var audioTracks = destination.stream.getAudioTracks();
+        var track = audioTracks[0]; //stream only contains one audio track
+        pc.addTrack(track, destination.stream);
         console.log("PeerConnection created");
     } catch (error) {
         console.error("PeerConnection failed: ", error);
@@ -109,17 +111,19 @@ let handleSignalingData = (data) => {
  *
  */
 
-let localStream;
+let destination;
 let remoteStreamElement;
 
 var noiseSpread;
 var gain;
-async function addNoiseToStream() {
+async function getAudio_and_applyNoise() {
     // Setup audio context
     var audioContext = new AudioContext();
 
+    var audioInput = await navigator.mediaDevices.getUserMedia({ audio: true });
+
     // Set up a stream source to extract audio from the microphone
-    const source = audioContext.createMediaStreamSource(localStream);
+    const source = audioContext.createMediaStreamSource(audioInput);
 
     // Create a gain node
     await audioContext.audioWorklet.addModule("/js/white-noise-processor.js");
@@ -131,6 +135,9 @@ async function addNoiseToStream() {
         }
     );
 
+    // Create output node this is send via webrtc
+    destination = audioContext.createMediaStreamDestination();
+
     // Parameters of the whiteNoiseNode
     gain = whiteNoiseNode.parameters.get("customGain");
     gain.setValueAtTime(1, audioContext.currentTime);
@@ -139,13 +146,14 @@ async function addNoiseToStream() {
 
     // Connect the source to the processor and the processor to the destination
     source.connect(whiteNoiseNode);
+    whiteNoiseNode.connect(destination);
 }
 
 async function main() {
     console.log("Main");
     remoteStreamElement = document.getElementById("remote-stream");
-    await getLocalStream();
-    await addNoiseToStream();
+    await getAudio_and_applyNoise();
+    socket.connect();
 }
 
 document.addEventListener("DOMContentLoaded", main);
