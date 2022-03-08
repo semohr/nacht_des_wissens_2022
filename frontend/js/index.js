@@ -1,46 +1,117 @@
-/** Main entry point for the frontend client, requires socket.io
- * to be loaded previously.
+/** Simple socket io signaling server to exchange
+ * audio stream between two clients.
  */
-const SERVER = 'http://localhost:8080/';
+const SIGNALING_SERVER_URL = "http://localhost:8080/";
+const PC_CONFIG = {};
 
-// To create a new connection to the signaling server
-socket = io.connect(SERVER);
+const socket = io(SIGNALING_SERVER_URL, { autoConnect: false });
 
-socket.on('connect', function() {
-    console.log('Connected to server');
-
-    var stream = ss.createStream();
-
-    // Send an empty join message to create a new room.
+socket.on("data", (data) => {
+    console.log("Data received: ", data);
+    handleSignalingData(data);
 });
 
+socket.on("ready", () => {
+    console.log("Ready");
+    createPeerConnection();
+    sendOffer();
+});
 
+let sendData = (data) => {
+    socket.emit("data", data);
+};
 
-
-/** Main entry point for the frontend app 
- * 
- * - Get audio stream
- * - Setup noise on audio
- * - Stream to other client
-*/
-async function main(){
-    // Setup audio context to be able to add noise
-    const audioContext = new AudioContext();
-
-    // Get streammedia device from user
-    const microphone = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-    // Set up a stream source to extract audio from the microphone
-    const source = audioContext.createMediaStreamSource(microphone);
-
-    // Load audio worklet processor
-    await audioContext.audioWorklet.addModule('/js/white-noise-processor.js');
-    const WhiteNoiseProcessor = new AudioWorkletNode(audioContext, 'white-noise-processor');
-
-    // Connect the source to the processor and the processor to the destination
-    source.connect(WhiteNoiseProcessor).connect(audioContext.destination);
-
-    // Start the audio context
-    audioContext.resume();
+/** Get the streaming data
+ *
+ */
+function getLocalStream() {
+    navigator.mediaDevices
+        .getUserMedia({ audio: true, video: true })
+        .then((stream) => {
+            console.log("Stream found");
+            localStream = stream;
+            // Connect after making sure that local stream is availble
+            socket.connect();
+        })
+        .catch((err) => {
+            console.error("Stream not found: ", err);
+        });
 }
-document.addEventListener('DOMContentLoaded', main)
+
+function createPeerConnection() {
+    try {
+        pc = new RTCPeerConnection(PC_CONFIG);
+        pc.onicecandidate = onIceCandidate;
+        pc.ontrack = ontrack;
+        localStream.getTracks().forEach(function (track) {
+            pc.addTrack(track, localStream);
+        });
+        console.log("PeerConnection created");
+    } catch (error) {
+        console.error("PeerConnection failed: ", error);
+    }
+}
+
+let sendOffer = () => {
+    console.log("Send offer");
+    pc.createOffer().then(setAndSendLocalDescription, (error) => {
+        console.error("Send offer failed: ", error);
+    });
+};
+
+let sendAnswer = () => {
+    console.log("Send answer");
+    pc.createAnswer().then(setAndSendLocalDescription, (error) => {
+        console.error("Send answer failed: ", error);
+    });
+};
+
+let setAndSendLocalDescription = (sessionDescription) => {
+    pc.setLocalDescription(sessionDescription);
+    console.log("Local description set");
+    sendData(sessionDescription);
+};
+
+let onIceCandidate = (event) => {
+    if (event.candidate) {
+        console.log("ICE candidate");
+        sendData({
+            type: "candidate",
+            candidate: event.candidate,
+        });
+    }
+};
+
+let ontrack = (event) => {
+    console.log("Add stream");
+    remoteStreamElement.srcObject = event.stream;
+};
+
+let handleSignalingData = (data) => {
+    switch (data.type) {
+        case "offer":
+            createPeerConnection();
+            pc.setRemoteDescription(new RTCSessionDescription(data));
+            sendAnswer();
+            break;
+        case "answer":
+            pc.setRemoteDescription(new RTCSessionDescription(data));
+            break;
+        case "candidate":
+            pc.addIceCandidate(new RTCIceCandidate(data.candidate));
+            break;
+    }
+};
+
+
+let pc;
+let localStream;
+let remoteStreamElement;
+
+function main(){
+    console.log("Main");
+    remoteStreamElement = document.getElementById("remote-stream");
+    getLocalStream();
+}
+
+document.addEventListener("DOMContentLoaded", main);

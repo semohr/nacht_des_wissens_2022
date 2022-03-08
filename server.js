@@ -12,8 +12,6 @@ const express_app = express();
 // Server the frontend folder as static folder
 express_app.use(express.static("frontend"));
 
-// Create http server using our express app
-//var http_server = http.createServer(express_app);
 
 /** Create socket.io app, this app handles all incoming
  * websocket requests.
@@ -23,6 +21,20 @@ const io = new Server(httpServer, {
     cors: {
         origin: "*",
     },
+});
+
+var ROOM = "test"
+
+io.on("connection", (socket) => {
+    console.log("Client connected");
+    // Join room
+    socket.join(ROOM);
+    socket.emit("ready");
+
+    socket.on("data", (data) => {
+        console.log("Data received: ", data);
+        socket.broadcast.to(ROOM).emit("data", data);
+    });
 });
 
 
