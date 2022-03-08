@@ -25,7 +25,7 @@ let sendData = (data) => {
  *
  */
 function getLocalStream() {
-    navigator.mediaDevices
+    return navigator.mediaDevices
         .getUserMedia({ audio: true, video: true })
         .then((stream) => {
             console.log("Stream found");
@@ -38,6 +38,7 @@ function getLocalStream() {
         });
 }
 
+let pc;
 function createPeerConnection() {
     try {
         pc = new RTCPeerConnection(PC_CONFIG);
@@ -84,7 +85,7 @@ let onIceCandidate = (event) => {
 
 let ontrack = (event) => {
     console.log("Add stream");
-    remoteStreamElement.srcObject = event.stream;
+    remoteStreamElement.srcObject = event.streams[0];
 };
 
 let handleSignalingData = (data) => {
@@ -103,15 +104,48 @@ let handleSignalingData = (data) => {
     }
 };
 
+/** Main functionality is defined here
+ *
+ *
+ */
 
-let pc;
 let localStream;
 let remoteStreamElement;
 
-function main(){
+var noiseSpread;
+var gain;
+async function addNoiseToStream() {
+    // Setup audio context
+    var audioContext = new AudioContext();
+
+    // Set up a stream source to extract audio from the microphone
+    const source = audioContext.createMediaStreamSource(localStream);
+
+    // Create a gain node
+    await audioContext.audioWorklet.addModule("/js/white-noise-processor.js");
+    const whiteNoiseNode = new AudioWorkletNode(
+        audioContext,
+        "white-noise-processor",
+        {
+            processorOptions: { noise_type: "white" }, //you can also pass constructor arguments
+        }
+    );
+
+    // Parameters of the whiteNoiseNode
+    gain = whiteNoiseNode.parameters.get("customGain");
+    gain.setValueAtTime(1, audioContext.currentTime);
+    noiseSpread = whiteNoiseNode.parameters.get("noiseSpread");
+    noiseSpread.setValueAtTime(0.02, audioContext.currentTime);
+
+    // Connect the source to the processor and the processor to the destination
+    source.connect(whiteNoiseNode);
+}
+
+async function main() {
     console.log("Main");
     remoteStreamElement = document.getElementById("remote-stream");
-    getLocalStream();
+    await getLocalStream();
+    await addNoiseToStream();
 }
 
 document.addEventListener("DOMContentLoaded", main);
