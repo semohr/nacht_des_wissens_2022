@@ -5,7 +5,10 @@
  * - destination variable has to be defined to send a stream
  * - also state has to be set to receiver or emitter
  */
-const SIGNALING_SERVER_URL = "http://localhost:8080/";
+
+//
+
+const SIGNALING_SERVER_URL = "http://localhost:" + window.location.port;
 const PC_CONFIG = {};
 const socket = io(SIGNALING_SERVER_URL, { autoConnect: false });
 
