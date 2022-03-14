@@ -19,8 +19,8 @@ const socket = io(SIGNALING_SERVER_URL, { autoConnect: false });
  * to the other client.
  */
 socket.on("ready", () => {
-    createPeerConnection(state);
-    sendOffer();
+    //createPeerConnection(state);
+    //sendOffer();
 });
 
 let pc;

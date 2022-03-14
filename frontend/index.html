@@ -38,67 +38,77 @@
             </button>
         </div>
     </main>
+
     <!-- Slider to create -->
-    <main id="app_state1" class="app container-fluid">
-        <div class="emitter col-12 d-flex" style="justify-content: space-evenly;">
+    <main id="app_state1" class="app container-fluid" style="flex-direction: column;">
+        <div id="random_number" class="emitter col-12 d-flex"
+            style="justify-content: space-evenly; flex-direction: column;">
+            <!--
             <label for="noise" class="form-label">Noise STD</label>
             <input type="range" min="0" max="0.02" value="0" step="0.0001" class="form-range" id="noise"
                 onchange="setNoiseSTD(this.value)">
+            -->
         </div>
 
         <!-- Number selector -->
-        <div id="numPad" class="reciever d-flex" style="justify-content: space-evenly; ">
+        <div id="numPad" class="receiver d-flex" style="justify-content: space-evenly; ">
             <div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b1" class="btn btn-outline-primary">
                         1
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b2" class="btn btn-outline-primary">
                         2
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b3" class="btn btn-outline-primary">
                         3
                     </button>
                 </div>
             </div>
             <div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b4" class="btn btn-outline-primary">
                         4
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b5" class="btn btn-outline-primary">
                         5
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b6" class="btn btn-outline-primary">
                         6
                     </button>
                 </div>
             </div>
             <div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b7" class="btn btn-outline-primary">
                         7
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b8" class="btn btn-outline-primary">
                         8
                     </button>
                 </div>
                 <div>
-                    <button class="btn btn-outline-primary">
+                    <button id="b9" class="btn btn-outline-primary">
                         9
                     </button>
                 </div>
             </div>
+        </div>
+
+        <div id="ready_btn_container" class="col-12 d-flex" style="justify-content: space-evenly;">
+            <button id="btn_ready" class="btn btn-outline-primary" onclick="READY_CLIENT(this)">
+                READY
+            </button>
         </div>
     </main>
 </body>

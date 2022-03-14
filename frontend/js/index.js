@@ -63,13 +63,26 @@ async function setup_receiver() {
     state = "receiver";
 
     // Display all elements for receiver
-    let doms_for_emitter = document.getElementsByClassName("emitter");
+    let doms_for_emitter = document.getElementsByClassName("receiver");
     Array.from(doms_for_emitter).forEach(function (dom) {
         dom.classList.remove("receiver");
     });
 
     // Set next app state
     AppState1();
+
+    for (let i = 1; i < 10; i++) {
+        var btn = document.getElementById("b" + i);
+        btn.addEventListener("click", (ev) => {
+            var id = ev.target.id;
+            socket.emit("experiment:return", parseInt(id[1]), EXPID);
+            // Disable all button
+            for (let j = 1; j < 10; j++) {
+                document.getElementById("b" + j).disabled = true;
+            }
+        });
+        btn.disabled = true;
+    }
 
     /** Connect to websocket server to receive signaling data
      * and other events. See functions defined in setup_webrtc.js
@@ -103,6 +116,24 @@ async function setup_emitter() {
     socket.connect();
 }
 
+var EXPID;
+socket.on("experiment:start", (expID) => {
+    console.log("[main] experiment:start");
+    EXPID = expID;
+    document.getElementById("btn_ready").style.display = "none";
+});
+
+
+
+socket.on("experiment:event", (random_number, expID) => {
+    console.log("[main] Received experiment:event", random_number);
+    document.getElementById("random_number").innerHTML = random_number;
+
+    for (let i = 1; i < 10; i++) {
+        document.getElementById("b" + i).disabled = false;
+    }
+});
+
 
 /** This function is called independent of client is receiver or emitter
  * 
@@ -115,3 +146,10 @@ async function main() {
 
 
 document.addEventListener("DOMContentLoaded", main);
+
+
+async function READY_CLIENT(element) {
+    //Disable button
+    element.disabled = true;
+    socket.emit("experiment:ready", state);
+}
