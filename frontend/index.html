@@ -1,17 +1,106 @@
 <!DOCTYPE html>
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Simple voice chat</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple voice chat</title>
 
-<!-- Socket IO -->
-<script src="/js/socket.io.min.js"></script>
+    <!-- Socket IO -->
+    <script src="/js/socket.io.min.js"></script>
 
-<!-- Own app -->
-<script src="/js/index.js"></script>
+    <!-- Own js -->
+    <script src="/js/setup_webrtc.js"></script>
+    <script src="/js/index.js"></script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+    <!-- Own styles -->
+    <link rel="stylesheet" href="/css/main.css">
 
 </head>
+
 <body>
-    <video id="remote-stream" autoplay playsinline></video>
+    <audio id="remote-stream" controls autoplay style="display:none"></audio>
+    <!-- Two button in center of page -->
+    <main id="app_state0" class="app container-fluid">
+        <div class="col-12 d-flex" style="justify-content: space-evenly;">
+            <button id="btn_emitter" class="btn btn-outline-primary">
+                <img class="p-2" src="/img/mic-fill.svg" alt="mic" width="200" height="200">
+            </button>
+
+            <button id="btn_receiver" class="btn btn-outline-primary">
+                <img class="p-2" src="/img/speaker-fill.svg" alt="camera" width="200" height="200">
+            </button>
+        </div>
+    </main>
+    <!-- Slider to create -->
+    <main id="app_state1" class="app container-fluid">
+        <div class="emitter col-12 d-flex" style="justify-content: space-evenly;">
+            <label for="noise" class="form-label">Noise STD</label>
+            <input type="range" min="0" max="0.02" value="0" step="0.0001" class="form-range" id="noise"
+                onchange="setNoiseSTD(this.value)">
+        </div>
+
+        <!-- Number selector -->
+        <div id="numPad" class="reciever d-flex" style="justify-content: space-evenly; ">
+            <div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        1
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        2
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        3
+                    </button>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        4
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        5
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        6
+                    </button>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        7
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        8
+                    </button>
+                </div>
+                <div>
+                    <button class="btn btn-outline-primary">
+                        9
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
+
 </html>

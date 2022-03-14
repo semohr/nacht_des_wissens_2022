@@ -29,12 +29,13 @@ io.on("connection", (socket) => {
     console.log("Client connected");
     // Join room
     socket.join(ROOM);
-    socket.emit("ready");
 
-    socket.on("data", (data) => {
-        console.log("Data received: ", data);
-        socket.broadcast.to(ROOM).emit("data", data);
+    //Transfer data for webrtc
+    socket.on("webrtc:data", (data) => {
+        socket.broadcast.to(ROOM).emit("webrtc:data", data);
     });
+
+    socket.emit("ready");
 });
 
 
@@ -43,7 +44,7 @@ httpServer.listen(8080, () => {
 });
 
 
-/**/ 
+/**/
 /* In theory it is quite easy to enable https but you need to 
 create a certificate and key file first. */
 /*

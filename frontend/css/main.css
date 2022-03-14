@@ -1,0 +1,53 @@
+html, body {
+    height: 100%;
+}
+
+main {
+    justify-content: space-evenly;
+    align-content: space-around;
+    align-items:center;
+    height: 100%;
+}
+
+.btn {
+    border-radius: 5%;
+    border-width: 2px;
+}
+
+.app {
+    display: none;
+}
+
+#app_state0 {
+    display: flex;
+}
+
+.emitter {
+    display: none !important;
+}
+
+.receiver {
+    display: none !important;
+}
+#numPad{
+    flex-flow: row wrap;
+}
+#numPad .btn{
+    width: 100px !important;
+    height: 100px !important;
+    max-height: 100px !important;
+    max-width: 100px !important;
+    text-align: center;
+}
+
+#numPad > div {
+    text-align: center;
+    padding: 10px;
+}
+
+#numPad > div > div {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
