@@ -134,6 +134,8 @@ io.on("connection", (socket) => {
     function experiment_end(expID) {
         console.log("experiment:end");
         const map = MAP[expID];
+        io.to(map.emitterID).emit("experiment:end", expID);
+        io.to(map.receiveID).emit("experiment:end", expID);
 
         var file = "./data_" + expID + ".json";
         writeFile(file, JSON.stringify(map), function (err) {

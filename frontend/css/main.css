@@ -16,6 +16,7 @@ main {
 
 .app {
     display: none;
+    text-align: center;
 }
 
 #app_state0 {
@@ -51,3 +52,14 @@ main {
     padding-bottom: 10px;
 }
 
+#random_number_container {
+    text-align: center;
+}
+
+#random_number {
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

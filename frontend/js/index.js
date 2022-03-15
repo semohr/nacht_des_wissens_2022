@@ -43,14 +43,15 @@ function setNoiseSTD(value) {
     noiseSTD.setValueAtTime(value, audioContext.currentTime);
 }
 
-
-
-
+/** Enable app state 1 i.e. the main event loop */
 function AppState1() {
     document.getElementById("app_state0").style.display = "none";
     document.getElementById("app_state1").style.display = "flex";
-
-
+}
+/** Enable app state 2 i.e. the end screen */
+function AppState2() {
+    document.getElementById("app_state1").style.display = "none";
+    document.getElementById("app_state2").style.display = "flex";
 }
 
 /** This function is called when the user clicks on the speaker
@@ -127,12 +128,33 @@ socket.on("experiment:start", (expID) => {
 
 socket.on("experiment:event", (random_number, expID) => {
     console.log("[main] Received experiment:event", random_number);
-    document.getElementById("random_number").innerHTML = random_number;
+    var container = document.getElementById("random_number_container");
+
+    //Remove all childs
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+
+    var help_text = document.createElement("h1");
+    help_text.innerHTML = "Please say the following number: ";
+    container.appendChild(help_text);
+    var randomNumberDiv = document.createElement("div");
+    randomNumberDiv.id = "random_number";
+    randomNumberDiv.innerHTML = random_number;
+    container.appendChild(randomNumberDiv);
 
     for (let i = 1; i < 10; i++) {
         document.getElementById("b" + i).disabled = false;
     }
 });
+
+socket.on("experiment:end", (expID) => {
+    console.log("[main] experiment:end");
+    AppState2()
+    socket.disconnect();
+})
+
+
 
 
 /** This function is called independent of client is receiver or emitter
