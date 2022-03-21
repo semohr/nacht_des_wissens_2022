@@ -4,7 +4,8 @@ import express from "express";
 import { Server } from "socket.io";
 import { writeFile, readFileSync } from 'fs';
 /** CONFIG */
-var NUM_EVENTS_PER_BLOCK = 2;
+var NUM_EVENTS_PER_BLOCK = 3;
+var NUM_BLOCKS = 4;
 
 
 /** Create our express app, this app handles all incoming 
@@ -56,8 +57,15 @@ io.on("connection", (socket) => {
             "receiveID": receiveID,
             "emitted": [],
             "received": [],
+            "currentBlock": 0,
         });
         var expID = MAP.length - 1;
+
+        // Set the emitted, received shape depending on the Number of blocks
+        for (let i = 0; i < NUM_BLOCKS; i++) {
+            MAP[expID].emitted.push([]);
+            MAP[expID].received.push([]);
+        }
 
         experiment_start(expID)
     }
@@ -97,14 +105,21 @@ io.on("connection", (socket) => {
     });
 
     socket.on("experiment:return", (receivedNum, expID) => {
-        const map = MAP[expID];
         console.log("[main] Received experiment:return", receivedNum, expID);
-        map.received.push(receivedNum);
 
-        if (map.received.length < NUM_EVENTS_PER_BLOCK) {
+        const map = MAP[expID];
+        const currentBlock = map.currentBlock;
+        
+        // Save received number
+        map.received[currentBlock].push(receivedNum);
+
+        if (map.received[currentBlock].length < NUM_EVENTS_PER_BLOCK) {
             experiment_event(expID)
         }
-        else {
+        else if (currentBlock < NUM_BLOCKS - 1) {
+            map["currentBlock"]++;
+            experiment_event(expID)
+        } else {
             experiment_end(expID)
         }
     });
@@ -113,9 +128,10 @@ io.on("connection", (socket) => {
 
     socket.emit("ready");
 
-
     function experiment_event(expID) {
         const map = MAP[expID];
+        const currentBlock = map.currentBlock;
+
         // Random integer between 1 and 9
         var random_number = Math.floor(Math.random() * 9) + 1;
 
@@ -123,8 +139,9 @@ io.on("connection", (socket) => {
         io.to(map.emitterID).emit("experiment:event", random_number, expID);
         io.to(map.receiveID).emit("experiment:event", random_number, expID);
 
-        map.emitted.push(random_number);
-
+        // Save emitted number
+        map.emitted[currentBlock].push(random_number);
+        progressBar(expID);
     }
 
     function experiment_start(expID) {
@@ -151,6 +168,15 @@ io.on("connection", (socket) => {
             console.log("The file was saved!");
         });
     }
+
+    function progressBar(expID) {
+        const map = MAP[expID];
+        const currentBlock = map.currentBlock;
+        const currentEvent = map.received[currentBlock].length;
+        io.to(map.emitterID).emit("experiment:progressBar", currentEvent, currentBlock, NUM_EVENTS_PER_BLOCK, NUM_BLOCKS);
+        io.to(map.receiveID).emit("experiment:progressBar", currentEvent, currentBlock, NUM_EVENTS_PER_BLOCK, NUM_BLOCKS);
+    }
+
 });
 
 

@@ -155,6 +155,31 @@ socket.on("experiment:end", (expID) => {
 })
 
 
+socket.on("experiment:progressBar", (currentEvent, currentBlock, totalEventsPerBlock, totalBlocks)=>{
+    console.log("[main] experiment:progressBar", currentEvent, currentBlock, totalEventsPerBlock, totalBlocks);
+    var progressBar = document.getElementById("progress");
+    if (progressBar.childElementCount > 0) {
+        var curr_pbar = progressBar.children[currentBlock];
+        curr_pbar.style.width = (currentEvent/totalEventsPerBlock)*100 + "%";
+        curr_pbar.setAttribute("aria-valuenow", currentEvent/totalEventsPerBlock*100);
+        if(currentEvent == 0 && currentBlock > 0){
+            progressBar.children[currentBlock-1].style.width = "100%";
+        }
+    }
+    else{
+        for (let i = 0; i < totalBlocks; i++) {
+            var progressBlock = document.createElement("div");
+            progressBlock.classList.add("progress-bar");
+            progressBlock.style.width = "0%";
+            progressBlock.setAttribute("role", "progressbar");
+            progressBlock.setAttribute("aria-valuenow", "0");
+            progressBlock.setAttribute("aria-valuemin", "0");
+            progressBlock.setAttribute("aria-valuemax", "100");
+            progressBar.appendChild(progressBlock);
+        }
+    }
+})
+
 
 
 /** This function is called independent of client is receiver or emitter
