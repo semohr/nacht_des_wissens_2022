@@ -2,7 +2,7 @@
 import http from 'http';
 import express from "express";
 import { Server } from "socket.io";
-import { writeFile } from 'fs';
+import { writeFile, readFileSync } from 'fs';
 /** CONFIG */
 var NUM_EVENTS_PER_BLOCK = 2;
 
@@ -19,7 +19,13 @@ express_app.use(express.static("frontend"));
 /** Create socket.io app, this app handles all incoming
  * websocket requests.
  */
-const httpServer = http.createServer(express_app);
+ import https from 'https';
+let credentials = {
+key: readFileSync('example.key', 'utf8'),
+cert: readFileSync('example.crt', 'utf8')
+};
+const httpServer = https.createServer(credentials, express_app);
+ 
 const io = new Server(httpServer, {
     cors: {
         origin: "*",
@@ -148,22 +154,6 @@ io.on("connection", (socket) => {
 });
 
 
-httpServer.listen(8080, () => {
-    console.info(`Server Running here 👉 http://localhost:${8080}`);
-});
-
-
-/**/
-/* In theory it is quite easy to enable https but you need to 
-create a certificate and key file first. */
-/*
-import fs from 'fs';
-import https from 'https';
-let credentials = {
-   key: fs.readFileSync('key.pem', 'utf8'),
-   cert: fs.readFileSync('cert.pem', 'utf8')
-};
-let serverHttps = https.createServer(sslOptions, app).listen(443,() =>{
-    console.info(`Server Running here 👉 https://localhost:${443}`);
+httpServer.listen(4430,() =>{
+    console.info(`Server Running here 👉 https://localhost:${4430}`);
 })
-*/

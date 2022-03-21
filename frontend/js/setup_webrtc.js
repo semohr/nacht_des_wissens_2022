@@ -8,7 +8,7 @@
 
 //
 
-const SIGNALING_SERVER_URL = "http://localhost:" + window.location.port;
+const SIGNALING_SERVER_URL = "https://localhost:" + window.location.port;
 const PC_CONFIG = {};
 const socket = io(SIGNALING_SERVER_URL, { autoConnect: false });
 
