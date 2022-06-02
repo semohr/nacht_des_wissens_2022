@@ -9,8 +9,8 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
             maxValue: 1,
             automationRate: 'a-rate'
         }, {
-            name: 'noiseSpread',
-            defaultValue: 0.02,
+            name: 'noiseSTD',
+            defaultValue: 0,
             minValue: 0,
             maxValue: 1,
         }]
@@ -37,9 +37,9 @@ class WhiteNoiseProcessor extends AudioWorkletProcessor {
             const outputChannel = output[channel];
 
             for (let i = 0; i < inputChannel.length; i++) {
-                const noiseSpread = parameters["noiseSpread"][i];
+                const noiseSTD = parameters["noiseSTD"][i];
                 const gain = parameters['customGain'][i];
-                const noise = this.boxmuller(0, noiseSpread);
+                const noise = this.boxmuller(0, 1) * noiseSTD;
                 outputChannel[i] = inputChannel[i] * gain + noise;
             }
         }

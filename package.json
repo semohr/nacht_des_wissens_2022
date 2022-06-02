@@ -1,1 +1,17 @@
-{"name":"NachtDerWissenschaft2020","version":"0.0.1","description":"","author":"","license":"GPL-3.0","main":"server/index.js","scripts":{"start":"node --experimental-specifier-resolution=node server.js"},"dependencies":{"express":"^4.17.3","socket.io":"^4.4.1","socket.io-stream":"^0.9.1"},"type":"module"}
+{
+    "name": "NachtDesWissens2022",
+    "version": "0.0.1",
+    "description": "",
+    "author": "",
+    "license": "GPL-3.0",
+    "main": "server.js",
+    "scripts": {
+        "start": "node --experimental-specifier-resolution=node server.js"
+    },
+    "dependencies": {
+        "express": "^4.17.3",
+        "fs": "^0.0.1-security",
+        "socket.io": "^4.4.1"
+    },
+    "type": "module"
+}
