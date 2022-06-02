@@ -20,13 +20,13 @@ express_app.use(express.static("frontend"));
 /** Create socket.io app, this app handles all incoming
  * websocket requests.
  */
- import https from 'https';
+import https from 'https';
 let credentials = {
-key: readFileSync('example.key', 'utf8'),
-cert: readFileSync('example.crt', 'utf8')
+    key: readFileSync('example.key', 'utf8'),
+    cert: readFileSync('example.crt', 'utf8')
 };
 const httpServer = https.createServer(credentials, express_app);
- 
+
 const io = new Server(httpServer, {
     cors: {
         origin: "*",
@@ -109,7 +109,7 @@ io.on("connection", (socket) => {
 
         const map = MAP[expID];
         const currentBlock = map.currentBlock;
-        
+
         // Save received number
         map.received[currentBlock].push(receivedNum);
 
@@ -180,6 +180,6 @@ io.on("connection", (socket) => {
 });
 
 
-httpServer.listen(4430,() =>{
+httpServer.listen(4430, "10.18.233.77", () => {
     console.info(`Server Running here 👉 https://localhost:${4430}`);
 })

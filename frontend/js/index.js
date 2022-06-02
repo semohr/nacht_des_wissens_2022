@@ -6,11 +6,39 @@
 let destination;
 let noiseSTD;
 var audioContext;
+
+//Problems with different browsers
+// see https://github.com/ionic-team/capacitor/issues/802
+async function getMediaStream(constraints) {
+    return new Promise(function (resolve, reject) {
+        if (navigator.mediaDevices
+            && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => resolve(stream))
+                .catch(err => reject(err));
+        } else {
+            const getUserMedia = navigator.getUserMedia
+                || navigator['webkitGetUserMedia']
+                || navigator['mozGetUserMedia']
+                || navigator['msGetUserMedia'];
+            getUserMedia(
+                constraints,
+                (stream) => resolve(stream),
+                (err) => reject(err)
+            );
+        }
+    });
+}
+
+
 async function getAudio_and_applyNoise() {
+    console.log("[main] getAudio_and_applyNoise");
     // Setup audio context
     audioContext = new AudioContext();
 
-    var audioInput = await navigator.mediaDevices.getUserMedia({ audio: true });
+    //Problems with different browsers
+    var audioInput = await getMediaStream({ audio: true });
+
 
     // Set up a stream source to extract audio from the microphone
     const source = audioContext.createMediaStreamSource(audioInput);
@@ -155,18 +183,18 @@ socket.on("experiment:end", (expID) => {
 })
 
 
-socket.on("experiment:progressBar", (currentEvent, currentBlock, totalEventsPerBlock, totalBlocks)=>{
+socket.on("experiment:progressBar", (currentEvent, currentBlock, totalEventsPerBlock, totalBlocks) => {
     console.log("[main] experiment:progressBar", currentEvent, currentBlock, totalEventsPerBlock, totalBlocks);
     var progressBar = document.getElementById("progress");
     if (progressBar.childElementCount > 0) {
         var curr_pbar = progressBar.children[currentBlock];
-        curr_pbar.style.width = (currentEvent/totalEventsPerBlock)*100 + "%";
-        curr_pbar.setAttribute("aria-valuenow", currentEvent/totalEventsPerBlock*100);
-        if(currentEvent == 0 && currentBlock > 0){
-            progressBar.children[currentBlock-1].style.width = "100%";
+        curr_pbar.style.width = (currentEvent / totalEventsPerBlock) * 100 + "%";
+        curr_pbar.setAttribute("aria-valuenow", currentEvent / totalEventsPerBlock * 100);
+        if (currentEvent == 0 && currentBlock > 0) {
+            progressBar.children[currentBlock - 1].style.width = "100%";
         }
     }
-    else{
+    else {
         for (let i = 0; i < totalBlocks; i++) {
             var progressBlock = document.createElement("div");
             progressBlock.classList.add("progress-bar");
