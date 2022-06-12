@@ -1,0 +1,6 @@
+{
+    "results": "Ihre Ergebnisse",
+    "thank_you_msg": "Wir hoffen Sie hatten Spaß bei diesem kleinen Experiment. Im folgenden können Sie durch Ihre Ergebnisse blättern. Bitte geben Sie ihre Identifikationsnummer ein die Sie an unserem Stand erhalten haben.",
+    "continue": "Fortfahren",
+    "error_msg": "Identifikationsnummer wurde nicht gefunden, diese sollte nummerisch und 4 Stellen lang sein. Eventuell sind Ihre Ergebnisse noch nicht verfügbar, versuchen Sie es gerne in ein paar Minuten erneut"
+}

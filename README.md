@@ -9,7 +9,10 @@ npm install
 
 Than run the server with
 ```
-npm start
+npm run dev
+# or
+npm run build
+npm run start
 ```
 
 Forward port (depending on setup) e.g.

@@ -1,0 +1,21 @@
+{
+    "locales": [
+        "en",
+        "de"
+    ],
+    "defaultLocale": "de",
+    "pages": {
+        "*": [
+            "common"
+        ],
+        "/": [
+            "welcome"
+        ],
+        "/experiment": [
+            "experiment"
+        ],
+        "/result": [
+            "result"
+        ]
+    }
+}
