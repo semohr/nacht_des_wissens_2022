@@ -11,6 +11,8 @@ interface Data {
     duration: number[][], //time ms for each event
     currentBlock: number, //Current experiment block
     start_last_event: Date, //Time of last started event
+    mi_bits: number[], // mututal information in bits (standard units) for each block
+    mi_bits_s: number[], // mututal information in bits/s (using information on timing) for each block
 }
 
 /** CONFIG */
@@ -113,7 +115,9 @@ const SocketHandler = (req, res) => {
                     "received": [],
                     "duration": [],
                     "currentBlock": 0,
-                    "start_last_event": undefined
+                    "start_last_event": undefined,
+                    "mi_bits": [],
+                    "mi_bits_s" : [],
                 }
 
 
@@ -135,6 +139,7 @@ const SocketHandler = (req, res) => {
 
                 // Random integer between 1 and 9
                 var random_number = Math.floor(Math.random() * 9) + 1;
+                //var random_number = 1 + map.emitted[currentBlock].length
 
                 // Send random number to all clients and start timer
                 map.start_last_event = moment();
@@ -170,6 +175,9 @@ const SocketHandler = (req, res) => {
                 io.to(map.emitterID).emit("experiment:end", fs_id);
                 io.to(map.receiveID).emit("experiment:end", fs_id);
 
+                // calculate all stuff
+                calculate_mutual_information(map)
+
                 writeFile(filename, JSON.stringify(map), function (err) {
                     if (err) {
                         return console.log(err);
@@ -194,3 +202,47 @@ const SocketHandler = (req, res) => {
 }
 
 export default SocketHandler
+
+// 
+function calculate_mutual_information(map) {
+    for (let i = 0; i < NUM_BLOCKS; i++) {
+        // evauluate the joint probability distribution from the recorded events
+        let xs = map.emitted[0]
+        let ys = map.received[0]
+        console.log(xs)
+        console.log(ys)
+
+        let size_alphabet = 9
+        let Pxy = Array(size_alphabet).fill().map(() => Array(size_alphabet).fill(0));
+        let Px = new Array(size_alphabet).fill(0);
+        let Py = new Array(size_alphabet).fill(0);
+
+        for (let j = 0; j< NUM_EVENTS_PER_BLOCK; j++){
+            Pxy[xs[j]-1][ys[j]-1] += 1/NUM_EVENTS_PER_BLOCK
+            Px[xs[j]-1] += 1/NUM_EVENTS_PER_BLOCK
+            Py[ys[j]-1] += 1/NUM_EVENTS_PER_BLOCK
+        }
+        console.log(Px)
+        console.log(Py)
+
+        var mi = 0
+        for (let ix = 0; ix < size_alphabet; ix++){
+            for (let iy = 0; iy < size_alphabet; iy++){
+                if (Pxy[ix][iy] > 0){
+                    mi += Pxy[ix][iy] * Math.log2( Pxy[ix][iy] / (Px[ix] * Py[iy]) )
+                }
+            }
+        }
+        map.mi_bits[i] = mi
+        console.log(mi)
+
+        // normalize mututal information
+        var time_total = 0
+        for (let j = 0; j < NUM_EVENTS_PER_BLOCK; j++) {
+            time_total += map.duration[i][j]
+        }
+        console.log(time_total)
+        map.mi_bits_s[i] = mi * NUM_EVENTS_PER_BLOCK / (time_total/1000)
+        console.log(map.mi_bits_s)
+    }
+}
