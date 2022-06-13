@@ -58,14 +58,14 @@ function InputExpID({ setData }) {
                 <form onSubmit={async (e) => {
                     e.preventDefault();
                     try {
-                        const data = await submitExpID(expID);
+                        const data = await submitExpID(_expID);
                         setData(data);
                     } catch (error) {
                         setError(true)
                         setTimeout(() => { setError(false) }, 60000)
                     }
                 }}>
-                    <input type="string" id="expID" name="expID" placeholder="ID" value={expID} onChange={(e) => setexpID(e.target.value)} />
+                    <input type="string" id="expID" name="expID" placeholder="ID" value={_expID} onChange={(e) => setexpID(e.target.value)} />
                     <button type="submit" className="btn btn-primary m-3">{cont}</button>
                 </form>
             </div>
@@ -79,6 +79,7 @@ async function submitExpID(expID) {
     const res = await fetch("/api/" + expID, {
         method: "GET",
     });
+    console.log(res)
 
     if (!res.ok) {
         throw Error("Server error: ExpID not found")

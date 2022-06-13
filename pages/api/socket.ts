@@ -117,7 +117,7 @@ const SocketHandler = (req, res) => {
                     "currentBlock": 0,
                     "start_last_event": undefined,
                     "mi_bits": [],
-                    "mi_bits_s" : [],
+                    "mi_bits_s": [],
                 }
 
 
@@ -203,46 +203,51 @@ const SocketHandler = (req, res) => {
 
 export default SocketHandler
 
-// 
-function calculate_mutual_information(map) {
+/** Calculates the mutual information of the given data and 
+ * adds it to the map.
+ * 
+ * @param map 
+ */
+function calculate_mutual_information(map: Data) {
     for (let i = 0; i < NUM_BLOCKS; i++) {
-        // evauluate the joint probability distribution from the recorded events
-        let xs = map.emitted[0]
-        let ys = map.received[0]
-        console.log(xs)
-        console.log(ys)
+
+        // evaluate the joint probability distribution from the recorded events
+        let xs = map.emitted[0];
+        let ys = map.received[0];
+        //console.log(xs)
+        //console.log(ys)
 
         let size_alphabet = 9
-        let Pxy = Array(size_alphabet).fill().map(() => Array(size_alphabet).fill(0));
+        let Pxy = Array(size_alphabet).fill(0).map(() => Array(size_alphabet).fill(0));
         let Px = new Array(size_alphabet).fill(0);
         let Py = new Array(size_alphabet).fill(0);
 
-        for (let j = 0; j< NUM_EVENTS_PER_BLOCK; j++){
-            Pxy[xs[j]-1][ys[j]-1] += 1/NUM_EVENTS_PER_BLOCK
-            Px[xs[j]-1] += 1/NUM_EVENTS_PER_BLOCK
-            Py[ys[j]-1] += 1/NUM_EVENTS_PER_BLOCK
+        for (let j = 0; j < NUM_EVENTS_PER_BLOCK; j++) {
+            Pxy[xs[j] - 1][ys[j] - 1] += 1 / NUM_EVENTS_PER_BLOCK
+            Px[xs[j] - 1] += 1 / NUM_EVENTS_PER_BLOCK
+            Py[ys[j] - 1] += 1 / NUM_EVENTS_PER_BLOCK
         }
-        console.log(Px)
-        console.log(Py)
+        //console.log(Px)
+        //console.log(Py)
 
         var mi = 0
-        for (let ix = 0; ix < size_alphabet; ix++){
-            for (let iy = 0; iy < size_alphabet; iy++){
-                if (Pxy[ix][iy] > 0){
-                    mi += Pxy[ix][iy] * Math.log2( Pxy[ix][iy] / (Px[ix] * Py[iy]) )
+        for (let ix = 0; ix < size_alphabet; ix++) {
+            for (let iy = 0; iy < size_alphabet; iy++) {
+                if (Pxy[ix][iy] > 0) {
+                    mi += Pxy[ix][iy] * Math.log2(Pxy[ix][iy] / (Px[ix] * Py[iy]))
                 }
             }
         }
         map.mi_bits[i] = mi
-        console.log(mi)
+        //console.log(mi)
 
         // normalize mututal information
         var time_total = 0
         for (let j = 0; j < NUM_EVENTS_PER_BLOCK; j++) {
             time_total += map.duration[i][j]
         }
-        console.log(time_total)
-        map.mi_bits_s[i] = mi * NUM_EVENTS_PER_BLOCK / (time_total/1000)
-        console.log(map.mi_bits_s)
+        //console.log(time_total)
+        map.mi_bits_s[i] = mi * NUM_EVENTS_PER_BLOCK / (time_total / 1000)
+        //console.log(map.mi_bits_s)
     }
 }
