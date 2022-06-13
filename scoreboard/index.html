@@ -131,8 +131,12 @@
 
 
 
-    function main() {
-        // Create table
+    async function main() {
+        // Create table by loading data via php
+        const data = await fetch("get_exp_results.php").then(response => response.json());
+
+        console.log(data);
+
         const table_data = { "ID": [0, 1, 2, 3, 4, 5, 6], "Mutual Information": [0, 0, 0, 0, 0, 0, 0] }
         document.getElementById("leaderboard").appendChild(create_table(table_data));
 
