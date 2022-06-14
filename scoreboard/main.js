@@ -10,7 +10,7 @@ async function main() {
     // Create table by loading data via php
     data = await fetch("get_exp_results.php").then(response => response.json());
 
-    console.log(data);
+    // console.log(data);
 
     // sort data according to some key
     const sort_by = "MI";
@@ -48,12 +48,23 @@ async function main() {
         }
     );
 
+    // we will need to make sure that we always have at least one row of data!
+    keys = Object.keys(data[0]);
+
     // currently search still searches everything.
     dataTable.on('search.dt', function () {
-        console.log(dataTable.search());
         // this gives us the rows that are still visible. we could get
         // the id and highligh those points in the distribution graph.
-        console.log(dataTable.rows({ filter: 'applied' }));
+        // console.log(dataTable.rows({ filter: 'applied' }));
+        visible_rows = dataTable.rows({ filter: 'applied' }).data().toArray()
+        // visible_hashes = visible_rows.map(row => row[col_index_for_hash]);
+        if (visible_rows.length == 1) {
+            // render special tootlip in high charts
+            hash = visible_rows[0][keys.indexOf("expID")];
+            mi = visible_rows[0][keys.indexOf("MI")];
+            console.log(mi);
+            highlight_point_in_chart(miChart, x_val = mi);
+        }
     });
 }
 
@@ -68,8 +79,8 @@ function create_table(data, row_first = false) {
     let keys = (row_first) ? Object.keys(data[0]) : Object.keys(data);
     let num_rows = (row_first) ? data.length : data[keys[0]].length;
 
-    console.log(keys);
-    console.log(num_rows);
+    // console.log(keys);
+    // console.log(num_rows);
 
     const table = document.createElement("table");
     table.classList.add("table", "table-striped");
@@ -98,7 +109,6 @@ function create_table(data, row_first = false) {
             } else {
                 td.innerHTML = data[key][row];
             }
-            console.log(td.innerHTML);
             tr.appendChild(td);
         }
         table_body.appendChild(tr);
@@ -108,12 +118,16 @@ function create_table(data, row_first = false) {
     return table;
 }
 
-function GaussKDE(xi, x) {
-    return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow(xi - x, 2) / -2);
+function GaussKDE(xi, x, sigma=1) {
+    return (1 / sigma / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow((xi - x)/sigma, 2) / -2);
 }
 
 function create_graph() {
 
+    // ps 22-06-14:
+    // i think we should not use the gaussian kernel (sorry)
+    // * simple smoothing can be enabled via highcharts builtin: https://jsfiddle.net/5g4m3nLz/
+    // * the tooltip becomes messy with kernel. x points are not constrained to data, histogram like y values are not that trivial. also having 1.5 teams reach 91 bits seems weird.
 
 
     let dataSource = [93, 93, 96, 100, 101, 102, 102];
@@ -124,12 +138,13 @@ function create_graph() {
         xiData[i] = startPoint + i;
     }
 
-
     let data_plot = [];
     let N = dataSource.length;
     let kernelChart = [];
     let kernel = [];
     let data = [];
+    // MI range over which the kernel smoothes
+    let sigma = 2.0;
 
     // Create the density estimate
     for (i = 0; i < xiData.length; i++) {
@@ -137,8 +152,8 @@ function create_graph() {
         kernel.push([]);
         kernel[i].push(new Array(dataSource.length));
         for (j = 0; j < dataSource.length; j++) {
-            temp = temp + GaussKDE(xiData[i], dataSource[j]);
-            kernel[i][j] = GaussKDE(xiData[i], dataSource[j]);
+            temp = temp + GaussKDE(xiData[i], dataSource[j], sigma);
+            kernel[i][j] = GaussKDE(xiData[i], dataSource[j], sigma);
         }
         data.push([xiData[i], (1 / N) * temp]);
     }
@@ -164,8 +179,14 @@ function create_graph() {
         legend: {
             enabled: false,
         },
+        // for the tooltip we want to say sth like ~ 3 teams reached such a score.
+        // to convert the plotted kde (a probability) to something like a histogram,
+        // we just need to multiply with the number of teams and cast to int.
         tooltip: {
-            valueDecimals: 3
+            valueDecimals: 3,
+            formatter: function () {
+                return '~ <b>' + Math.floor(this.y * N / sigma * 10) + '</b> teams<br>reached <b>' + this.x + '</b> bits';
+            }
         },
         // match bootstrap colors so we can match the headers of the card button etc
         colors: ["#027BFF", "#DC3645", "#FFC207", "#28A745",
@@ -185,4 +206,24 @@ function create_graph() {
             enabled: false
         },
     })
+}
+
+function highlight_point_in_chart(chart, x_val) {
+    // we need to find the point in the series via the desired x-value,
+    // and customzie the tooltip
+
+    var poi;
+    Highcharts.each(chart.series[0].points, function (point) {
+        console.log(point.x)
+        if (point.x == x_val) {
+            poi = point;
+            // break
+            // return false;
+        }
+    });
+
+    // chart.series[0].data[50].setState("hover")
+    // chart.tooltip.refresh([chart.series[0].points[50]]);
+    poi.setState("hover");
+    chart.tooltip.refresh([poi]);
 }
