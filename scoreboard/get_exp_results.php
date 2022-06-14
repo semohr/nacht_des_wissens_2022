@@ -11,7 +11,7 @@
         $row = array(
             "MI" => $json["data"]["MI"],
             "expID" => $json["data"]["expID"],
-            "duration" => $json["data"]["duration"],
+            "duration" => $json["data"]["totalDuration"],
         );
         array_push($results, $row);
     }
