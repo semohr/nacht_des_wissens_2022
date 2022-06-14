@@ -5,6 +5,7 @@
     <title>Information Theory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="main.css" rel="stylesheet">
 
 
 </head>
@@ -15,24 +16,30 @@
         crossorigin="anonymous"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
+    <!-- DataTables dependencies, if we do not want bells and whistles for tables,
+    we can drop jquery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
+
 
     <div class="container">
         <div class="row align-items-start my-2">
-            <div class="col-lg-4 my-2">
+            <div class="col-lg-6 my-2">
                 <div class="card">
                 <h5 class="card-header text-center">Leaderboard</h5>
-                    <div class="card-body px-0">
-                        <div id="leaderboard"></div>
+                    <div class="card-body px-0 py-2">
+                        <div id="leaderboard-container" class="px-0"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 my-2">
+            <div class="col-lg-6 my-2">
                 <div class="card">
                     <h5 class="card-header d-flex justify-content-between align-items-center">
                         <span></span> <!-- this is a dummy to center the text -->
                         <span>Mutual Information</span>
                         <!-- avoid stretching the header in y direction by overwriting the button padding -->
-                        <button class="btn btn-sm btn-outline-secondary py-0" type="button" data-bs-toggle="collapse" data-bs-target="#MI_info"
+                        <button class="btn btn-sm btn-outline-primary py-0" type="button" data-bs-toggle="collapse" data-bs-target="#MI_info"
                             aria-expanded="false" aria-controls="MI_info">
                             ?
                         </button>
@@ -175,6 +182,7 @@
 
 
     var data;
+    var dataTable;
     async function main() {
         // Create table by loading data via php
         data = await fetch("get_exp_results.php").then(response => response.json());
@@ -188,15 +196,45 @@
         });
 
         // const table_data = { "ID": [0, 1, 2, 3, 4, 5, 6], "Mutual Information": [0, 0, 0, 0, 0, 0, 0] }
-        document.getElementById("leaderboard").appendChild(
-            // create_table(table_data, row_first = false)
-            create_table(data, row_first = true)
-        );
+        let table = create_table(data, row_first = true);
+        table.id = "leaderboard";
+        table.style.width = "100%";
+
+        document.getElementById("leaderboard-container").appendChild(table);
 
         // Create graph
         create_graph();
+
+        // init DataTable for sorting and the likes
+        dataTable = new DataTable('#leaderboard',
+            {
+                // paging: false,
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search hash"
+                },
+                // customize the created dom https://datatables.net/reference/option/dom
+                // "dom": 'ft'
+                // needed tweaking to have search on the left
+                // "dom": "<'row'<'col-2'f> <'col-8'> <'col-2'l> > <'row'<'col-12'tr>> <'row px-2'<'col-6'p>>"
+                "dom" : "<'d-flex justify-content-between mx-2' <f> <l> >" +
+                    "<'row'<'col-12'tr>>" +
+                    "<'d-flex flex-row-reverse mx-2' <p> >"
+
+            }
+        );
+
+        // currently search still searches everything.
+        dataTable.on('search.dt', function () {
+            console.log(dataTable.search());
+            // this gives us the rows that are still visible. we could get
+            // the id and highligh those points in the distribution graph.
+            console.log(dataTable.rows({ filter: 'applied' }));
+        });
     }
+
     document.addEventListener("DOMContentLoaded", main);
+
 </script>
 
 
