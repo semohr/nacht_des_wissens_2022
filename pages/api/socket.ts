@@ -6,6 +6,8 @@ import { writeFile, readFileSync, readdir, readdirSync } from 'fs';
 interface Data {
     emitterID: string;
     receiveID: string;
+    teamname_emitter: string,
+    teamname_receiver: string,
     emitted: number[][], //emitted number each block
     received: number[][], //received number each block
     duration: number[][], //time ms for each event
@@ -48,30 +50,31 @@ const SocketHandler = (req, res) => {
                 }
             });
 
-            socket.on("experiment:ready", (state) => {
-                console.log("[main] Received experiment:ready", state);
+            socket.on("experiment:ready", (state, teamname) => {
+                console.log("[main] Received experiment:ready", state, teamname);
                 var id1 = socket.id;
                 console.log("[main] id", id1);
 
                 if (state == "emitter") {
                     if (receiver.length > 0) {
-                        var id2 = receiver.pop();
-                        ready_pair(id1, id2);
+                        var [id2, teamname2] = receiver.pop();
+                        ready_pair(id1, id2, teamname, teamname2);
                     }
                     else {
-                        emitter.push(id1);
+                        emitter.push([id1, teamname]);
                     }
                 }
                 if (state == "receiver") {
                     if (emitter.length > 0) {
-                        var id2 = emitter.pop();
-                        ready_pair(id2, id1);
+                        var [id2, teamname2] = emitter.pop();
+                        ready_pair(id2, id1, teamname2, teamname);
                     } else {
-                        receiver.push(id1);
+                        receiver.push([id1, teamname]);
                     }
                 }
             });
 
+            /**
             socket.on("experiment:ready_receiver", (id1) => {
                 if (emitter.length > 0) {
                     var id2 = emitter.pop();
@@ -81,6 +84,7 @@ const SocketHandler = (req, res) => {
                     receiver.push(id1);
                 }
             });
+            */
 
             socket.on("experiment:return", (receivedNum, expID) => {
                 console.log("[main] Received experiment:return", receivedNum, expID);
@@ -105,8 +109,7 @@ const SocketHandler = (req, res) => {
             });
 
             // Helper functions
-
-            function ready_pair(emitterID, receiveID) {
+            function ready_pair(emitterID, receiveID, teamname_emitter, teamname_receiver) {
                 console.log("ready_pair", emitterID, receiveID);
                 const map: Data = {
                     "emitterID": emitterID,
@@ -116,6 +119,8 @@ const SocketHandler = (req, res) => {
                     "duration": [],
                     "currentBlock": 0,
                     "start_last_event": undefined,
+                    "teamname_emitter": teamname_emitter,
+                    "teamname_receiver": teamname_receiver,
                     "mi_bits": [],
                     "mi_bits_s": [],
                 }
@@ -130,7 +135,7 @@ const SocketHandler = (req, res) => {
 
                 MAP.push(map);
                 var expID = MAP.length - 1;
-                experiment_start(expID)
+                experiment_start(expID);
             }
 
             function experiment_event(expID) {
@@ -171,9 +176,9 @@ const SocketHandler = (req, res) => {
                 const filenames = readdirSync("public/experiments");
                 const fs_id = String(filenames.length).padStart(4, '0');
                 const filename = "public/experiments/" + fs_id + ".json";
-
-                io.to(map.emitterID).emit("experiment:end", fs_id);
-                io.to(map.receiveID).emit("experiment:end", fs_id);
+                const teamname = map.teamname_emitter + " " + map.teamname_receiver;
+                io.to(map.emitterID).emit("experiment:end", fs_id, teamname);
+                io.to(map.receiveID).emit("experiment:end", fs_id, teamname);
 
                 // calculate all stuff
                 calculate_mutual_information(map)
@@ -193,11 +198,8 @@ const SocketHandler = (req, res) => {
                 io.to(map.emitterID).emit("experiment:progressBar", currentEvent, currentBlock, NUM_EVENTS_PER_BLOCK, NUM_BLOCKS);
                 io.to(map.receiveID).emit("experiment:progressBar", currentEvent, currentBlock, NUM_EVENTS_PER_BLOCK, NUM_BLOCKS);
             }
-
         })
-
     }
-
     res.end()
 }
 

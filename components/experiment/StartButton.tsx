@@ -15,3 +15,29 @@ export default function StartButton() {
         </div>
     )
 }
+
+export function StartForm() {
+    const { t } = useTranslation("common");
+
+    const router = useRouter();
+    const begin = t("Begin");
+    const insert_teamname = t("Teamname", { n_th: "first" });
+
+
+
+    return (
+        <form id="start-form" onSubmit={(e) => {
+            e.preventDefault();
+
+            router.push("/experiment")
+        }}>
+            <p>{insert_teamname}</p>
+            <input type="text w-80" />
+            <div className="beginBtn">
+                <button type="submit" className="btn btn-lg btn-primary">
+                    {begin.toUpperCase()}
+                </button>
+            </div>
+        </form>
+    )
+}

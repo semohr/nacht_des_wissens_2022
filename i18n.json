@@ -16,6 +16,9 @@
         ],
         "/result": [
             "result"
+        ],
+        "/bye": [
+            "result"
         ]
     }
 }

@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import { MouseEventHandler, useEffect, useState } from "react";
 
 export default function Results() {
-
-
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -26,8 +24,7 @@ export default function Results() {
     )
 }
 
-function InputExpID({ setData }) {
-
+export function InputExpID({ setData }) {
     // Get the expID from the URL if defined
     const router = useRouter()
     var { expID } = router.query;
