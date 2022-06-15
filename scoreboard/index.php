@@ -1,12 +1,25 @@
 <html>
 
+<!-- localisation -->
+
+<?php
+    $locale = 'de';
+
+    if (isset($_GET['lang']))
+        $locale = $_GET['lang'];
+    include('locales/'. $locale . '.php');
+    echo '<script type="text/javascript">';
+    echo 'var $LANG = ' . json_encode($LANG) . ';';
+    echo 'var $locale = "' . $locale . '";';
+    echo '</script>';
+?>
+
 <head>
     <meta charset="utf-8">
     <title>Information Theory</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="main.css" rel="stylesheet">
-
 
 </head>
 
@@ -22,7 +35,20 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.css" />
 
-
+    <div class="languageSelector">
+            <a id="lang-de-btn"
+                href = "index.php?lang=de"
+                <?php if ($locale == 'de') echo 'hidden'; ?>
+                >
+                <img src="./public/de.svg"></img>
+            </a>
+            <a id="lang-en-btn"
+                href = "index.php?lang=en"
+                <?php if ($locale == 'en') echo 'hidden'; ?>
+                >
+                <img src="./public/gb.svg"></img>
+            </a>
+        </div>
     <div class="container">
         <div class="row align-items-start my-2">
             <div class="col-lg-6 my-2">
@@ -48,10 +74,7 @@
 
                         <div class="collapse" id="MI_info">
                             <div class="card card-body m-2">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis
-                                dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis,
-                                dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis
-                                deserunt maxime adipisci natus praesentium obcaecati.
+                                <?php echo $LANG["mi_info"]; ?>
                             </div>
                         </div>
 
@@ -64,7 +87,6 @@
 
 
 </body>
-
 
 <script type="text/javascript" src="main.js"></script>
 

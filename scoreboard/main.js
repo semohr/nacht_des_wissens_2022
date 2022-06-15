@@ -34,8 +34,10 @@ async function main() {
         {
             // paging: false,
             language: {
+                // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
+                url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/German.json",
                 search: "",
-                searchPlaceholder: "Search hash"
+                searchPlaceholder: "Search Team"
             },
             // customize the created dom https://datatables.net/reference/option/dom
             // "dom": 'ft'

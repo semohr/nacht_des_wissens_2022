@@ -2,3 +2,25 @@
 /* .dataTables_filter {
     float: left !important;
 } */
+
+
+.languageSelector {
+    margin: 16px;
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+
+
+}
+
+.languageSelector button {
+    background-color: transparent;
+    border: transparent;
+}
+
+.languageSelector img {
+    height: 2em;
+}
