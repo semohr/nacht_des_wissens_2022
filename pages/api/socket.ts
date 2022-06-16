@@ -185,7 +185,8 @@ const SocketHandler = (req, res) => {
                     if (err) {
                         return console.log(err);
                     }
-                    console.log("The file was saved!");
+                    console.log("The file was saved as 'public/experiments/" + fs_id + ".json'!");
+                    //TODO start sync to scoreboardserver here!
                 });
             }
 

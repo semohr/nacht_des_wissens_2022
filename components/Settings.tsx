@@ -2,7 +2,7 @@ import useLocalStorage from "react-use/lib/useLocalStorage";
 
 
 export default function Settings() {
-    const [settings, setSettings] = useLocalStorage<"receiver" | "emitter">("role");
+    const [settings, setSettings] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
     if (!settings) {
         setSettings("receiver");
     }

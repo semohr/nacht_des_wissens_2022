@@ -103,7 +103,7 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
 
 export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
     const socket = useSocket();
-    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role");
+    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
     const [ready, setReady] = useState(initial);
     const [tn, setTn] = useState("");
     const [bg, setBg] = useState("transparent");
