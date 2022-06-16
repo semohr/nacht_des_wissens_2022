@@ -15,5 +15,11 @@ $LANG = array(
     "scatter_ylabel" => "Mutual Information in bits/s",
     //
     "datatable_search_placeholder" => "Team suchen",
+    // datatable column ids to strings
+    "rank" => "Rang",
+    "team_name" => "Team",
+    "mi_bits_s" => "MI (bit/s)",
+    "mi_bits" => "MI (bits)",
+    "duration" => "Zeit (s)",
 );
 ?>

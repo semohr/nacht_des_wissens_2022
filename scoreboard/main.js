@@ -4,6 +4,11 @@ document.addEventListener("DOMContentLoaded", main);
 var data;
 var dataTable;
 var miChart;
+var column_ids;
+var column_labels;
+// match bootstrap colors
+const colors = ["#027BFF", "#DC3645", "#FFC207", "#28A745",
+    "#19A2B7", "#343A41", "#6C757D"]
 
 // initialize after dom is loaded
 async function main() {
@@ -13,32 +18,62 @@ async function main() {
     // console.log(data);
 
     // sort data according to some key
-    const sort_by = "MI";
+    const sort_by = "mi_bits_s";
     data.sort(function (a, b) {
         return b[sort_by] - a[sort_by];
     });
 
-    // const table_data = { "ID": [0, 1, 2, 3, 4, 5, 6], "Mutual Information": [0, 0, 0, 0, 0, 0, 0] }
-    let table = create_table(data, row_first = true);
+    // now data is ordered and we can set a rank
+    for (let i = 0; i < data.length; i++) {
+        data[i].rank = i + 1;
+    }
+
+
+    column_ids = ["rank", "team_name", "mi_bits_s", "mi_bits", "duration"];
+    column_labels = column_ids.map(id => { return $LANG[id] });
+
+    // create table in html
+    let table = create_table(data, keys = column_ids, row_first = true);
     table.id = "leaderboard";
     table.style.width = "100%";
-
     document.getElementById("leaderboard-container").appendChild(table);
 
-    // Create graph
-    miChart = create_mi_dist();
 
+    const [edges, bin_centers, counts] = calculate_histogram(data.map(d => d["mi_bits"]));
+    // console.log(bin_centers);
+    // console.log(edges);
+    // console.log(counts);
+
+    // Create graphs
+    miChart = create_mi_dist(x = bin_centers, y = counts, base_color = colors[0]);
+    miScatter = create_scatter_plot(
+        x = data.map(d => d["mi_bits"]),
+        y = data.map(d => d["mi_bits_s"]),
+        base_color = colors[0]
+    );
 
     // init DataTable for sorting and the likes
     dataTable = new DataTable('#leaderboard',
         {
-            // paging: false,
+            columns: column_ids.map(
+                id => {
+                    return {
+                        title: $LANG[id],
+                        data: id,
+                        searchable: id == "team_name" ? true : false,
+                        render: (["mi_bits_s", "mi_bits", "duration"].includes(id)) ?
+                            DataTable.render.number(null, null, 2) :
+                            DataTable.render.text()
+                    }
+                }
+            ),
             language: {
                 // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
                 url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/" + $LANG['language'] + ".json",
                 search: "",
                 searchPlaceholder: $LANG['datatable_search_placeholder'],
             },
+            // paging: false,
             // customize the created dom https://datatables.net/reference/option/dom
             // "dom": 'ft'
             // needed tweaking to have search on the left
@@ -53,20 +88,25 @@ async function main() {
     // we will need to make sure that we always have at least one row of data!
     keys = Object.keys(data[0]);
 
-    // currently search still searches everything.
+    // make the search highlight the highest point of all teams currently shown
     dataTable.on('search.dt', function () {
-        // this gives us the rows that are still visible. we could get
-        // the id and highligh those points in the distribution graph.
-        // console.log(dataTable.rows({ filter: 'applied' }));
-        visible_rows = dataTable.rows({ filter: 'applied' }).data().toArray()
+        // only do sth if we have a searchterm
+        if (dataTable.search().length == 0) return;
+
+        // get rows that are still visible after filtering
+        rows = dataTable.rows({ filter: 'applied' }).data().toArray()
         // visible_hashes = visible_rows.map(row => row[col_index_for_hash]);
-        if (visible_rows.length == 1) {
-            // render special tootlip in high charts
-            hash = visible_rows[0][keys.indexOf("expID")];
-            mi = visible_rows[0][keys.indexOf("MI")];
-            console.log(mi);
-            highlight_point_in_chart(miChart, x_val = mi);
-        }
+
+        mi = rows.map(row => parseFloat(row["mi_bits"]));
+        mi_per_sec = rows.map(row => parseFloat(row["mi_bits_s"]));
+
+        // set the tooltip of the prob dist to the highest mi that is still visible!
+        mi_max = Math.max(...mi);
+        highlight_points_in_chart(miChart, mi_max);
+
+        // for scatter, highlight all matches
+        highlight_points_in_chart(miScatter, mi, mi_per_sec);
+
     });
 }
 
@@ -76,9 +116,11 @@ async function main() {
  * ps: I added `row_first` so we can pass data as we get it from php.
  * we could detect this but focus, lennard.
  */
-function create_table(data, row_first = false) {
+function create_table(data, keys = null, row_first = false) {
 
-    let keys = (row_first) ? Object.keys(data[0]) : Object.keys(data);
+    if (keys == null) {
+        const keys = (row_first) ? Object.keys(data[0]) : Object.keys(data);
+    }
     let num_rows = (row_first) ? data.length : data[keys[0]].length;
 
     // console.log(keys);
@@ -120,49 +162,34 @@ function create_table(data, row_first = false) {
     return table;
 }
 
-function GaussKDE(xi, x, sigma=1) {
-    return (1 / sigma / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow((xi - x)/sigma, 2) / -2);
+function GaussKDE(xi, x, sigma = 1) {
+    return (1 / sigma / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow((xi - x) / sigma, 2) / -2);
 }
 
-function create_mi_dist() {
+function create_mi_dist(x, y, base_color = "#027BFF") {
 
-    // ps 22-06-14:
-    // i think we should not use the gaussian kernel (sorry)
-    // * simple smoothing can be enabled via highcharts builtin: https://jsfiddle.net/5g4m3nLz/
-    // * the tooltip becomes messy with kernel. x points are not constrained to data, histogram like y values are not that trivial. also having 1.5 teams reach 91 bits seems weird.
+    // plot mutual information as smoothed histogram
+    const N = y.reduce((a, b) => a + b);
 
+    // normalize y
+    y = y.map(y_i => y_i / N);
 
-    let dataSource = [93, 93, 96, 100, 101, 102, 102];
-    let xiData = [];
-    let range = 105,
-        startPoint = 0;
-    for (i = 0; i < range; i++) {
-        xiData[i] = startPoint + i;
-    }
+    // zip x and y into array of tuples
+    const data = x.map((x, i) => [x, y[i]]);
 
-    let data_plot = [];
-    let N = dataSource.length;
-    let kernelChart = [];
-    let kernel = [];
-    let data = [];
-    // MI range over which the kernel smoothes
-    let sigma = 2.0;
-
-    // Create the density estimate
-    for (i = 0; i < xiData.length; i++) {
-        let temp = 0;
-        kernel.push([]);
-        kernel[i].push(new Array(dataSource.length));
-        for (j = 0; j < dataSource.length; j++) {
-            temp = temp + GaussKDE(xiData[i], dataSource[j], sigma);
-            kernel[i][j] = GaussKDE(xiData[i], dataSource[j], sigma);
+    // localised tootlip formatter
+    function localised_formatter(x, y) {
+        if ($locale == "de") {
+            return '<b>' + x.toFixed(2) + '</b> bits wurden in<br><b>' + Math.floor(y * N) + '</b> von ' + N + ' Experimenten erreicht';
+        } else {
+            return '<b>' + x.toFixed(2) + '</b> bits were reached in<br><b>' + Math.floor(y * N) + '</b> out of ' + N + ' experiments';
         }
-        data.push([xiData[i], (1 / N) * temp]);
     }
 
-    return Highcharts.chart("graph", {
+
+    return Highcharts.chart("miDist", {
         chart: {
-            type: "spline",
+            type: "column",
             animation: true,
             zoomType: "x",
         },
@@ -174,6 +201,7 @@ function create_mi_dist() {
             type: "",
             title: { text: $LANG['mi_xlabel'] },
             min: 0,
+            crosshair: false,
         },
         yAxis: {
             title: { text: $LANG['mi_ylabel'] }
@@ -187,22 +215,39 @@ function create_mi_dist() {
         tooltip: {
             valueDecimals: 3,
             formatter: function () {
-                return '~ <b>' + Math.floor(this.y * N / sigma * 10) + '</b> teams<br>reached <b>' + this.x + '</b> bits';
-            }
+                return localised_formatter(this.x, this.y);
+            },
         },
+        // assume only one series.
         // match bootstrap colors so we can match the headers of the card button etc
-        colors: ["#027BFF", "#DC3645", "#FFC207", "#28A745",
-            "#19A2B7", "#343A41", "#6C757D"],
+        colors: [base_color],
+
+        // plotOptions: {
+        //     series: {
+        //         marker: {
+        //             enabled: false
+        //         },
+        //     }
+        // },
         plotOptions: {
-            series: {
-                marker: {
-                    enabled: false
-                },
+            column: {
+                pointPadding: 0,
+                borderWidth: 0,
+                groupPadding: 0.01,
+                shadow: false,
+                colorByPoint: true,
             }
         },
-        series: [
-            { name: "P(MI)", data: data },
-        ],
+        series: [{
+            name: "P(MI)",
+            data: data,
+            allowPointSelect: false,
+            states: {
+                select: {
+                    color: colors[1],
+                },
+            },
+        }],
         // hide the highcharts logo. make sure to acknowledge in the credits section
         credits: {
             enabled: false
@@ -210,22 +255,159 @@ function create_mi_dist() {
     })
 }
 
-function highlight_point_in_chart(chart, x_val) {
-    // we need to find the point in the series via the desired x-value,
-    // and customzie the tooltip
+function create_scatter_plot(x, y, base_color = "#027BFF") {
 
+    x = x.flat();
+    y = y.flat();
+    data = x.map((x, i) => [x, y[i]])
+
+    return Highcharts.chart("miScatter", {
+        chart: {
+            type: "scatter",
+            animation: true,
+            zoomType: "xy",
+        },
+
+        boost: {
+            useGPUTranslations: true,
+            usePreAllocated: true
+        },
+
+        title: {
+            text: ""
+        },
+        xAxis: {
+            type: "",
+            title: { text: $LANG['mips_xlabel'] },
+            min: 0,
+            crosshair: false,
+        },
+        yAxis: {
+            title: { text: $LANG['mips_ylabel'] }
+        },
+        legend: {
+            enabled: false,
+        },
+        // for the tooltip we want to say sth like ~ 3 teams reached such a score.
+        // to convert the plotted kde (a probability) to something like a histogram,
+        // we just need to multiply with the number of teams and cast to int.
+        tooltip: {
+            enabled: false,
+        },
+        // assume only one series.
+        // match bootstrap colors so we can match the headers of the card button etc
+        colors: [base_color],
+
+        // plotOptions: {
+        //     series: {
+        //         marker: {
+        //             enabled: false
+        //         },
+        //     }
+        // },
+        series: [{
+            name: "MIPS vs MI",
+            data: data,
+            allowPointSelect: false,
+            marker: {
+                states: {
+                    select: {
+                        fillColor: colors[1],
+                        lineWidth: 0,
+                        radius: 6,
+                    },
+                },
+            },
+        }],
+        // hide the highcharts logo. make sure to acknowledge in the credits section
+        credits: {
+            enabled: true
+        },
+    });
+}
+
+function highlight_points_in_chart(chart, x_val, y_val = null) {
+    // we need to find the point in the series via the desired x-value
+    //  (and, optionally, y-value) to customzie the tooltip
+
+
+    if (Array.isArray(x_val)) {
+        x_val = x_val.flat();
+        y_val = y_val.flat();
+    } else {
+        x_val = [x_val];
+        y_val = [y_val];
+    }
+
+    console.log(x_val);
+    console.log(y_val);
     var poi;
     Highcharts.each(chart.series[0].points, function (point) {
-        console.log(point.x)
-        if (point.x == x_val) {
-            poi = point;
-            // break
-            // return false;
+        // unselect all points by default
+        point.select(false);
+        // select the ones that match
+        for (let i = 0; i < x_val.length; i++) {
+            if (point.x == x_val[i]) {
+                if (y_val[i] == null || y_val[i] == point.y) {
+                    console.log("highlighting: " + point.x + " " + point.y);
+                    chart.tooltip.refresh([point]);
+                    point.setState("select");
+                }
+            }
         }
     });
+}
 
-    // chart.series[0].data[50].setState("hover")
-    // chart.tooltip.refresh([chart.series[0].points[50]]);
-    poi.setState("hover");
-    chart.tooltip.refresh([poi]);
+function calculate_histogram(data) {
+    // pass a series of data assuming events are discrete.
+    // automatically calculate bin edges.
+
+    // returns bin_edges (length n+1), bin_centers (length n) and counts (length n)
+
+    sorted_data = data;
+    sorted_data = sorted_data.flat();
+    sorted_data = sorted_data.sort(function (a, b) { return a - b; });
+    // console.log("data");
+    // console.log(sorted_data);
+
+    const unique = (value, index, self) => {
+        // check that the floating point value is not the same as the previous one
+        return self.indexOf(value) === index
+    }
+    const unique_values = sorted_data.filter(unique);
+
+    edges = [unique_values[0] - 0.1];
+    for (let i = 0; i < unique_values.length - 1; i++) {
+        edges.push(unique_values[i] + (unique_values[i + 1] - unique_values[i]) / 2);
+    }
+    edges.push(unique_values[unique_values.length - 1] + 0.1);
+
+    counts = new Array(edges.length - 1).fill(0);
+
+    for (let val of sorted_data) {
+        idx = hist_index_from_value(edges, val);
+        console.log(idx + ' ' + val);
+        counts[idx] = counts[idx] + 1;
+    }
+
+    // console.log("edges");
+    // console.log(edges);
+    // console.log("unique_values");
+    // console.log(unique_values);
+    // console.log("counts");
+    // console.log(counts);
+
+    return [edges, unique_values, counts];
+}
+
+function hist_index_from_value(edges, value) {
+    // return the index of the bin that contains the value
+    // if the value is outside the range, return -1
+    for (let i = 0; i < edges.length; i++) {
+        if (value < edges[i]) {
+            return i - 1;
+        }
+    }
+    // return edges.length - 1;
+    return null
 }

@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
 
-                                <div id="graph" class="p-1 mt-1"></div>
+                                <div id="miDist" class="p-1 mt-1"></div>
                             </div>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                                     </div>
                                 </div>
 
-                                <div id="graph" class="p-1 mt-1"></div>
+                                <div id="miScatter" class="p-1 mt-1"></div>
                             </div>
                         </div>
                     </div>

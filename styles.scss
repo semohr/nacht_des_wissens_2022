@@ -32,10 +32,8 @@
     border-radius: 0px;
 }
 
-.rotate {
-    &:hover {
-        animation: rotating 0.7s linear;
-    }
+.rotate-outer:hover .rotate-inner {
+    animation: rotating 0.5s linear;
 }
 
 @keyframes rotating {
