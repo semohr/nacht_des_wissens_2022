@@ -33,6 +33,7 @@
 }
 
 .rotate-outer:hover .rotate-inner {
+    display: inline-block;
     animation: rotating 0.5s linear;
 }
 

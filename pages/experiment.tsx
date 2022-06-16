@@ -12,12 +12,16 @@ export default function experiment() {
     // Check if both players are ready
     const [started, setStarted] = useState(false);
     const [expID, setExpID] = useState(null);
-    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
+    const [_role, _setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
+    const [role, setRole] = useState("");
     const [backgroundC, setbackgroundC] = useState("transparent");
 
     const socket = useSocket();
     const router = useRouter();
 
+    useEffect(() => {
+        setRole(_role);
+    }, []);
 
 
     useEffect(() => {
@@ -33,10 +37,10 @@ export default function experiment() {
         }
     }, [socket]);
 
-    var form;
+    var form = null;
     if (role == "receiver") {
         form = <NumPad expID={expID} disabled={!started} />
-    } else {
+    } else if (role == "emitter") {
         form = <Prompt expID={expID} />
     }
 
@@ -44,7 +48,7 @@ export default function experiment() {
         <>
             <div className="container-fluid d-flex vh-100 flex-center flex-column">
                 {form}
-                {!started ? <ReadyBtn /> : null}
+                {!started ? <ReadyBtn role={role} /> : null}
                 <ProgressBar />
             </div>
         </>

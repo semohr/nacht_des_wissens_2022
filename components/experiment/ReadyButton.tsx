@@ -5,11 +5,9 @@ import { useEffect, useState } from "react";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 
 
-export default function ReadyBtn({ onClick = () => { }, initial = false }) {
-    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
+export default function ReadyBtn({ onClick = () => { }, initial = false, role }) {
     const router = useRouter();
     const { team_name } = router.query;
-
 
     if (role == "receiver") {
         return <ReadyBtnReceiver onClick={onClick} initial={initial} />;
