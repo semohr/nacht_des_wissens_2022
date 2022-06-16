@@ -12,11 +12,13 @@ export default function experiment() {
     // Check if both players are ready
     const [started, setStarted] = useState(false);
     const [expID, setExpID] = useState(null);
-    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role");
+    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
     const [backgroundC, setbackgroundC] = useState("transparent");
 
     const socket = useSocket();
     const router = useRouter();
+
+
 
     useEffect(() => {
         if (socket) {
@@ -25,8 +27,8 @@ export default function experiment() {
                 setExpID(expID);
             });
             socket.on("experiment:end", (expID, teamname) => {
+                socket.close();
                 router.push("/bye?teamname=" + teamname);
-                socket.disconnect();
             });
         }
     }, [socket]);

@@ -6,8 +6,7 @@ import { writeFile, readFileSync, readdir, readdirSync } from 'fs';
 interface Data {
     emitterID: string;
     receiveID: string;
-    teamname_emitter: string,
-    teamname_receiver: string,
+    team_name: string,
     emitted: number[][], //emitted number each block
     received: number[][], //received number each block
     duration: number[][], //time ms for each event
@@ -50,15 +49,15 @@ const SocketHandler = (req, res) => {
                 }
             });
 
-            socket.on("experiment:ready", (state, teamname) => {
+            socket.on("experiment:ready", (state, teamname?) => {
                 console.log("[main] Received experiment:ready", state, teamname);
                 var id1 = socket.id;
                 console.log("[main] id", id1);
 
                 if (state == "emitter") {
                     if (receiver.length > 0) {
-                        var [id2, teamname2] = receiver.pop();
-                        ready_pair(id1, id2, teamname, teamname2);
+                        var id2 = receiver.pop();
+                        ready_pair(id1, id2, teamname);
                     }
                     else {
                         emitter.push([id1, teamname]);
@@ -66,10 +65,10 @@ const SocketHandler = (req, res) => {
                 }
                 if (state == "receiver") {
                     if (emitter.length > 0) {
-                        var [id2, teamname2] = emitter.pop();
-                        ready_pair(id2, id1, teamname2, teamname);
+                        var [id2, _teamname] = emitter.pop();
+                        ready_pair(id2, id1, _teamname);
                     } else {
-                        receiver.push([id1, teamname]);
+                        receiver.push([id1]);
                     }
                 }
             });
@@ -109,7 +108,7 @@ const SocketHandler = (req, res) => {
             });
 
             // Helper functions
-            function ready_pair(emitterID, receiveID, teamname_emitter, teamname_receiver) {
+            function ready_pair(emitterID, receiveID, teamname) {
                 console.log("ready_pair", emitterID, receiveID);
                 const map: Data = {
                     "emitterID": emitterID,
@@ -119,8 +118,7 @@ const SocketHandler = (req, res) => {
                     "duration": [],
                     "currentBlock": 0,
                     "start_last_event": undefined,
-                    "teamname_emitter": teamname_emitter,
-                    "teamname_receiver": teamname_receiver,
+                    "team_name": teamname,
                     "mi_bits": [],
                     "mi_bits_s": [],
                 }
@@ -176,7 +174,7 @@ const SocketHandler = (req, res) => {
                 const filenames = readdirSync("public/experiments");
                 const fs_id = String(filenames.length).padStart(4, '0');
                 const filename = "public/experiments/" + fs_id + ".json";
-                const teamname = map.teamname_emitter + " " + map.teamname_receiver;
+                const teamname = map.team_name
                 io.to(map.emitterID).emit("experiment:end", fs_id, teamname);
                 io.to(map.receiveID).emit("experiment:end", fs_id, teamname);
 

@@ -2,6 +2,6 @@
     "ready": "bereit",
     "waiting_msg": "Warten auf anderen Spieler...",
     "prompt": "Bitte kommunizieren Sie folgende Nummer:",
-    "Teamname": "Bitte wählt euren Team Namen",
+    "Teamname": "Bitte wählt euren Team Namen!",
     "Submit_Teamname": "Submit team name"
 }

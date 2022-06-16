@@ -1,16 +1,20 @@
 import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 
 
 export default function ReadyBtn({ onClick = () => { }, initial = false }) {
-    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role");
+    const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
+    const router = useRouter();
+    const { team_name } = router.query;
+
 
     if (role == "receiver") {
-        return <ReadyBtnReceiver onClick={onClick} initial={initial}/>;
+        return <ReadyBtnReceiver onClick={onClick} initial={initial} />;
     } else if (role == "emitter") {
-        return <ReadyBtnEmitter onClick={onClick} initial={initial} />;
+        return <ReadyBtnEmitter onClick={onClick} initial={initial} force_teamname={team_name} />;
     } else {
         console.log("unknown role: " + role);
         return null;
@@ -19,10 +23,10 @@ export default function ReadyBtn({ onClick = () => { }, initial = false }) {
 
 // the emitter reads out the numbers, thus is likely in front of PC
 // and can enter a teamname.
-export function ReadyBtnEmitter({ onClick = () => { }, initial = false }) {
+export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_teamname = undefined }) {
     const socket = useSocket();
     const [ready, setReady] = useState(initial);
-
+    const [outline, setOutline] = useState(false);
 
     //Translations
     const { t } = useTranslation("experiment");
@@ -30,30 +34,44 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false }) {
     const waiting_msg = t("waiting_msg");
 
     return (
-        <>
-            <form>
+        <div className="p-3">
+            <form onSubmit={e => {
+                e.preventDefault();
+                const teamname = (document.getElementById("input_teamname") as HTMLInputElement).value;
+
+                socket!.emit("experiment:ready", "emitter", teamname);
+                setReady(true);
+
+                // disable buttons
+                (document.getElementById("input_teamname") as HTMLInputElement).disabled = true;
+                (document.getElementById("button_ready") as HTMLButtonElement).disabled = true;
+                (document.getElementById("button_newname") as HTMLButtonElement).disabled = true;
+            }}>
                 <label htmlFor="input_teamname" className="form-label">{t("Teamname")}</label>
                 <div className="input-group mb-3">
-                    <input type="string" className="form-control" id="input_teamname"
+                    <input
+                        type="string"
+                        className="form-control"
+                        id="input_teamname"
                         placeholder="TeamName"
+                        disabled={force_teamname}
+                        value={force_teamname || ""}
+                        required
                     />
-                    <button className="btn btn-outline-secondary" type="button" onClick={async () => {updateTeamnamePlaceholder()}}>
-                        <i className="rotate bi bi-arrow-counterclockwise"></i></button>
+                    <button id="button_newname" className="btn btn-outline-secondary" type="button" onClick={async () => { updateTeamnamePlaceholder() }} disabled={force_teamname}>
+                        <div className="rotate"><i className="bi bi-arrow-counterclockwise"></i></div>
+                    </button>
                 </div>
 
                 <div className="readyBtn">
-                    {ready ? <div className="ready">{waiting_msg}</div> : null}
-                    <button onClick={(e) => {
+                    {ready ? <div className="ready p-2">{waiting_msg}</div> : null}
+                    <button id="button_ready" type="submit" onClick={(e) => {
                         onClick();
-                        socket!.emit("experiment:ready", "emitter");
-                        setReady(true);
-                        // disable button
-                        (e.target as HTMLButtonElement).disabled = true;
                     }
                     } className="btn btn-lg btn-primary" >{ready_str.toUpperCase()}</button>
                 </div >
             </form>
-        </>
+        </div>
     );
 }
 
@@ -69,19 +87,17 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
     const waiting_msg = t("waiting_msg");
 
     return (
-        <>
-            <div className="readyBtn">
-                {ready ? <div className="ready">{waiting_msg}</div> : null}
-                <button onClick={(e) => {
-                    onClick();
-                    socket!.emit("experiment:ready", "receiver");
-                    setReady(true);
-                    // disable button
-                    (e.target as HTMLButtonElement).disabled = true;
-                }
-                } className="btn btn-lg btn-secondary" >{ready_str.toUpperCase()}</button>
-            </div >
-        </>
+        <div className="readyBtn">
+            {ready ? <div className="ready">{waiting_msg}</div> : null}
+            <button onClick={(e) => {
+                onClick();
+                socket!.emit("experiment:ready", "receiver");
+                setReady(true);
+                // disable button
+                (e.target as HTMLButtonElement).disabled = true;
+            }
+            } className="btn btn-lg btn-secondary" >{ready_str.toUpperCase()}</button>
+        </div >
     );
 }
 
@@ -99,30 +115,28 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
 
     const teamname = t("Teamname", { n_th: role == "emitter" ? "first" : "second" });
     return (
-        <>
-            <div className="readyBtn d-flex flex-column">
-                {ready ? <div className="ready">{waiting_msg}</div> : null}
-                <p>{teamname}</p>
-                <input id="teamname_input" type="text" onChange={(e) => { setTn(e.target.value) }} style={{ backgroundColor: bg }} />
-                <button onClick={(e) => {
-                    if (tn == "") {
-                        setBg("red");
-                        setTimeout(() => {
-                            setBg("transparent");
-                        }, 500);
-                        return
-                    }
-
-                    onClick();
-                    socket!.emit("experiment:ready", role, tn);
-                    setReady(true);
-                    // disable button
-                    (document.getElementById("teamname_input") as HTMLInputElement)!.disabled = true;
-                    (e.target as HTMLButtonElement).disabled = true;
+        <div className="readyBtn d-flex flex-column">
+            {ready ? <div className="ready">{waiting_msg}</div> : null}
+            <p>{teamname}</p>
+            <input id="teamname_input" type="text" onChange={(e) => { setTn(e.target.value) }} style={{ backgroundColor: bg }} />
+            <button onClick={(e) => {
+                if (tn == "") {
+                    setBg("red");
+                    setTimeout(() => {
+                        setBg("transparent");
+                    }, 500);
+                    return
                 }
-                } className="btn btn-lg btn-secondary m-3" >{ready_str.toUpperCase()}</button>
-            </div >
-        </>
+
+                onClick();
+                socket!.emit("experiment:ready", role, tn);
+                setReady(true);
+                // disable button
+                (document.getElementById("teamname_input") as HTMLInputElement)!.disabled = true;
+                (e.target as HTMLButtonElement).disabled = true;
+            }
+            } className="btn btn-lg btn-secondary m-3" >{ready_str.toUpperCase()}</button>
+        </div >
     );
 }
 
@@ -138,6 +152,6 @@ async function fetchTeamname() {
 async function updateTeamnamePlaceholder() {
     const teamname = await fetchTeamname();
     console.log(teamname);
-    (document.getElementById("input_teamname") as HTMLInputElement).placeholder = teamname;
+    (document.getElementById("input_teamname") as HTMLInputElement).value = teamname;
 }
 

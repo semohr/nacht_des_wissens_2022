@@ -12,7 +12,8 @@ export default function Bye() {
     const msg = t("thank_you_msg");
     const cont = t("continue");
     const error_msg = t("error_msg")
-    const next_exp = t("next_exp")
+    const retry = t("retry")
+    const end = t("end")
 
     return (
         <>
@@ -23,7 +24,8 @@ export default function Bye() {
                 <p>
                     {teamname}
                 </p>
-                <button className="btn btn-outline-primary" onClick={()=>{router.push("/")}}>{next_exp}</button>
+                <button className="btn btn-outline-primary" onClick={() => { router.push("/experiment?team_name=" + teamname) }}>{retry}</button>
+                <button className="btn btn-outline-primary" onClick={() => { router.push("/") }}>{end}</button>
             </div>
         </>
     )

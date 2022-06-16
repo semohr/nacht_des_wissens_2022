@@ -16,7 +16,9 @@ export default function useSocket() {
         };
         init();
         setActiveSocket(socket);
-
+        if (!socket.connected) {
+            socket.connect();
+        }
         function cleanup() {
             //socket.disconnect()
         }
@@ -25,5 +27,5 @@ export default function useSocket() {
         // so pass an empty array
     }, [])
 
-    return activeSocket
+    return activeSocket;
 }
