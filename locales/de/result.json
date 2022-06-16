@@ -3,5 +3,6 @@
     "thank_you_msg": "Wir hoffen Sie hatten Spaß bei diesem kleinen Experiment.",
     "continue": "Fortfahren",
     "error_msg": "Identifikationsnummer wurde nicht gefunden, diese sollte nummerisch und 4 Stellen lang sein. Eventuell sind Ihre Ergebnisse noch nicht verfügbar, versuchen Sie es gerne in ein paar Minuten erneut",
-    "remember_teamname": "Bitte merken Sie sich ihren team namen"
+    "remember_teamname": "Bitte merken Sie sich ihren team namen",
+    "next_exp": "Neuer Versuch"
 }
