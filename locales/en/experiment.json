@@ -2,6 +2,6 @@
     "ready": "ready",
     "waiting_msg": "Waiting for other players...",
     "prompt": "Please communicate the following number:",
-    "Teamname": "Please choose the {{n_th}} part of your team name!",
+    "Teamname": "Please select your team name!",
     "Submit_Teamname": "Submit team name"
 }

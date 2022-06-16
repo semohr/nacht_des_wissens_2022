@@ -32,6 +32,12 @@
     border-radius: 0px;
 }
 
+.rotate{
+    transition: transform .7s ease-in-out;
+    &:hover {
+        transform: rotate(360deg);
+    }
+}
 
 .block-1>.progress-bar {
     background-color: rgb(93, 217, 255);

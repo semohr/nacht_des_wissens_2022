@@ -3,9 +3,63 @@ import useTranslation from "next-translate/useTranslation";
 import { useState } from "react";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 
+
 export default function ReadyBtn({ onClick = () => { }, initial = false }) {
-    const socket = useSocket();
     const [role, setRole] = useLocalStorage<"receiver" | "emitter">("role");
+
+    if (role == "receiver") {
+        return <ReadyBtnReceiver onClick={onClick} initial={initial}/>;
+    } else if (role == "emitter") {
+        return <ReadyBtnEmitter onClick={onClick} initial={initial} />;
+    } else {
+        console.log("unknown role: " + role);
+        return null;
+    }
+}
+
+// the emitter reads out the numbers, thus is likely in front of PC
+// and can enter a teamname.
+export function ReadyBtnEmitter({ onClick = () => { }, initial = false }) {
+    const socket = useSocket();
+    const [ready, setReady] = useState(initial);
+
+
+    //Translations
+    const { t } = useTranslation("experiment");
+    const ready_str = t("ready");
+    const waiting_msg = t("waiting_msg");
+
+    return (
+        <>
+            <form>
+                <label htmlFor="input_teamname" className="form-label">{t("Teamname")}</label>
+                <div className="input-group mb-3">
+                    <input type="string" className="form-control" id="input_teamname"
+                        placeholder="TeamName"
+                    />
+                    <button className="btn btn-outline-secondary" type="button" onClick={async () => {updateTeamnamePlaceholder()}}>
+                        <i className="rotate bi bi-arrow-counterclockwise"></i></button>
+                </div>
+
+                <div className="readyBtn">
+                    {ready ? <div className="ready">{waiting_msg}</div> : null}
+                    <button onClick={(e) => {
+                        onClick();
+                        socket!.emit("experiment:ready", "emitter");
+                        setReady(true);
+                        // disable button
+                        (e.target as HTMLButtonElement).disabled = true;
+                    }
+                    } className="btn btn-lg btn-primary" >{ready_str.toUpperCase()}</button>
+                </div >
+            </form>
+        </>
+    );
+}
+
+// the receiver has the numpad and listens to spoken words of emitter
+export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
+    const socket = useSocket();
     const [ready, setReady] = useState(initial);
 
 
@@ -20,7 +74,7 @@ export default function ReadyBtn({ onClick = () => { }, initial = false }) {
                 {ready ? <div className="ready">{waiting_msg}</div> : null}
                 <button onClick={(e) => {
                     onClick();
-                    socket!.emit("experiment:ready", role);
+                    socket!.emit("experiment:ready", "receiver");
                     setReady(true);
                     // disable button
                     (e.target as HTMLButtonElement).disabled = true;
@@ -71,3 +125,19 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
         </>
     );
 }
+
+
+async function fetchTeamname() {
+    const teamname = await fetch("/api/teamname").then(res => res.json()).catch(e => {
+        console.log(e);
+        return fetchTeamname();
+    });
+    return teamname["team_name"];
+}
+
+async function updateTeamnamePlaceholder() {
+    const teamname = await fetchTeamname();
+    console.log(teamname);
+    (document.getElementById("input_teamname") as HTMLInputElement).placeholder = teamname;
+}
+

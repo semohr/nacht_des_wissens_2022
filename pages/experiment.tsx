@@ -2,7 +2,7 @@ import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
 import { useEffect, useState } from "react";
 import useLocalStorage from "react-use/lib/useLocalStorage";
-import { ReadyBtnWithTeamname } from "components/experiment/ReadyButton";
+import ReadyBtn, { ReadyBtnWithTeamname } from "components/experiment/ReadyButton";
 import NumPad from "components/experiment/NumPad";
 import Prompt from "components/experiment/Prompt";
 import ProgressBar from "components/experiment/ProgressBar";
@@ -42,7 +42,7 @@ export default function experiment() {
         <>
             <div className="container-fluid d-flex vh-100 flex-center flex-column">
                 {form}
-                {!started ? <ReadyBtnWithTeamname /> : null}
+                {!started ? <ReadyBtn /> : null}
                 <ProgressBar />
             </div>
         </>

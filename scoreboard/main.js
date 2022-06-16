@@ -26,7 +26,7 @@ async function main() {
     document.getElementById("leaderboard-container").appendChild(table);
 
     // Create graph
-    miChart = create_graph();
+    miChart = create_mi_dist();
 
 
     // init DataTable for sorting and the likes
@@ -35,9 +35,9 @@ async function main() {
             // paging: false,
             language: {
                 // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
-                url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/German.json",
+                url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/" + $LANG['language'] + ".json",
                 search: "",
-                searchPlaceholder: "Search Team"
+                searchPlaceholder: $LANG['datatable_search_placeholder'],
             },
             // customize the created dom https://datatables.net/reference/option/dom
             // "dom": 'ft'
@@ -124,7 +124,7 @@ function GaussKDE(xi, x, sigma=1) {
     return (1 / sigma / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow((xi - x)/sigma, 2) / -2);
 }
 
-function create_graph() {
+function create_mi_dist() {
 
     // ps 22-06-14:
     // i think we should not use the gaussian kernel (sorry)
@@ -172,11 +172,11 @@ function create_graph() {
         },
         xAxis: {
             type: "",
-            title: { text: "Mutual Information in bits" },
+            title: { text: $LANG['mi_xlabel'] },
             min: 0,
         },
         yAxis: {
-            title: { text: "Probability" }
+            title: { text: $LANG['mi_ylabel'] }
         },
         legend: {
             enabled: false,

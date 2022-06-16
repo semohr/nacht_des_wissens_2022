@@ -1,0 +1,303 @@
+{
+"animals" : {
+    "A" :[
+        "Albatrosses",
+        "Alligators",
+        "Alpacas",
+        "Ants",
+        "Anteaters",
+        "Antelopes",
+        "Apes",
+        "Armadillos"
+    ],
+    "B" :[
+        "Baboons",
+        "Badgers",
+        "Bats",
+        "Bears",
+        "Beavers",
+        "Bees",
+        "Birds",
+        "Bisons",
+        "Buffalos",
+        "Butterflies"
+    ],
+    "C" :[
+        "Caracoles",
+        "Caribous",
+        "Cats",
+        "Camels",
+        "Capybaras"
+    ],
+    "D" :[
+        "Dolphins",
+        "Doves",
+        "Ducks",
+        "Dwarves",
+        "Dinosaurs"
+    ],
+    "E" :[
+        "Eagles",
+        "Eels",
+        "Elephants",
+        "Elks"
+    ],
+    "F": [
+        "Fishes",
+        "Flamingos",
+        "Flounders",
+        "Frogs"
+    ],
+    "G" :[
+        "Gazelles",
+        "Geese",
+        "Giraffes",
+        "Goats",
+        "Grizzlies"
+    ],
+    "H" :[
+        "Horses",
+        "Humans",
+        "Humpbacks",
+        "Hyenas",
+        "Hippos",
+        "Hornets",
+        "Hummingbirds"
+    ],
+    "I": [
+        "Iguanas",
+        "Ibexes"
+    ],
+    "J" :[
+        "Jaguars",
+        "Jellyfish"
+    ],
+    "K": [
+        "Kangaroos",
+        "Kiwis",
+        "Koalas",
+        "Krill"
+    ],
+    "L" :[
+        "Lizards",
+        "Llamas",
+        "Lions"
+    ],
+    "M" :[
+        "Mice",
+        "Moles",
+        "Monkeys",
+        "Mongooses",
+        "Marmots"
+    ],
+    "N" :[
+        "Nighthawks"
+    ],
+    "O" :[
+        "Ocelots",
+        "Octopi",
+        "Otters",
+        "Oysters"
+    ],
+    "P" :[
+        "Penguins",
+        "Pigs",
+        "Ponies",
+        "Porpoises",
+        "Prawns",
+        "Pterodactyls",
+        "Pumas"
+    ],
+    "Q" :[
+        "Quails",
+        "Quokkas"
+    ],
+    "R" :[
+        "Rabbits",
+        "Rats",
+        "Raccoons",
+        "Rams",
+        "Roadrunners"
+    ],
+    "S" :[
+        "Scorpions",
+        "Seals",
+        "Sharks",
+        "Sheep",
+        "Snails",
+        "Snakes",
+        "Sparrows",
+        "Squirrels",
+        "Starfish",
+        "Storks"
+    ],
+    "T" :[
+        "Tigers",
+        "Turtles",
+        "Toads"
+    ],
+    "U" :[
+        "Ursulas"
+    ],
+    "V" :[
+        "Vultures"
+    ],
+    "W" :[
+        "Warthogs",
+        "Wolves"
+    ],
+    "X" : [
+        "X-rays"
+    ],
+    "Y" :[
+        "Yaks"
+    ],
+    "Z" :[
+        "Zebras",
+        "Zombies"
+    ]
+},
+"adjectives" : {
+    "A" :[
+        "Academic",
+        "Accurate",
+        "Admirable"
+    ],
+    "B": [
+        "Bold",
+        "Brilliant",
+        "Busy"
+    ],
+    "C": [
+        "Charming",
+        "Clean",
+        "Chubby",
+        "Cute",
+        "Curious",
+        "Clean"
+    ],
+    "D": [
+        "Dazzling",
+        "Dangerous",
+        "Dazzling"
+    ],
+    "E": [
+        "Efficient",
+        "Elegant",
+        "Eloquent",
+        "Extraordinary"
+    ],
+    "F": [
+        "Fantastic",
+        "Funny",
+        "Famous",
+        "Fabulous",
+        "Fit"
+    ],
+    "G": [
+        "Gorgeous",
+        "Giggling"
+    ],
+    "H": [
+        "Hilarious",
+        "Holy",
+        "Happy"
+    ],
+    "I": [
+        "Incredible",
+        "Impressive",
+        "Insightful",
+        "Intelligent"
+    ],
+    "J": [
+        "Jolly",
+        "Jumpy",
+        "Jealous",
+        "Just"
+    ],
+    "K" : [
+        "Kind",
+        "Keen",
+        "Knowing"
+    ],
+    "L": [
+        "Lucky",
+        "Laughing",
+        "Loud",
+        "Likeable"
+    ],
+    "M": [
+        "Majestic",
+        "Mighty"
+    ],
+    "N": [
+        "Nice",
+        "Nifty",
+        "Neat",
+        "Nimble",
+        "Nostalgic"
+    ],
+    "O": [
+        "Outstanding",
+        "Outgoing",
+        "Orderly"
+    ],
+    "P": [
+        "Proud",
+        "Pleasant",
+        "Powerful",
+        "Passionate"
+    ],
+    "Q": [
+        "Quiet",
+        "Quirky",
+        "Quick"
+    ],
+    "R": [
+        "Rich",
+        "Reliable",
+        "Righteous"
+    ],
+    "S": [
+        "Sincere",
+        "Satisfied",
+        "Sarcastic",
+        "Selfconfident"
+    ],
+    "T": [
+        "Tasty",
+        "Terrific",
+        "Tender",
+        "Tough",
+        "Tasteful",
+        "Talented"
+    ],
+    "U": [
+        "Unbelievable",
+        "Upright"
+    ],
+    "V": [
+        "Vibrant",
+        "Versatile",
+        "Valiant"
+    ],
+    "W": [
+        "Whopping",
+        "Wicked",
+        "Worthy",
+        "Warm",
+        "Wise",
+        "Winning"
+    ],
+    "X": [
+        "X-treme"
+    ],
+    "Y": [
+        "Yummy",
+        "Yellow"
+    ],
+    "Z": [
+        "Zestful"
+    ]
+}
+}
