@@ -330,6 +330,7 @@ function highlight_points_in_chart(chart, x_val, y_val = null) {
     // we need to find the point in the series via the desired x-value
     //  (and, optionally, y-value) to customzie the tooltip
 
+    chart.tooltip.hide();
 
     if (Array.isArray(x_val)) {
         x_val = x_val.flat();

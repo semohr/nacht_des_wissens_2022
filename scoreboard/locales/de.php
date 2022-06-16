@@ -9,6 +9,9 @@ $LANG = array(
     "mi_xlabel" => "Mutual Information in bits",
     "mi_ylabel" => "Wahrscheinlichkeit",
     //
+    "mips_xlabel" => "MI in bits",
+    "mips_ylabel" => "MI in bits/s",
+    //
     "scatter_title" => "Correlation MI und MI pro Zeit",
     "scatter_info" => "Deutsche Info zur MI, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis, dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis deserunt maxime adipisci natus praesentium obcaecati.",
     "scatter_xlabel" => "Mutual Information in bits",
