@@ -50,7 +50,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                 <label htmlFor="input_teamname" className="form-label">{t("Teamname")}</label>
                 <div className="input-group mb-3">
                     <input
-                        type="string"
+                        type="text"
                         className="form-control"
                         id="input_teamname"
                         placeholder="TeamName"
@@ -58,8 +58,8 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                         value={force_teamname || ""}
                         required
                     />
-                    <button id="button_newname" className="btn btn-outline-secondary" type="button" onClick={async () => { updateTeamnamePlaceholder() }} disabled={force_teamname}>
-                        <div className="rotate"><i className="bi bi-arrow-counterclockwise"></i></div>
+                    <button id="button_newname" className="btn btn-outline-secondary rotate-outer" type="button" onClick={async () => { updateTeamnamePlaceholder() }} disabled={force_teamname}>
+                        <span className="rotate-inner"><i className="bi bi-arrow-counterclockwise"></i></span>
                     </button>
                 </div>
 
