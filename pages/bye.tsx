@@ -17,15 +17,19 @@ export default function Bye() {
 
     return (
         <>
-            <LanguageSelector />
-            <div className="d-flex flex-center flex-column vh-100 p-5">
-                <h1>{title}</h1>
-                <h2>{msg}</h2>
-                <p>
-                    {teamname}
-                </p>
-                <button className="btn btn-outline-primary" onClick={() => { router.push("/experiment?team_name=" + teamname) }}>{retry}</button>
-                <button className="btn btn-outline-primary" onClick={() => { router.push("/") }}>{end}</button>
+            <div className="container-fluid p-3 vh-100 ">
+                <div className="d-flex justify-content-end">
+                    <LanguageSelector />
+                </div>
+                <div className="d-flex flex-center flex-column vh-100 p-5">
+                    <h1>{title}</h1>
+                    <h2>{msg}</h2>
+                    <p>
+                        {teamname}
+                    </p>
+                    <button className="btn btn-outline-primary" onClick={() => { router.push("/experiment?team_name=" + teamname) }}>{retry}</button>
+                    <button className="btn btn-outline-primary" onClick={() => { router.push("/") }}>{end}</button>
+                </div>
             </div>
         </>
     )
