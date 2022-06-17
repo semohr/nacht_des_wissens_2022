@@ -35,21 +35,25 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.12.1/sl-1.4.0/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.12.1/sl-1.4.0/datatables.min.js"></script>
 
-
-    <div class="languageSelector">
-            <a id="lang-de-btn"
-                href = "index.php?lang=de"
-                <?php if ($locale == 'de') echo 'hidden'; ?>
-                >
-                <img src="./public/de.svg"></img>
-            </a>
-            <a id="lang-en-btn"
-                href = "index.php?lang=en"
-                <?php if ($locale == 'en') echo 'hidden'; ?>
-                >
-                <img src="./public/gb.svg"></img>
-            </a>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-end mt-2">
+            <div class="languageSelector">
+                <a id="lang-de-btn"
+                    href = "index.php?lang=de"
+                    <?php if ($locale == 'de') echo 'hidden'; ?>
+                    >
+                    <img src="./public/de.svg"></img>
+                </a>
+                <a id="lang-en-btn"
+                    href = "index.php?lang=en"
+                    <?php if ($locale == 'en') echo 'hidden'; ?>
+                    >
+                    <img src="./public/gb.svg"></img>
+                </a>
+            </div>
         </div>
+    </div>
+
     <div class="container">
         <div class="row align-items-start my-2">
 

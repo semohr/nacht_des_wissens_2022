@@ -5,15 +5,12 @@
 
 
 .languageSelector {
-    margin: 16px;
+    /* margin: 16px;
     display: flex;
     justify-content: flex-end;
     position: absolute;
     top: 0;
-    right: 0;
-
-
-
+    right: 0; */
 }
 
 .languageSelector button {
