@@ -1,3 +1,7 @@
+// contains code required to setup the experiment
+// e.g. teamname selection
+
+
 import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";

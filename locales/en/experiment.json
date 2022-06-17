@@ -1,7 +1,7 @@
 {
     "ready": "ready",
     "waiting_msg": "Waiting for other players...",
-    "prompt": "Please communicate the following number:",
+    "prompt": "Read out the following number:",
     "Teamname": "Please select your team name!",
     "Submit_Teamname": "Submit team name"
 }

@@ -22,13 +22,20 @@ export default function Bye() {
                     <LanguageSelector />
                 </div>
                 <div className="d-flex flex-center flex-column vh-100 p-5">
-                    <h1>{title}</h1>
+                    <h1>{teamname},</h1>
                     <h2>{msg}</h2>
-                    <p>
-                        {teamname}
-                    </p>
-                    <button className="btn btn-outline-primary" onClick={() => { router.push("/experiment?team_name=" + teamname) }}>{retry}</button>
-                    <button className="btn btn-outline-primary" onClick={() => { router.push("/") }}>{end}</button>
+
+                    <div className="btn-group btn-group-lg mt-5" role="group">
+                        <button className="btn btn-outline-primary" onClick={
+                            () => { router.push("/") }}
+                        >{end} <i className="bi bi-check2-square"></i>
+                        </button>
+                        <button className="btn btn-outline-primary" onClick={
+                            () => { router.push("/experiment?team_name=" + teamname) }
+                        }>{retry} <i className="bi bi-arrow-counterclockwise"></i>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </>

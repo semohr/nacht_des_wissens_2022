@@ -1,8 +1,9 @@
 {
     "results": "Your results",
-    "thank_you_msg": "We hope you had fun with this small experiment.",
+    "thank_you_msg": "we hope you enjoyed this small experiment.",
     "continue": "Continue",
     "error_msg": "Identification number not found, it should be four digits long. Maybe your results are not available yet, try again in a few minutes.",
     "remember_teamname": "Please remember your team name:",
-    "next_exp": "New try"
+    "retry": "Try again",
+    "end": "End"
 }
