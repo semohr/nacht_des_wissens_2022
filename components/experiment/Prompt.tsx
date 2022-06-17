@@ -2,7 +2,7 @@ import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
 import { useEffect, useState } from "react";
 
-export default function Prompt({ expID }) {
+export default function Prompt({ expID, exp_is_running = true }) {
 
     const [num, setNum] = useState(null);
     const [color, setColor] = useState("black");
@@ -25,6 +25,10 @@ export default function Prompt({ expID }) {
         }
     }, [socket]);
 
+    // only show the readout prompt if the experiment is running
+    if (!exp_is_running) {
+        return (<></>);
+    }
 
     return (
         <>

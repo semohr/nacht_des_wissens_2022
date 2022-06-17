@@ -21,7 +21,11 @@ export function LanguageSelector() {
         if (l == "en") {
             flag = "gb";
         }
-        buttons.push(<button key={l} className="" onClick={async () => await setLanguage(l)}><i className={"fi fi-" + flag}></i></button>)
+        buttons.push(<button key={l} className="" onClick={
+                async () => await setLanguage(l)
+            }>
+            <i className={"fi fi-" + flag}></i></button>
+        )
     })
 
     return (

@@ -71,7 +71,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                             disabled={force_teamname}
                             value={force_teamname || undefined}
                             required
-                            autocomplete="off"
+                            autoComplete="off"
                         />
                         <button
                             id="button_newname"

@@ -39,9 +39,9 @@ export default function experiment() {
 
     var form = null;
     if (role == "receiver") {
-        form = <NumPad expID={expID} disabled={!started} />
+        form = <NumPad expID={expID} exp_is_running={started} />
     } else if (role == "emitter") {
-        form = <Prompt expID={expID} />
+        form = <Prompt expID={expID} exp_is_running={started} />
     }
 
     return (
