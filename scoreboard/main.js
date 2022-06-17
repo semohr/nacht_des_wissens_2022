@@ -45,11 +45,13 @@ async function main() {
     // console.log(counts);
 
     // Create graphs
-    miChart = create_mi_dist(x = bin_centers, y = counts, base_color = colors[0]);
+    miChart = create_mi_dist(
+        x = bin_centers,
+        y = counts,
+    );
     miScatter = create_scatter_plot(
         x = data.map(d => d["mi_bits"]),
         y = data.map(d => d["mi_bits_s"]),
-        base_color = colors[0]
     );
 
     // init DataTable for sorting and the likes
@@ -67,6 +69,7 @@ async function main() {
                     }
                 }
             ),
+            select: 'single',
             language: {
                 // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
                 url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/" + $LANG['language'] + ".json",
@@ -90,6 +93,10 @@ async function main() {
 
     // make the search highlight the highest point of all teams currently shown
     dataTable.on('search.dt', function () {
+        // johannes did not like it.
+        // click is required to highlight!
+        return;
+
         // only do sth if we have a searchterm
         if (dataTable.search().length == 0) return;
 
@@ -107,6 +114,29 @@ async function main() {
         // for scatter, highlight all matches
         highlight_points_in_chart(miScatter, mi, mi_per_sec);
 
+    });
+
+    dataTable.on('select', function (e, dt, type, indexes) {
+        // type should always be row!
+        if (type === 'row') {
+            // we only allow selecting one item
+            let row = dataTable.rows(indexes).data()[0];
+
+            mi = parseFloat(row["mi_bits"]);
+            mi_per_sec =  parseFloat(row["mi_bits_s"]);
+
+            // set the tooltip of the prob dist to the highest mi that is still visible!
+            highlight_points_in_chart(miChart, mi);
+
+            // for scatter, highlight all matches
+            highlight_points_in_chart(miScatter, mi, mi_per_sec);
+        }
+
+    });
+
+    dataTable.on('deselect', function (e, dt, type, indexes) {
+        unhighlight_all(miChart);
+        unhighlight_all(miScatter);
     });
 }
 
@@ -166,7 +196,7 @@ function GaussKDE(xi, x, sigma = 1) {
     return (1 / sigma / Math.sqrt(2 * Math.PI)) * Math.exp(Math.pow((xi - x) / sigma, 2) / -2);
 }
 
-function create_mi_dist(x, y, base_color = "#027BFF") {
+function create_mi_dist(x, y, base_color = "#6C757D", highlight_color = "#027BFF") {
 
     // plot mutual information as smoothed histogram
     const N = y.reduce((a, b) => a + b);
@@ -244,7 +274,7 @@ function create_mi_dist(x, y, base_color = "#027BFF") {
             allowPointSelect: false,
             states: {
                 select: {
-                    color: colors[1],
+                    color: highlight_color,
                 },
             },
         }],
@@ -255,7 +285,7 @@ function create_mi_dist(x, y, base_color = "#027BFF") {
     })
 }
 
-function create_scatter_plot(x, y, base_color = "#027BFF") {
+function create_scatter_plot(x, y, base_color = "#6C757D", highlight_color = "#027BFF") {
 
     x = x.flat();
     y = y.flat();
@@ -312,7 +342,7 @@ function create_scatter_plot(x, y, base_color = "#027BFF") {
             marker: {
                 states: {
                     select: {
-                        fillColor: colors[1],
+                        fillColor: highlight_color,
                         lineWidth: 0,
                         radius: 6,
                     },
@@ -356,6 +386,13 @@ function highlight_points_in_chart(chart, x_val, y_val = null) {
                 }
             }
         }
+    });
+}
+
+function unhighlight_all(chart) {
+    chart.tooltip.hide();
+    Highcharts.each(chart.series[0].points, function (point) {
+        point.select(false);
     });
 }
 
