@@ -33,9 +33,21 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
 
     return (
         <div className="p-3">
-            <form onSubmit={e => {
+            <form className="needs-validation" noValidate
+                onSubmit={e => {
                 e.preventDefault();
                 const teamname = (document.getElementById("input_teamname") as HTMLInputElement).value;
+
+                console.log(e)
+                // custom bootstrap validation
+                if (!e.target.checkValidity()) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    e.target.classList.add('was-validated')
+                    return;
+                }
+
+                e.target.classList.add('was-validated')
 
                 socket!.emit("experiment:ready", "emitter", teamname);
                 setReady(true);
@@ -46,20 +58,21 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                 (document.getElementById("button_newname") as HTMLButtonElement).disabled = true;
             }}>
                 <label htmlFor="input_teamname" className="form-label">{t("Teamname")}</label>
-                <div className="input-group mb-3">
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="input_teamname"
-                        placeholder="TeamName"
-                        disabled={force_teamname}
-                        value={force_teamname || ""}
-                        required
-                    />
-                    <button id="button_newname" className="btn btn-outline-secondary rotate-outer" type="button" onClick={async () => { updateTeamnamePlaceholder() }} disabled={force_teamname}>
-                        <span className="rotate-inner"><i className="bi bi-arrow-counterclockwise"></i></span>
-                    </button>
-                </div>
+                    <div className="input-group mb-3 ">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="input_teamname"
+                            placeholder="TeamName"
+                            disabled={force_teamname}
+                            value={force_teamname || undefined}
+                            required
+                            autocomplete="off"
+                        />
+                        <button id="button_newname" className="btn btn-outline-secondary rotate-outer" type="button" onClick={async () => { updateTeamnamePlaceholder() }} disabled={force_teamname}>
+                            <span className="rotate-inner"><i className="bi bi-arrow-counterclockwise"></i></span>
+                        </button>
+                    </div>
 
                 <div className="readyBtn">
                     {ready ? <div className="ready p-2">{waiting_msg}</div> : null}
