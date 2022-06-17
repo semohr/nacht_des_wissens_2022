@@ -94,7 +94,7 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
                 // disable button
                 (e.target as HTMLButtonElement).disabled = true;
             }
-            } className="btn btn-lg btn-secondary" >{ready_str.toUpperCase()}</button>
+            } className="btn btn-lg btn-primary" >{ready_str.toUpperCase()}</button>
         </div >
     );
 }
@@ -133,7 +133,7 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
                 (document.getElementById("teamname_input") as HTMLInputElement)!.disabled = true;
                 (e.target as HTMLButtonElement).disabled = true;
             }
-            } className="btn btn-lg btn-secondary m-3" >{ready_str.toUpperCase()}</button>
+            } className="btn btn-lg btn-primary m-3" >{ready_str.toUpperCase()}</button>
         </div >
     );
 }

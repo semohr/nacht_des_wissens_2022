@@ -98,39 +98,39 @@
 }
 
 .settings {
-    position: absolute;
-    margin: 8px;
-    bottom: 0;
-    right: 0;
+    // position: absolute;
+    // margin: 8px;
+    // bottom: 0;
+    // right: 0;
 
     .dropdown-menu {
-        font-size: 0.8em;
-        padding-top: 5px;
-        padding-bottom: 1px;
+        font-size: 1em;
+        padding-top: 7px;
+        padding-bottom: 5px;
         padding-inline: 1em;
         min-width: 0;
 
-        &.show {
-            display: flex;
-        }
+        // &.show {
+            // display: flex;
+        // }
 
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
+        // flex-direction: column;
+        // justify-content: flex-start;
+        // align-items: flex-start;
     }
 
-    .form-check {
-        width: fit-content;
-    }
+    // .form-check {
+    //     width: fit-content;
+    // }
 }
 
 .languageSelector {
-    margin: 16px;
-    display: flex;
-    justify-content: flex-end;
-    position: absolute;
-    top: 0;
-    right: 0;
+    // margin: 16px;
+    // display: flex;
+    // justify-content: flex-end;
+    // position: absolute;
+    // top: 0;
+    // right: 0;
 
     button {
         background-color: transparent;

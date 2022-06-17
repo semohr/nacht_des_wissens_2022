@@ -14,19 +14,23 @@ export default function Welcome() {
 
     return (
         <div className="container-fluid p-3 vh-100 ">
-            <LanguageSelector />
-            <div className="welcome row gy-2">
-                <div>
-                    <h1>{title}</h1>
-                    <h2>{subtitle}</h2>
-                </div>
-                <div >
-                    <div>{weAre}</div>
-                    <div>{experimentDescription}</div>
-                </div>
-                <StartButton />
+            <div className="d-flex justify-content-between">
+                <Settings />
+                <LanguageSelector />
             </div>
-            <Settings />
+            <div className="row gy-2">
+                <div className="col-12 welcome mb-2">
+                    <div>
+                        <h1>{title}</h1>
+                        <h2>{subtitle}</h2>
+                    </div>
+                    <div >
+                        <div>{weAre}</div>
+                        <div>{experimentDescription}</div>
+                    </div>
+                    <StartButton />
+                </div>
+            </div>
         </div>
     )
 }
