@@ -73,8 +73,17 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                             required
                             autocomplete="off"
                         />
-                        <button id="button_newname" className="btn btn-outline-secondary rotate-outer" type="button" onClick={async () => { updateTeamnamePlaceholder() }} disabled={force_teamname}>
-                            <span className="rotate-inner"><i className="bi bi-arrow-counterclockwise"></i></span>
+                        <button
+                            id="button_newname"
+                            className="btn btn-outline-secondary rotate-outer"
+                            type="button"
+                            onClick={
+                                async () => { updateTeamnamePlaceholder() }
+                            }
+                            disabled={force_teamname}>
+                            <span className="rotate-inner">
+                                <i className="bi bi-arrow-counterclockwise"></i>
+                            </span>
                         </button>
                     </div>
 
@@ -83,7 +92,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                     <button id="button_ready" type="submit" onClick={(e) => {
                         onClick();
                     }
-                    } className="btn btn-lg btn-primary" >{ready_str.toUpperCase()}</button>
+                    } className="btn btn-lg btn-primary" >{ready_str}</button>
                 </div >
             </form>
         </div>
@@ -111,7 +120,7 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
                 // disable button
                 (e.target as HTMLButtonElement).disabled = true;
             }
-            } className="btn btn-lg btn-primary" >{ready_str.toUpperCase()}</button>
+            } className="btn btn-lg btn-primary" >{ready_str}</button>
         </div >
     );
 }
@@ -150,7 +159,7 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
                 (document.getElementById("teamname_input") as HTMLInputElement)!.disabled = true;
                 (e.target as HTMLButtonElement).disabled = true;
             }
-            } className="btn btn-lg btn-primary m-3" >{ready_str.toUpperCase()}</button>
+            } className="btn btn-lg btn-primary m-3" >{ready_str}</button>
         </div >
     );
 }

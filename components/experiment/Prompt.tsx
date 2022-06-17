@@ -27,14 +27,16 @@ export default function Prompt({ expID }) {
 
 
     return (
-        <div className="prompt">
-            <div className="text">
-                {prompt}
+        <>
+            <div className="prompt">
+                <div className="text">
+                    {prompt}
+                </div>
+                <div className="number" style={{ "color": color }}>
+                    {!num ? "[?]" : num}
+                </div>
             </div>
-            <div className="number" style={{ "color": color }}>
-                {!num ? "[?]" : num}
-            </div>
-        </div>
+        </>
     );
 }
 

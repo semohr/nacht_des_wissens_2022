@@ -10,7 +10,7 @@ export default function StartButton() {
     return (
         <div className="beginBtn">
             <button className="btn btn-lg btn-primary" onClick={() => { router.push("/experiment") }}>
-                {begin.toUpperCase()}
+                {begin}
             </button>
         </div>
     )
@@ -35,7 +35,7 @@ export function StartForm() {
             <input type="text w-80" />
             <div className="beginBtn">
                 <button type="submit" className="btn btn-lg btn-primary">
-                    {begin.toUpperCase()}
+                    {begin}
                 </button>
             </div>
         </form>
