@@ -61,10 +61,23 @@
             <!-- leaderboard -->
             <div class="col-lg-6 my-2">
                 <div class="card">
-                <h5 class="card-header text-center">
-                    <?php echo $LANG['leaderboard_title']; ?>
-                </h5>
+                    <h5 class="card-header d-flex justify-content-between align-items-center">
+                        <span></span> <!-- this is a dummy to center the text -->
+                        <span>
+                            <?php echo $LANG['leaderboard_title']; ?>
+                        </span>
+                        <!-- avoid stretching the header in y direction by overwriting the button padding -->
+                        <button class="btn btn-sm btn-outline-primary py-0" type="button" data-bs-toggle="collapse" data-bs-target="#leaderboard_info"
+                            aria-expanded="false" aria-controls="leaderboard_info">
+                            ?
+                        </button>
+                    </h5>
                     <div class="card-body px-0 py-2">
+                            <div class="collapse mx-2" id="leaderboard_info">
+                                <div class="card card-body mb-2">
+                                    <?php echo $LANG["leaderboard_info"]; ?>
+                                </div>
+                            </div>
                         <div id="leaderboard-container" class="px-0"></div>
                     </div>
                 </div>

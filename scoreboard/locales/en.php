@@ -3,6 +3,7 @@ $LANG = array(
     // keep the language key uppercase like this, it is used as file name to fetch a language file
     "language" => "English",
     "leaderboard_title" => "Leaderboard",
+    "leaderboard_info" => "Your rank is determined by your Mutual Information per second. Click on your team name to see in the figures how you compare to other teams!",
     //
     "mi_title" => "Mutual Information",
     "mi_info" => "English info to MI, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis, dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis deserunt maxime adipisci natus praesentium obcaecati.",
