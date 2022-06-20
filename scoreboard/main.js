@@ -70,6 +70,7 @@ async function main() {
                 }
             ),
             select: 'single',
+            scrollX: true,
             language: {
                 // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
                 url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/" + $LANG['language'] + ".json",
@@ -81,9 +82,9 @@ async function main() {
             // "dom": 'ft'
             // needed tweaking to have search on the left
             // "dom": "<'row'<'col-2'f> <'col-8'> <'col-2'l> > <'row'<'col-12'tr>> <'row px-2'<'col-6'p>>"
-            "dom": "<'d-flex justify-content-between mx-2' <f> <l> >" +
-                "<'row'<'col-12'tr>>" +
-                "<'d-flex flex-row-reverse mx-2' <p> >"
+            "dom": "<'d-flex flex-wrap' <'me'f>>" +
+                "<'row'<'col-12 table-responsive'tr>>" +
+                "<'d-flex flex-wrap mt-2 mx-2' <'my-1 me-auto'l> <p> >"
 
         }
     );
