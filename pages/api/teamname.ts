@@ -56,7 +56,7 @@ function get_random(list) {
 }
 
 // Get all already used names, such that we don't regenerate them
-function getUsedTeamnames() {
+export function getUsedTeamnames() {
     var teamnames = [];
     // Get all json files
     const jsonsInDir = fs.readdirSync('public/experiments/').filter(file => path.extname(file) === '.json');
@@ -64,7 +64,7 @@ function getUsedTeamnames() {
     jsonsInDir.forEach(file => {
         const fileData = fs.readFileSync(path.join('public/experiments', file));
         const json = JSON.parse(fileData.toString());
-        teamnames.push(json.teamname);
+        teamnames.push(json.team_name);
     });
     return teamnames;
 }

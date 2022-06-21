@@ -1,7 +1,8 @@
 {
     "ready": "Bereit",
-    "waiting_msg": "Warten auf anderen Spieler...",
+    "waiting_msg": "Warten auf andere Spieler*in ...",
     "prompt": "Bitte kommunizieren Sie folgende Nummer:",
     "Teamname": "Bitte wählt Euren Team Namen!",
-    "Submit_Teamname": "Teamname passt!"
+    "Submit_Teamname": "Teamname passt!",
+    "error_teamname_already_taken" : "Teamname bereits vergeben."
 }
