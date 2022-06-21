@@ -43,13 +43,13 @@
                     href = "index.php?lang=de"
                     <?php if ($locale == 'de') echo 'hidden'; ?>
                     >
-                    <img src="./public/de.svg"></img>
+                    <img src="./public/gb.svg"></img>
                 </a>
                 <a id="lang-en-btn"
                     href = "index.php?lang=en"
                     <?php if ($locale == 'en') echo 'hidden'; ?>
                     >
-                    <img src="./public/gb.svg"></img>
+                    <img src="./public/de.svg"></img>
                 </a>
             </div>
         </div>
