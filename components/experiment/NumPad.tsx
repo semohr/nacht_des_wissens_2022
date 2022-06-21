@@ -1,9 +1,21 @@
 import useSocket from "lib/useSocket";
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function NumPad({ expID, onClick = (num) => { }, exp_is_running = true }) {
 
     const socket = useSocket();
+    const [buttons_enabled, setButtons_enabled] = useState(exp_is_running);
+
+    // only enable pressing a button once a new number has been shown to the other user
+    useEffect(() => {
+        if (socket) {
+            socket.on("experiment:event", (random_number, r_expID) => {
+                console.log(random_number,r_expID)
+                setButtons_enabled(true);
+            })
+        }
+    }, [socket]);
+
 
     const groups = [];
     for (var g = 2; g >= 0; g--) {
@@ -16,11 +28,11 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
                     className="btn btn-lg btn-outline-primary"
                     onClick={() => {
                         console.log("clicked " + (g * 3 + i + 1));
-                        console.log(socket)
+                        setButtons_enabled(false);
                         socket.emit("experiment:return", g * 3 + i + 1, expID);
                         onClick(g * 3 + i + 1)
                     }}
-                    disabled={!exp_is_running}>
+                    disabled={!buttons_enabled}>
                     {g * 3 + i + 1}
                 </button>
             );

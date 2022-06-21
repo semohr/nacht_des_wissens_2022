@@ -4,8 +4,9 @@ import { writeFile, readFileSync, readdir, readdirSync } from 'fs';
 
 
 interface Data {
+    expID: string,    //experiment id, we filter this
     emitterID: string;
-    receiveID: string;
+    receiveID: string; // beware the typo when reusing this code.
     team_name: string,
     emitted: number[][], //emitted number each block
     received: number[][], //received number each block
@@ -17,11 +18,20 @@ interface Data {
 }
 
 /** CONFIG */
-var NUM_EVENTS_PER_BLOCK = 10;
+var NUM_EVENTS_PER_BLOCK = 100;
 var NUM_BLOCKS = 1;
 var emitter = [];
 var receiver = [];
 var MAP = [];
+
+function get_map_by_expID(expID){
+    const filtered = MAP.filter(map => map.expID == expID)
+
+    if (filtered == undefined) {
+        return undefined
+    }
+    return filtered[0]
+}
 
 /** Initialize websocket or load if already
  * running. See below for functionality.
@@ -88,7 +98,7 @@ const SocketHandler = (req, res) => {
             socket.on("experiment:return", (receivedNum, expID) => {
                 console.log("[main] Received experiment:return", receivedNum, expID);
 
-                const map = MAP[expID];
+                const map = get_map_by_expID(expID);
                 const currentBlock = map.currentBlock;
                 const delta = moment().diff(map.start_last_event, "ms");
 
@@ -107,10 +117,22 @@ const SocketHandler = (req, res) => {
                 }
             });
 
+            //
+            socket.on("bye", (try_again: boolean, expID: string) => {
+                console.log("[main] received bye", try_again, expID)
+                const map = get_map_by_expID(expID);
+
+                io.emit("bye", try_again, expID);
+            });
+
             // Helper functions
             function ready_pair(emitterID, receiveID, teamname) {
                 console.log("ready_pair", emitterID, receiveID);
+                // Get random unique identifier for the experiment taking date time into account
+                const expID = moment().format("YYYYMMDDHHmmss") + "_" + Math.floor(Math.random() * 100);
+
                 const map: Data = {
+                    "expID": expID,
                     "emitterID": emitterID,
                     "receiveID": receiveID,
                     "emitted": [],
@@ -130,14 +152,13 @@ const SocketHandler = (req, res) => {
                     map.received.push([]);
                     map.duration.push([]);
                 }
-
                 MAP.push(map);
-                var expID = MAP.length - 1;
+
                 experiment_start(expID);
             }
 
             function experiment_event(expID) {
-                const map = MAP[expID];
+                const map = get_map_by_expID(expID);
                 const currentBlock = map.currentBlock;
 
                 // Random integer between 1 and 9
@@ -156,7 +177,7 @@ const SocketHandler = (req, res) => {
 
             function experiment_start(expID) {
                 console.log("experiment:start");
-                const map = MAP[expID];
+                const map = get_map_by_expID(expID);
 
                 io.to(map.emitterID).emit("experiment:start", expID);
                 io.to(map.receiveID).emit("experiment:start", expID);
@@ -166,17 +187,19 @@ const SocketHandler = (req, res) => {
 
             function experiment_end(expID) {
                 console.log("experiment:end");
-                const map = MAP[expID];
-
+                const map = get_map_by_expID(expID);
 
                 // Determine filename by number of files in dir
                 // XXXX format padded by zeros
-                const filenames = readdirSync("public/experiments");
-                const fs_id = String(filenames.length).padStart(4, '0');
-                const filename = "public/experiments/" + fs_id + ".json";
+                const filename = "public/experiments/" + expID + ".json";
                 const teamname = map.team_name
-                io.to(map.emitterID).emit("experiment:end", fs_id, teamname);
-                io.to(map.receiveID).emit("experiment:end", fs_id, teamname);
+                io.to(map.emitterID).emit("experiment:end", expID, teamname);
+                io.to(map.receiveID).emit("experiment:end", expID, teamname);
+
+                // Omit save file for emitter
+                if (socket.id == map.emitterID){
+                    return
+                }
 
                 // calculate all stuff
                 calculate_mutual_information(map)
@@ -185,13 +208,13 @@ const SocketHandler = (req, res) => {
                     if (err) {
                         return console.log(err);
                     }
-                    console.log("The file was saved as 'public/experiments/" + fs_id + ".json'!");
+                    console.log("The file was saved as 'public/experiments/" + expID + ".json'!");
                     //TODO start sync to scoreboardserver here!
                 });
             }
 
             function progressBar(expID) {
-                const map = MAP[expID];
+                const map = get_map_by_expID(expID);
                 const currentBlock = map.currentBlock;
                 const currentEvent = map.received[currentBlock].length;
                 io.to(map.emitterID).emit("experiment:progressBar", currentEvent, currentBlock, NUM_EVENTS_PER_BLOCK, NUM_BLOCKS);
@@ -204,10 +227,10 @@ const SocketHandler = (req, res) => {
 
 export default SocketHandler
 
-/** Calculates the mutual information of the given data and 
+/** Calculates the mutual information of the given data and
  * adds it to the map.
- * 
- * @param map 
+ *
+ * @param map
  */
 function calculate_mutual_information(map: Data) {
     for (let i = 0; i < NUM_BLOCKS; i++) {

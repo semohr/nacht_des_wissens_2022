@@ -32,7 +32,7 @@ export default function experiment() {
             });
             socket.on("experiment:end", (expID, teamname) => {
                 socket.close();
-                router.push("/bye?teamname=" + teamname);
+                router.push("/bye?teamname=" + teamname + "&expID=" + expID);
             });
         }
     }, [socket]);
