@@ -48,8 +48,8 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
             return;
         }
         let bid = "b" + event.key;
-        document.getElementById(bid).focus();
-        document.getElementById(bid).click();
+        document.getElementById(bid)!.focus();
+        document.getElementById(bid)!.click();
     }, []);
 
     useEffect(() => {

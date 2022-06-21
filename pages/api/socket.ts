@@ -1,5 +1,6 @@
 import { Server } from 'socket.io'
 import moment from "moment"
+import {spawn} from "child_process"
 import { writeFile, readFileSync, readdir, readdirSync } from 'fs';
 
 
@@ -209,7 +210,28 @@ const SocketHandler = (req, res) => {
                         return console.log(err);
                     }
                     console.log("The file was saved as 'public/experiments/" + expID + ".json'!");
-                    //TODO start sync to scoreboardserver here!
+
+                    const sync_script = `
+                        pwd
+                        sftp -P 2222 smohr@vwebfile.gwdg.de << @
+                            cd www/info-theory/exp_results
+                            put public/experiments/${expID}.json
+                            quit
+                        @
+                    `;
+
+                    var cmd = spawn(sync_script, [], { shell: true });
+
+                    // deal with upload error
+                    cmd.stdout.on('data', function(data) {
+                        console.log(data.toString());
+                    });
+                    cmd.stderr.on('data', function(data) {
+                        console.error(data.toString());
+                    });
+                    cmd.on('exit', function(code) {
+                        console.log("Exited with code " + code);
+                    });
                 });
             }
 
