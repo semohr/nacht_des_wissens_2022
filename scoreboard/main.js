@@ -1,7 +1,10 @@
-document.addEventListener("DOMContentLoaded", main);
+document.addEventListener("DOMContentLoaded", () => {
+    main();
+    setInterval(main, 15000);
+});
 
 // some global variables for debugging
-var data;
+var data = [];
 var dataTable;
 var miChart;
 var column_ids;
@@ -13,9 +16,17 @@ const colors = ["#027BFF", "#DC3645", "#FFC207", "#28A745",
 // initialize after dom is loaded
 async function main() {
     // Create table by loading data via php
-    data = await fetch("get_exp_results.php").then(response => response.json());
+    const data_new = await fetch("get_exp_results.php").then(response => response.json());
+    console.log("main")
+    // Check if data length changed changed
+    // As we run a page refresh every 15 seconds
+    // see at top
+    if (data_new.length == data.length) {
+        return
+    } else {
+        data = data_new;
 
-    // console.log(data);
+    }
 
     // sort data according to some key
     const sort_by = "mi_bits_s";
@@ -124,7 +135,7 @@ async function main() {
             let row = dataTable.rows(indexes).data()[0];
 
             mi = parseFloat(row["mi_bits"]);
-            mi_per_sec =  parseFloat(row["mi_bits_s"]);
+            mi_per_sec = parseFloat(row["mi_bits_s"]);
 
             // set the tooltip of the prob dist to the highest mi that is still visible!
             highlight_points_in_chart(miChart, mi);
