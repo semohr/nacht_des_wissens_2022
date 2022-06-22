@@ -17,7 +17,7 @@ export default function Bye() {
     useEffect(() => {
         setRole(_role);
         //Set image qrcode
-        var url = "https://information-theory.ds.mpg.de/"
+        var url = "http://information-theory.ds.mpg.de/"
         if (teamname) {
             url += "?teamname=" + teamname
         }

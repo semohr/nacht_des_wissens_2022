@@ -1,7 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
-    main();
-    setInterval(main, 15000);
-});
+document.addEventListener("DOMContentLoaded", main);
 
 // some global variables for debugging
 var data = [];
@@ -150,6 +147,9 @@ async function main() {
         unhighlight_all(miChart);
         unhighlight_all(miScatter);
     });
+
+    // fetch the teamname from the url so we can link to a team via qr code
+    get_url_queries();
 }
 
 /** Returns table from cols data, data hast to be dict of arrays with
@@ -424,7 +424,7 @@ function calculate_histogram(data) {
         // check that the floating point value is not the same as the previous one
         return self.indexOf(value) === index
     }
-    const unique_values = sorted_data.filter(unique);
+    var unique_values = sorted_data.filter(unique);
 
     edges = [unique_values[0] - 0.1];
     for (let i = 0; i < unique_values.length - 1; i++) {
@@ -447,7 +447,31 @@ function calculate_histogram(data) {
     // console.log("counts");
     // console.log(counts);
 
-    return [edges, unique_values, counts];
+    // dirty temporary hack
+    let mi_max = 3.14;
+    let mi_min = 0;
+
+    num_bins = 10;
+    bw = (mi_max - mi_min) / num_bins;
+
+    bin_centers = new Array(num_bins).fill(0);
+    for (let i = 0; i < bin_centers.length; i++) {
+        bin_centers[i] = mi_min + i * bw;
+    }
+
+    edges = new Array(num_bins + 1).fill(0);
+    for (let i = 0; i < edges.length; i++) {
+        edges[i] = mi_min + i * bw; - bw / 2;
+    }
+
+    counts = new Array(num_bins).fill(0);
+    for (let d of sorted_data) {
+        idx = hist_index_from_value(edges, d);
+        counts[idx] = counts[idx] + 1;
+    }
+
+
+    return [edges, bin_centers, counts];
 }
 
 function hist_index_from_value(edges, value) {
@@ -460,4 +484,19 @@ function hist_index_from_value(edges, value) {
     }
     // return edges.length - 1;
     return null
+}
+
+
+function get_url_queries() {
+    // get the url queries as a dict
+    // returns a dict with the query names as keys and the values as values
+
+    let url = new URL(window.location.href);
+
+    let params = new URLSearchParams(url.search.slice(1));
+
+    for (let p of params) {
+        console.log(p);
+    }
+
 }
