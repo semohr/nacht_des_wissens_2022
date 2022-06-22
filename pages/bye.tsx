@@ -11,11 +11,19 @@ export default function Bye() {
     const { teamname, expID } = router.query;
     const socket = useSocket();
     const [_role, _setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
-
+    const img_ref = useRef<HTMLImageElement>(null);
     // workaround for hydartion bug
     const [role, setRole] = useState("");
     useEffect(() => {
         setRole(_role);
+        //Set image qrcode
+        var url = "https://information-theory.ds.mpg.de/"
+        if (teamname) {
+            url += "?teamname=" + teamname
+        }
+        generateQR(url).then((url) => {
+            img_ref.current.src = url;
+        })
     }, []);
 
     // we need a listener when the emitter presses a button, also update receivers page.
@@ -36,11 +44,7 @@ export default function Bye() {
         }
     }, [socket]);
 
-    //Set image qrcode
-    const img_ref = useRef<HTMLImageElement>(null);
-    generateQR("https://information-theory.ds.mpg.de/?team_name=" + teamname).then((url) => {
-        img_ref.current.src = url;
-    })
+
 
 
     //Translation
