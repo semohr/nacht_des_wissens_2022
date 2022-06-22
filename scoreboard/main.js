@@ -113,8 +113,8 @@ async function main() {
         rows = dataTable.rows({ filter: 'applied' }).data().toArray()
         // visible_hashes = visible_rows.map(row => row[col_index_for_hash]);
 
-        mi = rows.map(row => parseFloat(row["mi_bits"]));
-        mi_per_sec = rows.map(row => parseFloat(row["mi_bits_s"]));
+        mi = rows.map(row => Math.abs(parseFloat(row["mi_bits"])));
+        mi_per_sec = rows.map(row => Math.abs(parseFloat(row["mi_bits_s"])));
 
         // set the tooltip of the prob dist to the highest mi that is still visible!
         mi_max = Math.max(...mi);
@@ -320,12 +320,14 @@ function create_scatter_plot(x, y, base_color = "#6C757D", highlight_color = "#0
         },
         xAxis: {
             type: "",
-            title: { text: $LANG['mips_xlabel'] },
+            title: { text: $LANG['scatter_xlabel'] },
             min: 0,
             crosshair: false,
         },
         yAxis: {
-            title: { text: $LANG['mips_ylabel'] }
+            title: { text: $LANG['scatter_ylabel'] },
+            min: 0,
+            crosshair: false,
         },
         legend: {
             enabled: false,
