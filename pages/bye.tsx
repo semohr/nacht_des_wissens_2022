@@ -2,14 +2,16 @@ import { LanguageSelector } from "components/LanguageSelector";
 import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "react-use";
+import QRCode from 'qrcode'
 
 export default function Bye() {
     const router = useRouter();
     const { teamname, expID } = router.query;
     const socket = useSocket();
     const [_role, _setRole] = useLocalStorage<"receiver" | "emitter">("role", "receiver");
+
     // workaround for hydartion bug
     const [role, setRole] = useState("");
     useEffect(() => {
@@ -21,7 +23,7 @@ export default function Bye() {
         if (socket) {
             socket.on("bye", (try_again: boolean, _expID) => {
                 console.log("bye received", try_again, _expID)
-                if (expID != _expID){
+                if (expID != _expID) {
                     console.log("id mismatch " + expID + " != " + _expID)
                     return
                 }
@@ -33,6 +35,12 @@ export default function Bye() {
             });
         }
     }, [socket]);
+
+    //Set image qrcode
+    const img_ref = useRef<HTMLImageElement>(null);
+    generateQR("https://information-theory.ds.mpg.de/?team_name=" + teamname).then((url) => {
+        img_ref.current.src = url;
+    })
 
 
     //Translation
@@ -46,16 +54,18 @@ export default function Bye() {
 
     var buttons_to_retry = null;
 
+
+
     if (role == "receiver") {
     } else if (role == "emitter") {
         buttons_to_retry = (<div className="btn-group btn-group-lg mt-5" role="group">
-            <button className="btn btn-outline-primary" onClick={ () => {
+            <button className="btn btn-outline-primary" onClick={() => {
                 socket.emit("bye", false, expID);
                 router.push("/");
             }}
             >{end} <i className="bi bi-check2-square"></i>
             </button>
-            <button className="btn btn-outline-primary" onClick={ () => {
+            <button className="btn btn-outline-primary" onClick={() => {
                 socket.emit("bye", true, expID);
                 router.push("/experiment?team_name=" + teamname);
             }}
@@ -75,11 +85,20 @@ export default function Bye() {
                 <div className="d-flex flex-center flex-column vh-100 p-5">
                     <h1>{teamname},</h1>
                     <h2>{msg}</h2>
-
+                    <img ref={img_ref} />
                     {buttons_to_retry}
 
                 </div>
             </div>
         </>
     )
+}
+
+
+const generateQR = async text => {
+    try {
+        return await QRCode.toDataURL(text)
+    } catch (err) {
+        console.error(err)
+    }
 }
