@@ -9,7 +9,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
     const socket = useSocket();
 
     //Translation
-    const { t } = useTranslation("experiment");
+    const { t } = useTranslation("common");
     const prompt = t("prompt");
 
 

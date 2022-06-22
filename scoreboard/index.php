@@ -146,6 +146,6 @@
 
 </body>
 
-<script type="text/javascript" src="main.js"></script>
+<script type="text/javascript" src="main.js?rndstr=<%= getRandomStr() %>""></script>
 
 </html>

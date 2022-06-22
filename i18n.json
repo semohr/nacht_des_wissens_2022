@@ -7,18 +7,6 @@
     "pages": {
         "*": [
             "common"
-        ],
-        "/": [
-            "welcome"
-        ],
-        "/experiment": [
-            "experiment"
-        ],
-        "/result": [
-            "result"
-        ],
-        "/bye": [
-            "result"
         ]
     }
 }

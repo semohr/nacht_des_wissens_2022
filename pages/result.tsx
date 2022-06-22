@@ -35,7 +35,7 @@ export function InputExpID({ setData }) {
     const [error, setError] = useState(false);
 
     //Translation
-    const { t, lang } = useTranslation("result");
+    const { t, lang } = useTranslation("common");
     const title = t("results")
     const msg = t("thank_you_msg");
     const cont = t("continue");

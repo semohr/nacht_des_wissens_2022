@@ -34,18 +34,18 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
     const [used, setUsed] = useState(false);
 
     //Translations
-    const { t } = useTranslation("experiment");
+    const { t } = useTranslation("common");
     const ready_str = t("ready");
     const waiting_msg = t("waiting_msg");
     const error_msg = t("error_teamname_already_taken");
 
     // Set status feedback div on validate
     var status_feedback = null;
-    if (ready){
-        status_feedback =  <div className="valid-feedback ready" style={{display:"block"}}>{waiting_msg}</div>
+    if (ready) {
+        status_feedback = <div className="valid-feedback ready" style={{ display: "block" }}>{waiting_msg}</div>
     }
-    if (used){
-        status_feedback = <div className="invalid-feedback" style={{display:"block"}}>{error_msg}</div>
+    if (used) {
+        status_feedback = <div className="invalid-feedback" style={{ display: "block" }}>{error_msg}</div>
     }
 
 
@@ -54,46 +54,46 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
         <div className="p-3">
             <form className="needs-validation" noValidate
                 onSubmit={async (e) => {
-                setUsed(false);
-                e.preventDefault();
-                const teamname = (document.getElementById("input_teamname") as HTMLInputElement).value;
-
-
-
-                // Check if teamname exists:
-                const used = await fetchTeamnameUsed(teamname);
-                console.log("teamname " + teamname + " has been used before: "  + used);
-                if (used && !force_teamname) {
-                    (document.getElementById("input_teamname") as HTMLInputElement).classList.add('is-invalid');
+                    setUsed(false);
                     e.preventDefault();
-                    e.stopPropagation();
-                    setUsed(true);
-                    return;
-                } else {
-                    (document.getElementById("input_teamname") as HTMLInputElement).classList.remove('is-invalid');
-                    (document.getElementById("input_teamname") as HTMLInputElement).classList.add('is-valid');
-                }
+                    const teamname = (document.getElementById("input_teamname") as HTMLInputElement).value;
 
-                console.log(e)
-                // custom bootstrap validation
-                if (!(e.target as HTMLFormElement).checkValidity()) {
 
-                    e.preventDefault();
-                    e.stopPropagation();
-                    (e.target as HTMLFormElement).classList.add('was-validated');
-                    return;
-                }
 
-                (e.target as HTMLFormElement).classList.add('was-validated')
+                    // Check if teamname exists:
+                    const used = await fetchTeamnameUsed(teamname);
+                    console.log("teamname " + teamname + " has been used before: " + used);
+                    if (used && !force_teamname) {
+                        (document.getElementById("input_teamname") as HTMLInputElement).classList.add('is-invalid');
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setUsed(true);
+                        return;
+                    } else {
+                        (document.getElementById("input_teamname") as HTMLInputElement).classList.remove('is-invalid');
+                        (document.getElementById("input_teamname") as HTMLInputElement).classList.add('is-valid');
+                    }
 
-                socket!.emit("experiment:ready", "emitter", teamname);
-                setReady(true);
+                    console.log(e)
+                    // custom bootstrap validation
+                    if (!(e.target as HTMLFormElement).checkValidity()) {
 
-                // disable buttons
-                (document.getElementById("input_teamname") as HTMLInputElement).disabled = true;
-                (document.getElementById("button_ready") as HTMLButtonElement).disabled = true;
-                (document.getElementById("button_newname") as HTMLButtonElement).disabled = true;
-            }}>
+                        e.preventDefault();
+                        e.stopPropagation();
+                        (e.target as HTMLFormElement).classList.add('was-validated');
+                        return;
+                    }
+
+                    (e.target as HTMLFormElement).classList.add('was-validated')
+
+                    socket!.emit("experiment:ready", "emitter", teamname);
+                    setReady(true);
+
+                    // disable buttons
+                    (document.getElementById("input_teamname") as HTMLInputElement).disabled = true;
+                    (document.getElementById("button_ready") as HTMLButtonElement).disabled = true;
+                    (document.getElementById("button_newname") as HTMLButtonElement).disabled = true;
+                }}>
                 <label htmlFor="input_teamname" className="form-label">{t("Teamname")}</label>
                 <div className="input-group">
                     <input
@@ -107,7 +107,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                         autoComplete="off"
                         // prevent bootstraps checking as one types cos we do not want
                         // to spam the server with requests
-                        onInput={e=>e.preventDefault()}
+                        onInput={e => e.preventDefault()}
                     />
                     <button
                         id="button_newname"
@@ -141,7 +141,7 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
 
 
     //Translations
-    const { t } = useTranslation("experiment");
+    const { t } = useTranslation("common");
     const ready_str = t("ready");
     const waiting_msg = t("waiting_msg");
 
@@ -168,7 +168,7 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
     const [bg, setBg] = useState("transparent");
 
     //Translations
-    const { t } = useTranslation("experiment");
+    const { t } = useTranslation("common");
     const ready_str = t("ready");
     const waiting_msg = t("waiting_msg");
 
@@ -208,8 +208,8 @@ async function fetchTeamname() {
     return teamname["team_name"];
 }
 
-async function fetchTeamnameUsed(teamname:string){
-    const valid = await fetch("/api/teamname_is_used?teamname="+teamname).then(res => res.json()).catch(
+async function fetchTeamnameUsed(teamname: string) {
+    const valid = await fetch("/api/teamname_is_used?teamname=" + teamname).then(res => res.json()).catch(
         e => {
             console.log(e);
             return false;

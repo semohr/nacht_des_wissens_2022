@@ -9,21 +9,21 @@ import setLanguage from 'next-translate/setLanguage'
 export function LanguageSelector() {
     // As there is only two languages the switcher is quite
     // easy we can extend it if we decide to add more languages
-    var { lang } = useTranslation();
+    var { lang } = useTranslation("common");
 
     var other_lang;
-    if (lang == "de"){
+    if (lang == "de") {
         other_lang = "en"
-    } else if (lang=="en"){
+    } else if (lang == "en") {
         lang = "gb"
         other_lang = "de"
     }
 
     var btn = <button key={lang} className="" onClick={
-            async () => await setLanguage(other_lang)
-        }>
+        async () => await setLanguage(other_lang)
+    }>
         <i className={"fi fi-" + lang}></i>
-        </button>
+    </button>
 
 
     return (
