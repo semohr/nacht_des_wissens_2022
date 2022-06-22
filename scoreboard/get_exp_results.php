@@ -8,7 +8,18 @@
     foreach (glob("exp_results/*.json") as $file) {
         // decode json file
         $json = json_decode(file_get_contents($file), true);
+
+        // because we change convention we do not show the MI but the accuracy,
+        // lets calculate that quickly.
+        $true_data = $json['emitted'][0];
+        $guessed_data = $json['received'][0];
+
+        // check overlap between true and guessed data
+        $overlap = array_intersect_assoc($true_data, $guessed_data);
+        $accuracy = count($overlap) / count($true_data) * 100;
+
         $row = array(
+            "accuracy" => $accuracy,
             "mi_bits" => $json["mi_bits"],
             "mi_bits_s" => $json["mi_bits_s"],
             "team_name" => $json["team_name"],

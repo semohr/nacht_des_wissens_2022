@@ -35,19 +35,21 @@ async function main() {
     for (let i = 0; i < data.length; i++) {
         data[i].rank = i + 1;
     }
+    // console.log(data)
 
 
-    column_ids = ["rank", "team_name", "mi_bits_s", "mi_bits", "duration"];
+    column_ids = ["rank", "team_name", "mi_bits_s", "accuracy", "duration"];
     column_labels = column_ids.map(id => { return $LANG[id] });
 
     // create table in html
-    let table = create_table(data, keys = column_ids, row_first = true);
-    table.id = "leaderboard";
-    table.style.width = "100%";
-    document.getElementById("leaderboard-container").appendChild(table);
+    let dataTable = create_table(data, keys = column_ids, row_first = true);
+    dataTable.id = "leaderboard";
+    dataTable.style.width = "100%";
+    document.getElementById("leaderboard-container").appendChild(dataTable);
 
 
-    const [edges, bin_centers, counts] = calculate_histogram(data.map(d => d["mi_bits"]));
+    const [edges, bin_centers, counts] = calculate_histogram(data.map(d => d["accuracy"]));
+    // console.log(data)
     // console.log(bin_centers);
     // console.log(edges);
     // console.log(counts);
@@ -57,10 +59,31 @@ async function main() {
         x = bin_centers,
         y = counts,
     );
+
     miScatter = create_scatter_plot(
-        x = data.map(d => d["mi_bits"]),
-        y = data.map(d => d["mi_bits_s"]),
+        x = data.map(d => d["accuracy"]).slice(),
+        y = data.map(d => d["mi_bits_s"]).slice(),
     );
+
+
+    // define the number formatters for differen columns
+    formatters = {
+        "mi_bits_s": DataTable.render.number(null, null, 2),
+        "mi_bits": DataTable.render.number(null, null, 2),
+        "duration": DataTable.render.number(null, null, 2),
+        // "accuracy": DataTable.render.number(null, null, 0),
+        "accuracy": DataTable.render.text()
+    }
+
+    // text alignments for different columns
+    alignments = {
+        "rank": "dt-body-left dt-head-left",
+        "mi_bits_s": "dt-body-right dt-head-right",
+        "mi_bits": "dt-body-right dt-head-right",
+        "duration": "dt-body-right dt-head-right",
+        "accuracy": "dt-body-right dt-head-right",
+        "team_name": "dt-body-center dt-head-center",
+    }
 
     // init DataTable for sorting and the likes
     dataTable = new DataTable('#leaderboard',
@@ -71,9 +94,10 @@ async function main() {
                         title: $LANG[id],
                         data: id,
                         searchable: id == "team_name" ? true : false,
-                        render: (["mi_bits_s", "mi_bits", "duration"].includes(id)) ?
-                            DataTable.render.number(null, null, 2) :
-                            DataTable.render.text()
+                        render: (Object.keys(formatters).includes(id)) ?
+                            formatters[id] : DataTable.render.text(),
+                        className: (Object.keys(alignments).includes(id)) ?
+                            alignments[id] : '',
                     }
                 }
             ),
@@ -92,7 +116,27 @@ async function main() {
             // "dom": "<'row'<'col-2'f> <'col-8'> <'col-2'l> > <'row'<'col-12'tr>> <'row px-2'<'col-6'p>>"
             "dom": "<'d-flex flex-wrap' <'me'f>>" +
                 "<'row'<'col-12 table-responsive'tr>>" +
-                "<'d-flex flex-wrap mt-2 mx-2' <'my-1 me-auto'l> <p> >"
+                "<'d-flex flex-wrap mt-2 mx-2' <'my-1 me-auto'l> <p> >",
+
+            // once the table is fully setup, check if teamname was passed in url and
+            // highlight the row
+            "initComplete": function () {
+                // fetch the teamname from the url so we can link to a team via qr code
+                let queries = get_url_queries();
+                // select the row matching the teamname that has the highest rank
+                if (queries.teamname) {
+                    console.log(queries.teamname)
+                    // search teamname occurences in data. since we ordered by rank,
+                    // first occurence is highest rank already
+                    let team_index = data.findIndex(d => d["team_name"] == queries.teamname);
+
+                    if (team_index != -1) {
+                        let pageSize = dataTable.page.len();
+                        dataTable.page(parseInt(team_index / pageSize, 10)).draw(false);
+                        row = dataTable.row(team_index).select();
+                    }
+                }
+            }
 
         }
     );
@@ -113,7 +157,7 @@ async function main() {
         rows = dataTable.rows({ filter: 'applied' }).data().toArray()
         // visible_hashes = visible_rows.map(row => row[col_index_for_hash]);
 
-        mi = rows.map(row => Math.abs(parseFloat(row["mi_bits"])));
+        mi = rows.map(row => Math.abs(parseFloat(row["accuracy"])));
         mi_per_sec = rows.map(row => Math.abs(parseFloat(row["mi_bits_s"])));
 
         // set the tooltip of the prob dist to the highest mi that is still visible!
@@ -125,13 +169,14 @@ async function main() {
 
     });
 
+    // make pressing a row highlight the result in plots
     dataTable.on('select', function (e, dt, type, indexes) {
         // type should always be row!
         if (type === 'row') {
             // we only allow selecting one item
             let row = dataTable.rows(indexes).data()[0];
 
-            mi = parseFloat(row["mi_bits"]);
+            mi = parseFloat(row["accuracy"]);
             mi_per_sec = parseFloat(row["mi_bits_s"]);
 
             // set the tooltip of the prob dist to the highest mi that is still visible!
@@ -148,8 +193,7 @@ async function main() {
         unhighlight_all(miScatter);
     });
 
-    // fetch the teamname from the url so we can link to a team via qr code
-    get_url_queries();
+
 }
 
 /** Returns table from cols data, data hast to be dict of arrays with
@@ -301,7 +345,7 @@ function create_scatter_plot(x, y, base_color = "#6C757D", highlight_color = "#0
 
     x = x.flat();
     y = y.flat();
-    data = x.map((x, i) => [x, y[i]])
+    let data = x.map((x, i) => [x, y[i]])
 
     return Highcharts.chart("miScatter", {
         chart: {
@@ -495,10 +539,14 @@ function get_url_queries() {
 
     let url = new URL(window.location.href);
 
-    let params = new URLSearchParams(url.search.slice(1));
+    let params = new URLSearchParams(url.search.slice(0));
 
-    for (let p of params) {
-        console.log(p);
+    // build a dict with the query names as keys and the values as values
+    let queries = {};
+    for (let param of params) {
+        queries[param[0]] = param[1];
     }
+
+    return queries;
 
 }

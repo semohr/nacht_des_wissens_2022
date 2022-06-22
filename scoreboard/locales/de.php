@@ -25,5 +25,6 @@ $LANG = array(
     "mi_bits_s" => "IR (bit/s)",
     "mi_bits" => "KK (%)",
     "duration" => "Zeit (s)",
+    "accuracy" => "A (%)"
 );
 ?>

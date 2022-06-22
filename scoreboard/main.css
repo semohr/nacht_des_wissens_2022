@@ -21,3 +21,16 @@
 .languageSelector img {
     height: 2em;
 }
+
+
+table.dataTable thead>tr>th {
+    padding-left: .5em !important;
+    padding-right: .5em !important;
+}
+
+table.dataTable thead .sorting:after {
+    content: none !important;
+}
+table.dataTable thead .sorting:before {
+    content: none !important;
+}
