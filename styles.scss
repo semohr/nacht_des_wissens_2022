@@ -21,7 +21,6 @@
         font-size: 1.5em;
         font-weight: 500;
     }
-
 }
 
 .progress {
@@ -55,14 +54,13 @@
     }
 }
 
-.block-1>.progress-bar {
+.block-1 > .progress-bar {
     background-color: rgb(93, 217, 255);
 }
 
-.block-2>.progress-bar {
+.block-2 > .progress-bar {
     background-color: rgb(0, 255, 98);
 }
-
 
 .numPad {
     width: fit-content;
@@ -84,7 +82,7 @@
     }
 
     .btn:not([disabled]) {
-        opacity: 1.0;
+        opacity: 1;
         transition: opacity 0.25s linear;
     }
 
@@ -94,7 +92,7 @@
         .btn-outline-primary:hover,
         .btn-outline-primary:focus,
         .btn-outline-primary:active,
-        .open>.dropdown-toggle.btn-primary {
+        .open > .dropdown-toggle.btn-primary {
             color: #0d6efd;
             background-color: #fff;
             border-color: #0d6efd;
@@ -104,7 +102,7 @@
         .btn-outline-secondary:hover,
         .btn-outline-secondary:focus,
         .btn-outline-secondary:active,
-        .open>.dropdown-toggle.btn-primary {
+        .open > .dropdown-toggle.btn-primary {
             color: #0d6efd;
             background-color: #e3eeff;
             border-color: #0d6efd;
@@ -112,15 +110,13 @@
         .btn-primary:hover,
         .btn-primary:focus,
         .btn-primary:active,
-        .open>.dropdown-toggle.btn-primary {
+        .open > .dropdown-toggle.btn-primary {
             color: #fff;
             background-color: #0d6efd;
             border-color: #fff;
         }
     }
 }
-
-
 
 .prompt {
     display: flex;
@@ -137,7 +133,6 @@
         font-size: 3em;
         font-weight: bold;
     }
-
 }
 
 .settings {
@@ -187,7 +182,30 @@
 
 /** Number History
 */
+.numHistory {
+    text-align: left;
+    justify-content: left;
+    margin-left: calc(50% - 5rem);
 
+    mask-image: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 5em,
+        rgba(0, 0, 0, 1) 100%
+    );
+    div {
+        animation: flyin 0.8s ease forwards;
+        opacity: 1;
+        transform: translateX(50vw);
+    }
+}
+
+@keyframes flyin {
+    to {
+        opacity: 1;
+        transform: translateX(0%);
+    }
+}
 
 /** Pages
 */
