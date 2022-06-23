@@ -11,7 +11,7 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
         if (socket) {
             socket.on("experiment:event", (random_number, r_expID) => {
                 // console.log(random_number,r_expID)
-                setButtons_enabled(true);
+                setTimeout(() => {setButtons_enabled(true)}, 300);
             })
         }
     }, [socket]);
