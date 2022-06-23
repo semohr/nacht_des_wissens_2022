@@ -10,7 +10,7 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
     useEffect(() => {
         if (socket) {
             socket.on("experiment:event", (random_number, r_expID) => {
-                console.log(random_number,r_expID)
+                // console.log(random_number,r_expID)
                 setButtons_enabled(true);
             })
         }
@@ -26,14 +26,36 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
                     key={i}
                     id={"b" + (g * 3 + i + 1)}
                     className="btn btn-lg btn-outline-primary"
-                    onClick={() => {
-                        console.log("clicked " + (g * 3 + i + 1));
+                    onClick={(event) => {
+                        console.log(event.target.id);
+                        // document.getElementById(event.target.id).blur();
+                        // console.log("clicked " + (g * 3 + i + 1));
                         setButtons_enabled(false);
                         socket.emit("experiment:return", g * 3 + i + 1, expID);
-                        onClick(g * 3 + i + 1)
+                        onClick(g * 3 + i + 1);
                     }}
-                    disabled={!buttons_enabled}>
-                    {g * 3 + i + 1}
+                    onTouchStart={(event) => {
+                        let btns = document.getElementsByClassName("btn-outline-secondary");
+                        for (var i = 0; i < btns.length; i++) {
+                            btns[i].classList.add("btn-outline-primary");
+                            btns[i].classList.remove("btn-outline-secondary");
+                        }
+
+                        (event.target as HTMLButtonElement).classList.remove("btn-outline-secondary");
+                        (event.target as HTMLButtonElement).classList.remove("btn-outline-primary");
+                        (event.target as HTMLButtonElement).classList.add("btn-primary");
+                    }}
+                    onTouchEnd={(event) => {
+                        (event.target as HTMLButtonElement).classList.remove("btn-primary");
+                        (event.target as HTMLButtonElement).classList.add("btn-outline-secondary");
+                        // console.log("touchend " + event.target.id);
+                        setTimeout(function() {
+                            document.getElementById(event.target.id).blur();
+                        }, 500);
+                    }}
+                    disabled={!buttons_enabled}
+                >
+                {g * 3 + i + 1}
                 </button>
             );
         }
@@ -43,7 +65,7 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
     // handle keyboard input
     const handleKeyPress = useCallback((event) => {
         event.preventDefault();
-        console.log(typeof(event.key));
+        // console.log(typeof(event.key));
         if (![ "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event.key)) {
             return;
         }
@@ -62,10 +84,18 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
         };
     }, [handleKeyPress]);
 
+
     return (
         <div className="numPad" id="numPad">
             {groups}
         </div>
     )
+
+
+
+}
+
+
+function fix_sticky_button() {
 
 }

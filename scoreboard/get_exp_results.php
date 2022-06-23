@@ -20,8 +20,8 @@
 
         $row = array(
             "accuracy" => $accuracy,
-            "mi_bits" => $json["mi_bits"],
-            "mi_bits_s" => $json["mi_bits_s"],
+            "mi_bits" => abs($json["mi_bits"][0]),
+            "mi_bits_s" => abs($json["mi_bits_s"][0]),
             "team_name" => $json["team_name"],
             "duration" => array_sum($json["duration"][0])/1000.0,
         );
