@@ -33,7 +33,6 @@ export default function NumPad({
                     id={"b" + (g * 3 + i + 1)}
                     className="btn btn-lg btn-outline-primary"
                     onClick={(event) => {
-                        console.log(event.target.id);
                         // document.getElementById(event.target.id).blur();
                         // console.log("clicked " + (g * 3 + i + 1));
                         setButtons_enabled(false);
@@ -70,7 +69,7 @@ export default function NumPad({
                         );
                         // console.log("touchend " + event.target.id);
                         setTimeout(function () {
-                            document.getElementById(event.target.id).blur();
+                            (event.target as HTMLButtonElement).blur();
                         }, 500);
                     }}
                     disabled={!buttons_enabled}
