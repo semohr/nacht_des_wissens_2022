@@ -1,11 +1,12 @@
 import useSocket from "lib/useSocket";
 import { useCallback, useEffect, useState } from 'react';
+import NumberHistory from "./NumberHistory";
 
 export default function NumPad({ expID, onClick = (num) => { }, exp_is_running = true }) {
 
     const socket = useSocket();
     const [buttons_enabled, setButtons_enabled] = useState(exp_is_running);
-
+    const [currentNum, setCurrentNum] = useState(null);
     // only enable pressing a button once a new number has been shown to the other user
     useEffect(() => {
         if (socket) {
@@ -32,6 +33,7 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
                         // console.log("clicked " + (g * 3 + i + 1));
                         setButtons_enabled(false);
                         socket.emit("experiment:return", g * 3 + i + 1, expID);
+                        setCurrentNum(g * 3 + i + 1);
                         onClick(g * 3 + i + 1);
                     }}
                     onTouchStart={(event) => {
@@ -86,9 +88,12 @@ export default function NumPad({ expID, onClick = (num) => { }, exp_is_running =
 
 
     return (
-        <div className="numPad" id="numPad">
-            {groups}
-        </div>
+        <>
+            <div className="numPad" id="numPad">
+                {groups}
+            </div>
+            <NumberHistory number={currentNum}></NumberHistory>
+        </>
     )
 
 
