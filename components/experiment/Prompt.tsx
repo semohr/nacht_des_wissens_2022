@@ -7,6 +7,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
     const [num, setNum] = useState(null);
     const [color, setColor] = useState("black");
     const socket = useSocket();
+    const [toggle, setToggle] = useState(false);
 
     //Translation
     const { t } = useTranslation("common");
@@ -20,6 +21,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
                     setColor("black");
                 }, 10);
                 setNum(random_number);
+                setToggle(!toggle);
             });
         }
     }, [socket]);
@@ -37,7 +39,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
                     {!num ? "[?]" : num}
                 </div>
             </div>
-            <NumberHistory number={num}></NumberHistory>
+            <NumberHistory number={num} toggle={toggle}></NumberHistory>
         </>
     );
 }

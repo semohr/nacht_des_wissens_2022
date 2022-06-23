@@ -1,14 +1,18 @@
 import useSocket from "lib/useSocket";
 import { useCallback, useEffect, useState } from "react";
 
-export default function NumberHistory({ number = undefined }) {
+//The number is not updated if the same is added to the stack
+// as react does not update the state if it was not changed...
+// here we introduce the toggle var to make sure that the number is updated
+// in these cases
+export default function NumberHistory({ number = undefined, toggle = false }) {
     const [history, setHistory] = useState([]);
 
     useEffect(() => {
         if (number) {
             addToHistory(number);
         }
-    }, [number]);
+    }, [number, toggle]);
 
     const addToHistory = (number) => {
         // add new_num tag to the element which is removed after 1 second
