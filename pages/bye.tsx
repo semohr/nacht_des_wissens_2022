@@ -14,11 +14,14 @@ export default function Bye() {
         "role",
         "receiver"
     );
+    const [accuracy, setAccuracy] = useState<number>(0);
+    const [duration, setDuration] = useState<number>(0);
     const img_ref = useRef<HTMLImageElement>(null);
     // workaround for hydartion bug
     const [role, setRole] = useState("");
     useEffect(() => {
         setRole(_role);
+
         //Set image qrcode
         var url = "http://information-theory.ds.mpg.de/";
         if (teamname) {
@@ -28,6 +31,37 @@ export default function Bye() {
             img_ref.current.src = url;
         });
     }, []);
+
+    useEffect(() => {
+        // Get results
+        const get = async () => {
+            const data = await fetch(`/api/results/` + expID).then((res) =>
+                res.json()
+            );
+            console.log(data);
+
+            // calc accuracy between emitted and received
+            // Also calc total duration
+            var accuracy = 0;
+            var duration = 0;
+            for (var i = 0; i < data.emitted[0].length; i++) {
+                const e = data.emitted[0][i];
+                const r = data.received[0][i];
+                if (e == r) {
+                    accuracy += 1;
+                }
+
+                // calc total duration
+                duration += data.duration[0][i];
+            }
+            accuracy = accuracy / data.emitted[0].length;
+            setAccuracy(accuracy);
+            setDuration(duration);
+        };
+        if (expID) {
+            get();
+        }
+    }, [expID]);
 
     // we need a listener when the emitter presses a button, also update receivers page.
     useEffect(() => {
@@ -60,7 +94,12 @@ export default function Bye() {
     var buttons_to_retry_rec = <p></p>;
     if (role == "receiver") {
         buttons_to_retry_rec = (
-            <button className="btn btn-sm btn-outline-secondary">
+            <button
+                className="btn btn-sm btn-outline-secondary"
+                onClick={() => {
+                    router.push("/");
+                }}
+            >
                 {end} <i className="bi bi-check2-square"></i>
             </button>
         );
@@ -102,6 +141,8 @@ export default function Bye() {
                     <h1>{teamname},</h1>
                     <h2>{msg}</h2>
                     <img ref={img_ref} />
+                    <h2>{accuracy * 100}%</h2>
+                    <h2>{duration / 1000}s</h2>
                     {buttons_to_retry_em}
                 </div>
             </div>
@@ -116,3 +157,7 @@ const generateQR = async (text) => {
         console.error(err);
     }
 };
+
+function results() {
+    //Fetch results
+}
