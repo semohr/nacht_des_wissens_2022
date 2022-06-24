@@ -19,7 +19,7 @@
         $accuracy = count($overlap) / count($true_data) * 100;
 
         $row = array(
-            "accuracy" => $accuracy,
+            "accuracy" => number_format($accuracy,0),
             "mi_bits" => abs($json["mi_bits"][0]),
             "mi_bits_s" => abs($json["mi_bits_s"][0]),
             "team_name" => $json["team_name"],
