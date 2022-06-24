@@ -33,40 +33,21 @@ export default function NumPad({
                     id={"b" + (g * 3 + i + 1)}
                     className="btn btn-lg btn-outline-primary"
                     onClick={(event) => {
-                        // document.getElementById(event.target.id).blur();
-                        // console.log("clicked " + (g * 3 + i + 1));
+                        reset_past_button();
                         setButtons_enabled(false);
                         socket.emit("experiment:return", g * 3 + i + 1, expID);
                         setCurrentNum(g * 3 + i + 1);
                         setToggle(!toggle);
+                        make_past_button(event.target.id);
                         onClick(g * 3 + i + 1);
                     }}
                     onTouchStart={(event) => {
-                        let btns = document.getElementsByClassName(
-                            "btn-outline-secondary"
-                        );
-                        for (var i = 0; i < btns.length; i++) {
-                            btns[i].classList.add("btn-outline-primary");
-                            btns[i].classList.remove("btn-outline-secondary");
-                        }
-
-                        (event.target as HTMLButtonElement).classList.remove(
-                            "btn-outline-secondary"
-                        );
-                        (event.target as HTMLButtonElement).classList.remove(
-                            "btn-outline-primary"
-                        );
-                        (event.target as HTMLButtonElement).classList.add(
-                            "btn-primary"
-                        );
+                        reset_past_button();
+                        make_past_button(event.target.id);
+                        make_touch_down(event.target.id);
                     }}
                     onTouchEnd={(event) => {
-                        (event.target as HTMLButtonElement).classList.remove(
-                            "btn-primary"
-                        );
-                        (event.target as HTMLButtonElement).classList.add(
-                            "btn-outline-secondary"
-                        );
+                        make_touch_end(event.target.id);
                         // console.log("touchend " + event.target.id);
                         setTimeout(function () {
                             (event.target as HTMLButtonElement).blur();
@@ -98,15 +79,6 @@ export default function NumPad({
         let target = document.getElementById(bid);
         target!.focus();
         target!.click();
-        // lets get the style we wanted for touch also on keyboards... yes this
-        // is redundant code.
-        let btns = document.getElementsByClassName("btn-outline-secondary");
-        for (var i = 0; i < btns.length; i++) {
-            btns[i].classList.add("btn-outline-primary");
-            btns[i].classList.remove("btn-outline-secondary");
-        }
-        target!.classList.remove("btn-primary");
-        target!.classList.add("btn-outline-secondary");
     }, []);
 
     useEffect(() => {
@@ -135,4 +107,28 @@ export default function NumPad({
     );
 }
 
-function fix_sticky_button() {}
+function reset_past_button(except_id = null) {
+    let btns = document.getElementsByClassName("btn-outline-secondary");
+    for (var i = 0; i < btns.length; i++) {
+        if (btns[i].id == except_id) continue;
+        btns[i].classList.remove("btn-primary"); // in case we missed a touch-end event
+        btns[i].classList.add("btn-outline-primary");
+        btns[i].classList.remove("btn-outline-secondary");
+    }
+}
+
+function make_past_button(button_id) {
+    let btn = document.getElementById(button_id);
+    btn!.classList.add("btn-outline-secondary");
+}
+
+function make_touch_down(button_id) {
+    let btn = document.getElementById(button_id);
+    btn!.classList.add("btn-primary");
+}
+
+function make_touch_end(button_id) {
+    let btn = document.getElementById(button_id);
+    btn!.classList.remove("btn-primary");
+
+}

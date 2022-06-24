@@ -6,7 +6,9 @@ import { useCallback, useEffect, useState } from "react";
 // here we introduce the toggle var to make sure that the number is updated
 // in these cases
 export default function NumberHistory({ number = undefined, toggle = false }) {
-    const [history, setHistory] = useState([]);
+    // init history with an empty character so the height is already allocated
+    // and the numpad doesnt move.
+    const [history, setHistory] = useState([<div>&zwnj;</div>]);
 
     const addToHistory = (number) => {
         // add new_num tag to the element which is removed after 1 second
