@@ -10,7 +10,11 @@ export default function NumberHistory({ number = undefined, toggle = false }) {
 
     const addToHistory = (number) => {
         // add new_num tag to the element which is removed after 1 second
-        let element = <div key={number + "-" + Math.random()} className="my-auto">{number}</div>;
+        let element = (
+            <div key={number + "-" + Math.random()} className="my-auto">
+                {number}
+            </div>
+        );
 
         //Check length and add or remove
         const max = 10;
@@ -28,12 +32,8 @@ export default function NumberHistory({ number = undefined, toggle = false }) {
     }, [number, toggle]);
 
     return (
-
-            <div
-                className="me-1 d-flex flex-row numHistory w-25"
-                id="numHistory"
-            >
-                {history}
-            </div>
+        <div className="me-1 d-flex flex-row numHistory w-50" id="numHistory">
+            {history}
+        </div>
     );
 }

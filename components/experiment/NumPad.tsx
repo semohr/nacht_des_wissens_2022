@@ -95,14 +95,12 @@ export default function NumPad({
             return;
         }
         let bid = "b" + event.key;
-        let target = document.getElementById(bid)
+        let target = document.getElementById(bid);
         target!.focus();
         target!.click();
         // lets get the style we wanted for touch also on keyboards... yes this
         // is redundant code.
-        let btns = document.getElementsByClassName(
-            "btn-outline-secondary"
-        );
+        let btns = document.getElementsByClassName("btn-outline-secondary");
         for (var i = 0; i < btns.length; i++) {
             btns[i].classList.add("btn-outline-primary");
             btns[i].classList.remove("btn-outline-secondary");
@@ -127,12 +125,12 @@ export default function NumPad({
                 {groups}
             </div>
 
-            <div className="d-flex justify-content-center w-100">
-                <NumberHistory number={currentNum} toggle={toggle}></NumberHistory>
-                <div className="w-25">
-                </div>
+            <div className="d-flex justify-content-center w-100 receiver">
+                <NumberHistory
+                    number={currentNum}
+                    toggle={toggle}
+                ></NumberHistory>
             </div>
-
         </>
     );
 }

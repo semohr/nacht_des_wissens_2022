@@ -6,7 +6,6 @@ import NumberHistory from "./NumberHistory";
 export default function Prompt({ expID, exp_is_running = true }) {
     const [num, setNum] = useState(null);
     const [prevNum, setPrevNum] = useState(null);
-    const [color, setColor] = useState("black");
     const socket = useSocket();
     const [toggle, setToggle] = useState(false);
 
@@ -17,10 +16,6 @@ export default function Prompt({ expID, exp_is_running = true }) {
     useEffect(() => {
         if (socket) {
             socket.on("experiment:event", (random_number, r_expID) => {
-                setColor("white");
-                setTimeout(() => {
-                    setColor("black");
-                }, 10);
                 setToggle(!toggle);
                 setPrevNum(num);
                 setNum(random_number);
@@ -37,13 +32,12 @@ export default function Prompt({ expID, exp_is_running = true }) {
         <>
             <div className="prompt">
                 <div className="text">{prompt}</div>
-                <div className="d-flex justify-content-center w-100">
-                    <NumberHistory number={prevNum} toggle={toggle}></NumberHistory>
-                    <div className="number mx-2" style={{ color: color }}>
-                        {!num ? "[?]" : num}
-                    </div>
-                    <div className = "w-25">
-                    </div>
+                <div className="d-flex justify-content-center w-100 position-relative">
+                    <NumberHistory
+                        number={prevNum}
+                        toggle={toggle}
+                    ></NumberHistory>
+                    <div className="number mx-2">{!num ? "[?]" : num}</div>
                 </div>
             </div>
         </>

@@ -184,25 +184,61 @@
 
 /** Number History
 */
-.numHistory {
-    text-align: right;
+//Emitter
+.prompt .numHistory {
+    position: absolute;
+    left: 0.5em;
+    top: 0; //1.5 is lineheight -> 0.75 to get middle
+    height: 100%;
+    text-align: center;
     justify-content: right;
+    overflow: visible;
+    z-index: 10;
+    padding-left: 12.5%;
     // margin-right: calc(50%);
 
     mask-image: linear-gradient(
         90deg,
-        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0) 15%,
         rgba(0, 0, 0, 0.2) 70%,
-        rgba(0, 0, 0, 0.5) 100%
+        rgba(0, 0, 0, 0.5) 90%,
+        rgba(0, 0, 0, 1) 100%
     );
     div {
-        // animation: flyin 0.8s ease forwards;
+        animation: flyin_em 0.8s ease forwards;
         opacity: 1;
-        // transform: translateX(50vw);
+        font-size: 3em;
+        transform: translateX(200%);
+    }
+}
+@keyframes flyin_em {
+    to {
+        font-size: 1rem;
+        transform: translateX(0%);
     }
 }
 
-@keyframes flyin {
+//Reciever
+.receiver .numHistory {
+    display: flex !important;
+    width: fit-content !important;
+    padding-right: 8em;
+
+    mask-image: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.2) 30%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 1) 100%
+    );
+
+    div {
+        animation: flyin_re 0.8s ease forwards;
+        opacity: 0;
+        transform: translateX(8em);
+    }
+}
+@keyframes flyin_re {
     to {
         opacity: 1;
         transform: translateX(0%);
