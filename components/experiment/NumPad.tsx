@@ -95,8 +95,20 @@ export default function NumPad({
             return;
         }
         let bid = "b" + event.key;
-        document.getElementById(bid)!.focus();
-        document.getElementById(bid)!.click();
+        let target = document.getElementById(bid)
+        target!.focus();
+        target!.click();
+        // lets get the style we wanted for touch also on keyboards... yes this
+        // is redundant code.
+        let btns = document.getElementsByClassName(
+            "btn-outline-secondary"
+        );
+        for (var i = 0; i < btns.length; i++) {
+            btns[i].classList.add("btn-outline-primary");
+            btns[i].classList.remove("btn-outline-secondary");
+        }
+        target!.classList.remove("btn-primary");
+        target!.classList.add("btn-outline-secondary");
     }, []);
 
     useEffect(() => {
@@ -114,7 +126,13 @@ export default function NumPad({
             <div className="numPad" id="numPad">
                 {groups}
             </div>
-            <NumberHistory number={currentNum} toggle={toggle}></NumberHistory>
+
+            <div className="d-flex justify-content-center w-100">
+                <NumberHistory number={currentNum} toggle={toggle}></NumberHistory>
+                <div className="w-25">
+                </div>
+            </div>
+
         </>
     );
 }
