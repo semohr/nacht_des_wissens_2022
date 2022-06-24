@@ -28,8 +28,8 @@ export default function Welcome() {
                 <Settings />
                 <LanguageSelector />
             </div>
-            <div className="row gy-2">
-                <div className="col-12 welcome mb-2">
+            <div className="row gy-2 justify-content-center" style={{ height: "90%" }}>
+                <div className="col col-md-8 col-sm-11 welcome mb-2">
                     <div>
                         <h1>{title}</h1>
                     </div>
