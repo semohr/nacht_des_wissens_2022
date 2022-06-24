@@ -141,8 +141,8 @@ export default function Bye() {
                     <h1>{teamname},</h1>
                     <h2>{msg}</h2>
                     <img ref={img_ref} />
-                    <h2>{accuracy * 100}%</h2>
-                    <h2>{duration / 1000}s</h2>
+                    <h2>{(accuracy * 100).toFixed(0)}%</h2>
+                    <h2>{(duration / 1000).toFixed(2)}s</h2>
                     {buttons_to_retry_em}
                 </div>
             </div>
@@ -152,7 +152,12 @@ export default function Bye() {
 
 const generateQR = async (text) => {
     try {
-        return await QRCode.toDataURL(text);
+        return await QRCode.toDataURL(text, {
+            color: {
+                dark: "#000",
+                light: "#0000",
+            }
+        });
     } catch (err) {
         console.error(err);
     }

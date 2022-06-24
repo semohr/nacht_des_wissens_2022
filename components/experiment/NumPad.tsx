@@ -4,7 +4,7 @@ import NumberHistory from "./NumberHistory";
 
 export default function NumPad({
     expID,
-    onClick = (num) => {},
+    onClick = (num) => { },
     exp_is_running = true,
 }) {
     const socket = useSocket();
@@ -33,22 +33,26 @@ export default function NumPad({
                     id={"b" + (g * 3 + i + 1)}
                     className="btn btn-lg btn-outline-primary"
                     onClick={(event) => {
+                        const target = event.target as HTMLButtonElement;
                         reset_past_button();
                         setButtons_enabled(false);
                         socket.emit("experiment:return", g * 3 + i + 1, expID);
                         setCurrentNum(g * 3 + i + 1);
                         setToggle(!toggle);
-                        make_past_button(event.target.id);
+                        make_past_button(target.id);
                         onClick(g * 3 + i + 1);
                     }}
                     onTouchStart={(event) => {
+                        const target = event.target as HTMLButtonElement;
                         reset_past_button();
-                        make_past_button(event.target.id);
-                        make_touch_down(event.target.id);
+                        make_past_button(target.id);
+                        make_touch_down(target.id);
                     }}
                     onTouchEnd={(event) => {
-                        make_touch_end(event.target.id);
-                        // console.log("touchend " + event.target.id);
+                        const target = event.target as HTMLButtonElement;
+                        make_touch_end(target.id);
+                        // Here we disable to button highlighting after
+                        // the user has pressed it.
                         setTimeout(function () {
                             (event.target as HTMLButtonElement).blur();
                         }, 500);
