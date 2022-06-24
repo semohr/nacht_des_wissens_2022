@@ -191,7 +191,7 @@
     top: 0; //1.5 is lineheight -> 0.75 to get middle
     height: 100%;
     text-align: center;
-    justify-content: right;
+    justify-content: left;
     overflow: visible;
     z-index: 10;
     padding-left: 12.5%;
@@ -271,8 +271,22 @@ body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
+    background-image: linear-gradient(
+        to right top,
+        #e9f8ff,
+        #dff5ff,
+        #d5f2ff,
+        #cbeeff,
+        #c0ebff,
+        #bbecff,
+        #b7edff,
+        #b2eeff,
+        #b4f3fe,
+        #b8f7fe,
+        #bcfbfc,
+        #c2fffb
+    );
 }
-
 .flex-center {
     justify-content: center;
     align-items: center;
