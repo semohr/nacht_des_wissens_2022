@@ -8,5 +8,10 @@
     "error_teamname_already_taken": "Teamname already taken.",
     "title": "Welcome!",
     "introduction_emitter": "Imagine you are a researcher at a remote research station in Antarctica. Over the past week, you've collected many important measurements - temperature, wind speeds, etc. - which you now want to share with your collegues back at the base station. However, you only have a noisy radio channel to communicate, and time is expensive: Can you make sure the other person gets all the numbers correct? How fast can you transmit all the information?",
-    "introduction_receiver": "Imagine you are a researcher at the base station of a research expedition in Antarctica. Your collegue, who is currently at a remote research outpost, has collected many important measurements over the last week - temperature, wind speeds, etc. - which he/she now wants to share with you. However, you only have a noisy radio channel to communicate, and time is expensive: Can you make sure you get all the numbers correct? How fast can you receive all the information?"
+    "introduction_receiver": "Imagine you are a researcher at the base station of a research expedition in Antarctica. Your collegue, who is currently at a remote research outpost, has collected many important measurements over the last week - temperature, wind speeds, etc. - which he/she now wants to share with you. However, you only have a noisy radio channel to communicate, and time is expensive: Can you make sure you get all the numbers correct? How fast can you receive all the information?",
+    "thank_you_msg": "thank you for playing! We hope you enjoyed.",
+    "thank_you_results": "You achieved an accuracy of {{accuracy}}% and it took you {{duration}}s to transmit all numbers.",
+    "thank_you_results_more": "For a more detailed look into your results, visit https://information-theory.ds.mpg.de or scan our QR-code.",
+    "Accuracy": "Accuracy",
+    "Duration": "Duration"
 }

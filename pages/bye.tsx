@@ -82,13 +82,14 @@ export default function Bye() {
     }, [socket]);
 
     //Translation
-    const { t, lang } = useTranslation("common");
-    const title = t("results");
-    const msg = t("thank_you_msg");
-    const cont = t("continue");
-    const error_msg = t("error_msg");
+    const { t } = useTranslation("common");
+    const thank_you_msg = t("thank_you_msg");
+    const results_msg = t("thank_you_results", { accuracy: (accuracy * 100).toFixed(0), duration: (duration / 1000).toFixed(2) });
+    const more_details = t("thank_you_results_more");
     const retry = t("retry");
     const end = t("end");
+    const accuracy_msg = t("Accuracy")
+    const duration_msg = t("Duration")
 
     var buttons_to_retry_em = null;
     var buttons_to_retry_rec = <p></p>;
@@ -139,11 +140,14 @@ export default function Bye() {
                 </div>
                 <div className="d-flex flex-center flex-column vh-100 p-5">
                     <h1>{teamname},</h1>
-                    <h2>{msg}</h2>
-                    <img ref={img_ref} />
-                    <h2>{(accuracy * 100).toFixed(0)}%</h2>
-                    <h2>{(duration / 1000).toFixed(2)}s</h2>
-                    {buttons_to_retry_em}
+                    <h2>{thank_you_msg}</h2>
+                    <h2>{accuracy_msg + ": " + (accuracy * 100).toFixed(0)}%</h2>
+                    <h2>{duration_msg + ": " + (duration / 1000).toFixed(2)}s</h2>
+                    <div className="m-2 d-flex flex-row align-items-center">
+                        <p className="m-0" style={{ width: "200px" }}>{more_details}</p>
+                        <img ref={img_ref} height={"200px"} width={"200px"} />
+                        {buttons_to_retry_em}
+                    </div>
                 </div>
             </div>
         </>
@@ -162,7 +166,3 @@ const generateQR = async (text) => {
         console.error(err);
     }
 };
-
-function results() {
-    //Fetch results
-}
