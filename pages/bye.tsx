@@ -141,13 +141,15 @@ export default function Bye() {
                 <div className="d-flex flex-center flex-column vh-100 p-5">
                     <h1>{teamname},</h1>
                     <h2>{thank_you_msg}</h2>
-                    <h2>{accuracy_msg + ": " + (accuracy * 100).toFixed(0)}%</h2>
-                    <h2>{duration_msg + ": " + (duration / 1000).toFixed(2)}s</h2>
+                    <div className="m-3">
+                        <h2 >{accuracy_msg + ": " + (accuracy * 100).toFixed(0)}%</h2>
+                        <h2>{duration_msg + ": " + (duration / 1000).toFixed(2)}s</h2>
+                    </div>
                     <div className="m-2 d-flex flex-row align-items-center">
                         <p className="m-0" style={{ width: "200px" }}>{more_details}</p>
                         <img ref={img_ref} height={"200px"} width={"200px"} />
-                        {buttons_to_retry_em}
                     </div>
+                    {buttons_to_retry_em}
                 </div>
             </div>
         </>
