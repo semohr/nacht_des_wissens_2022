@@ -63,7 +63,7 @@
                 <div class="card">
                     <h5 class="card-header d-flex justify-content-between align-items-center">
                         <span></span> <!-- this is a dummy to center the text -->
-                        <span>
+                        <span style="text-align: center;">
                             <?php echo $LANG['leaderboard_title']; ?>
                         </span>
                         <!-- avoid stretching the header in y direction by overwriting the button padding -->
@@ -90,7 +90,7 @@
                         <div class="card">
                             <h5 class="card-header d-flex justify-content-between align-items-center">
                                 <span></span> <!-- this is a dummy to center the text -->
-                                <span>
+                                <span style="text-align: center;">
                                     <?php echo $LANG['mi_title']; ?>
                                 </span>
                                 <!-- avoid stretching the header in y direction by overwriting the button padding -->
@@ -117,7 +117,7 @@
                         <div class="card">
                             <h5 class="card-header d-flex justify-content-between align-items-center">
                                 <span></span> <!-- this is a dummy to center the text -->
-                                <span>
+                                <span style="text-align: center;">
                                     <?php echo $LANG['scatter_title']; ?>
                                 </span>
                                 <!-- avoid stretching the header in y direction by overwriting the button padding -->

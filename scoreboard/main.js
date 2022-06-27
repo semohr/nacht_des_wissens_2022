@@ -110,6 +110,7 @@ async function main() {
             ),
             select: 'single',
             scrollX: true,
+            pageLength: 25,
             language: {
                 // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
                 url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/" + $LANG['language'] + ".json",

@@ -31,6 +31,13 @@
     border-radius: 0px;
 }
 
+.input-group .btn-outline-secondary {
+    background: white;
+}
+.input-group .btn-outline-secondary:hover {
+    background: var(--bs-secondary);
+}
+
 .rotate-outer:hover .rotate-inner {
     display: inline-block;
     animation: rotating 0.5s linear;
