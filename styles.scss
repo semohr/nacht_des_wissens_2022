@@ -177,9 +177,12 @@
         font-weight: bold;
         // text-align: left;
         // justify-content: left;
-        animation-duration: .3s;
-        animation-name: expandText;
     }
+}
+
+.oink {
+    animation-duration: .3s;
+    animation-name: oink;
 }
 
 @keyframes expandText {
@@ -188,6 +191,21 @@
     }
 
     to {
+        font-size: 3em;
+    }
+}
+
+@keyframes oink {
+    0% {
+        background: 3em;
+    }
+
+    /* Adding a step in the middle */
+    50% {
+        font-size: 3.5em;
+    }
+
+    100% {
         font-size: 3em;
     }
 }
