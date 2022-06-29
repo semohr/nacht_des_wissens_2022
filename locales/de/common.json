@@ -6,18 +6,12 @@
     "Teamname": "Bitte wählt Euren Team Namen!",
     "Submit_Teamname": "Teamname passt!",
     "error_teamname_already_taken": "Teamname bereits vergeben.",
-    "results": "Ihre Ergebnisse",
-    "continue": "Fortfahren",
-    "error_msg": "Identifikationsnummer wurde nicht gefunden, diese sollte nummerisch und 4 Stellen lang sein. Eventuell sind Ihre Ergebnisse noch nicht verfügbar, versuchen Sie es gerne in ein paar Minuten erneut",
-    "remember_teamname": "Bitte merken Sie sich ihren team namen",
-    "retry": "Neuer Versuch",
-    "end": "Ende",
     "title": "Wilkommen!",
     "introduction_emitter": "Stell dir vor du bist ein Forscher auf einer abgelegenen Forschungsstation in der Antarktis. Über die letzte Woche hast du viele wichtige Messungen getätigt - Temperatur, Windgeschwindigkeiten etc. - die du nun an deine Kollegen in der Basisstation weiterleiten möchtest. Dafür steht euch allerdings nur ein verrauschtes Funkgerät zur Verfügung, und Zeit ist teuer: Schaffst du es dass die andere Person alle Zahlen richtig versteht? Wie schnell könnt ihr die Informationen übermitteln?",
     "introduction_receiver": "Stell dir vor du bist ein Forscher in der Basisstation einer Antarktis-Expedition. Über die letzte Woche hat dein Kollege bzw. deine Kollegin auf einem Außenposten viele wichtige Messungen getätigt - Temperatur, Windgeschwindigkeiten etc. - die er/sie nun an dich weiterleiten möchte. Dafür steht euch allerdings nur ein verrauschtes Funkgerät zur Verfügung, und Zeit ist teuer: Schaffst du es alle Zahlen richtig zu verstehen? Wie schnell könnt ihr die Informationen übermitteln?",
-    "thank_you_msg": "wir hoffen Ihr hattet Spaß bei diesem kleinen Experiment.",
-    "thank_you_results": "You achieved an accuracy of {{accuracy}}% and it took you {{duration}}s to transmit all numbers.",
-    "thank_you_results_more": "For a more detailed look into your results, visit https://information-theory.ds.mpg.de or scan our QR-code.",
-    "Accuracy": "Übertragsunsqualität:",
-    "Duration": "Dauer des Experiments:"
+    "thank_you_msg": "danke fürs Mitspielen! Wir hoffen, es hat euch gefallen.",
+    "thank_you_results": "Ihr habt eine Genauigkeit von {{accuracy}}% erreichtund es hat {{duration}}s gedauert alle Nummern zu kommunizieren.",
+    "thank_you_results_more": "Für mehr Details und eine Erklärung der Ergebnisse, könnt Ihr https://information-theory.ds.mpg.de besuchen oder den QR-code scannen.",
+    "Accuracy": "Genauigkeit",
+    "Duration": "Dauer"
 }

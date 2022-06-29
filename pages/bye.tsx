@@ -106,7 +106,6 @@ export default function Bye() {
         );
     } else if (role == "emitter") {
         buttons_to_retry_em = (
-            <div className="btn-group btn-group-lg mt-2" role="group">
                 <button
                     className="btn btn-outline-primary"
                     onClick={() => {
@@ -166,4 +165,3 @@ const generateQR = async (text) => {
     } catch (err) {
         console.error(err);
     }
-};
