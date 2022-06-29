@@ -106,6 +106,7 @@ export default function Bye() {
         );
     } else if (role == "emitter") {
         buttons_to_retry_em = (
+            <div className="btn-group btn-group-lg mt-2" role="group">
                 <button
                     className="btn btn-outline-primary"
                     onClick={() => {
@@ -130,6 +131,7 @@ export default function Bye() {
         console.log("role not defined");
     }
 
+
     return (
         <>
             <div className="container-fluid p-3 vh-100 ">
@@ -147,7 +149,7 @@ export default function Bye() {
                         <p className="m-0" style={{ width: "200px" }}>{more_details}</p>
                         <img ref={img_ref} height={"200px"} width={"200px"} />
                     </div>
-                        {buttons_to_retry_em}
+                    {buttons_to_retry_em}
                 </div>
             </div>
         </>
@@ -165,3 +167,4 @@ const generateQR = async (text) => {
     } catch (err) {
         console.error(err);
     }
+};
