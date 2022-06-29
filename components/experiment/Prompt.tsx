@@ -1,6 +1,6 @@
 import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NumberHistory from "./NumberHistory";
 
 export default function Prompt({ expID, exp_is_running = true }) {
@@ -8,6 +8,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
     const [prevNum, setPrevNum] = useState(null);
     const socket = useSocket();
     const [toggle, setToggle] = useState(false);
+    const currentNumberRef = useRef(null);
 
     //Translation
     const { t } = useTranslation("common");
@@ -19,13 +20,12 @@ export default function Prompt({ expID, exp_is_running = true }) {
                 setToggle(!toggle);
                 setPrevNum(num);
                 setNum(random_number);
-                let cnd = document.getElementById("currentNumber");
-                if (typeof cnd !== 'undefined' && cnd !== null) {
-                    cnd.classList.remove("oink");
+                if (currentNumberRef.current) {
+                    currentNumberRef.current.classList.remove("oink");
                     // the line below triggers reflow so that readding the class actually
                     // triggers the css animation again.
-                    void cnd.offsetWidth;
-                    cnd.classList.add("oink");
+                    void currentNumberRef.current.offsetWidth;
+                    currentNumberRef.current.classList.add("oink");
                 }
             });
         }
@@ -46,7 +46,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
                         toggle={toggle}
                     ></NumberHistory>
                     <div className="number-container d-flex flex-column align-items-center">
-                        <div id="currentNumber"
+                        <div ref={currentNumberRef} id="currentNumber"
                             className="number mx-2 my-auto oink">
                             {!num ? "[?]" : num}
                         </div>

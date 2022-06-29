@@ -1,6 +1,6 @@
 import { Server } from 'socket.io'
 import moment from "moment"
-import {spawn} from "child_process"
+import { spawn } from "child_process"
 import { writeFile, readFileSync, readdir, readdirSync } from 'fs';
 
 
@@ -25,7 +25,7 @@ var emitter = [];
 var receiver = [];
 var MAP = [];
 
-function get_map_by_expID(expID){
+function get_map_by_expID(expID) {
     const filtered = MAP.filter(map => map.expID == expID)
 
     if (filtered == undefined) {
@@ -198,7 +198,7 @@ const SocketHandler = (req, res) => {
                 io.to(map.receiveID).emit("experiment:end", expID, teamname);
 
                 // Omit save file for emitter
-                if (socket.id == map.emitterID){
+                if (socket.id == map.emitterID) {
                     return
                 }
 
@@ -223,14 +223,14 @@ const SocketHandler = (req, res) => {
                     var cmd = spawn(sync_script, [], { shell: true });
 
                     // deal with upload error
-                    cmd.stdout.on('data', function(data) {
+                    /*cmd.stdout.on('data', function(data) {
                         console.log(data.toString());
-                    });
-                    cmd.stderr.on('data', function(data) {
+                    });*/
+                    cmd.stderr.on('data', function (data) {
                         console.error(data.toString());
                     });
-                    cmd.on('exit', function(code) {
-                        console.log("Exited with code " + code);
+                    cmd.on('exit', function (code) {
+                        console.log("[Socket] Upload script exited with code " + code);
                     });
                 });
             }
