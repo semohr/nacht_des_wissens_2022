@@ -19,12 +19,14 @@ export default function Prompt({ expID, exp_is_running = true }) {
                 setToggle(!toggle);
                 setPrevNum(num);
                 setNum(random_number);
-                let currentNumber = document.getElementById("currentNumber");
-                currentNumber!.classList.remove("oink");
-                // the line below triggers reflow so that readding the class actually
-                // triggers the css animation again.
-                void currentNumber.offsetWidth;
-                currentNumber!.classList.add("oink");
+                let cnd = document.getElementById("currentNumber");
+                if (typeof cnd !== 'undefined' && cnd !== null) {
+                    cnd.classList.remove("oink");
+                    // the line below triggers reflow so that readding the class actually
+                    // triggers the css animation again.
+                    void cnd.offsetWidth;
+                    cnd.classList.add("oink");
+                }
             });
         }
     }, [socket, toggle, num, prevNum]);
@@ -45,7 +47,7 @@ export default function Prompt({ expID, exp_is_running = true }) {
                     ></NumberHistory>
                     <div className="number-container d-flex flex-column align-items-center">
                         <div id="currentNumber"
-                            className="number mx-2 my-auto">
+                            className="number mx-2 my-auto oink">
                             {!num ? "[?]" : num}
                         </div>
                     </div>
