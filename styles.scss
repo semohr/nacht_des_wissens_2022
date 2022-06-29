@@ -168,11 +168,27 @@
         font-weight: bold;
     }
 
+    .number-container {
+        height: 3.5em;
+    }
+
     .number {
         font-size: 3em;
         font-weight: bold;
         // text-align: left;
         // justify-content: left;
+        animation-duration: .3s;
+        animation-name: expandText;
+    }
+}
+
+@keyframes expandText {
+    from {
+        font-size: 0em;
+    }
+
+    to {
+        font-size: 3em;
     }
 }
 
@@ -247,8 +263,16 @@
         opacity: 1;
         font-size: 3em;
         transform: translateX(200%);
+
     }
+
 }
+
+.phantom {
+    color:rgba(0, 0, 0, 0) !important;
+}
+
+
 
 @keyframes flyin_em {
     to {

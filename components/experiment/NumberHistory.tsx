@@ -8,7 +8,10 @@ import { useCallback, useEffect, useState } from "react";
 export default function NumberHistory({ number = undefined, toggle = false }) {
     // init history with an empty character so the height is already allocated
     // and the numpad doesnt move.
-    const [history, setHistory] = useState([<div>&zwnj;</div>]);
+    const max = 10;
+    let history_placeholder = Array(max).fill(<div className="phantom">0</div>);
+    const [history, setHistory] = useState(history_placeholder);
+    console.log(history);
 
     const addToHistory = (number) => {
         // add new_num tag to the element which is removed after 1 second
@@ -19,7 +22,6 @@ export default function NumberHistory({ number = undefined, toggle = false }) {
         );
 
         //Check length and add or remove
-        const max = 10;
         if (history.length <= max) {
             setHistory([...history, element]);
         } else {

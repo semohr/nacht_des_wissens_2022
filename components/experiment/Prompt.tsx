@@ -37,7 +37,9 @@ export default function Prompt({ expID, exp_is_running = true }) {
                         number={prevNum}
                         toggle={toggle}
                     ></NumberHistory>
-                    <div className="number mx-2">{!num ? "[?]" : num}</div>
+                    <div className="number-container d-flex flex-column align-items-center">
+                        <div className="number mx-2 my-auto">{!num ? "[?]" : num}</div>
+                    </div>
                 </div>
             </div>
         </>
