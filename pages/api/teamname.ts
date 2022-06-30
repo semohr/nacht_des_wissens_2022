@@ -1,25 +1,39 @@
 import fs from 'fs';
+import useTranslation from 'next-translate/useTranslation';
 import path from "path";
 
 
 
 
-var candidates = [];
-
+var candidates_en = [];
+var candidates_de = [];
 function set_canidates() {
-    const name_data = fs.readFileSync("locales/en/teamnames.json");
-    const names = JSON.parse(name_data.toString());
+    const name_data_en = fs.readFileSync("locales/en/teamnames.json");
+    const names_en = JSON.parse(name_data_en.toString());
 
-    for (let letter of Object.keys(names["animals"])) {
-        let animals = names["animals"][letter];
-        let adjectives = names["adjectives"][letter];
-        //console.log(letter);
-        //console.log(animals);
-        //console.log(adjectives);
+    for (let letter of Object.keys(names_en["animals"])) {
+        let animals = names_en["animals"][letter];
+        let adjectives = names_en["adjectives"][letter];
+
         // All combinations of adjectives and animals
         animals.forEach(animal => {
             adjectives.forEach(adjective => {
-                candidates.push(adjective + animal);
+                candidates_en.push(adjective + animal);
+            });
+        });
+    }
+
+    const name_data_de = fs.readFileSync("locales/de/teamnames.json");
+    const names_de = JSON.parse(name_data_de.toString());
+
+    for (let letter of Object.keys(names_de["animals"])) {
+        let animals = names_de["animals"][letter];
+        let adjectives = names_de["adjectives"][letter];
+
+        // All combinations of adjectives and animals
+        animals.forEach(animal => {
+            adjectives.forEach(adjective => {
+                candidates_de.push(adjective + animal);
             });
         });
     }
@@ -29,10 +43,28 @@ function set_canidates() {
 // Get new random Team Name which was never used before
 export default async function getTeamname(req, res) {
 
+    var language = req.query.language;
+    if (!language) {
+        language = "en"
+    }
+
+
     // Set canidates if not set yet
-    if (candidates.length == 0) {
+    if (candidates_en.length == 0) {
         set_canidates();
     }
+    // Get all candiates by language
+    var candidates;
+    if (language == "de") {
+        candidates = candidates_de
+    } else if (language == "en") {
+        candidates = candidates_en
+    }
+    else {
+        console.log("Language not supported")
+        candidates = candidates_en
+    }
+
 
     const team_names = getUsedTeamnames();
 

@@ -34,7 +34,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
     const [used, setUsed] = useState(false);
 
     //Translations
-    const { t } = useTranslation("common");
+    const { lang, t } = useTranslation("common");
     const ready_str = t("ready");
     const waiting_msg = t("waiting_msg");
     const error_msg = t("error_teamname_already_taken");
@@ -137,7 +137,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                         className="btn btn-outline-secondary rotate-outer"
                         type="button"
                         onClick={
-                            async () => { updateTeamnamePlaceholder() }
+                            async () => { updateTeamnamePlaceholder(lang) }
                         }
                         disabled={force_teamname}>
                         <span className="rotate-inner">
@@ -191,7 +191,7 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
     return (
         <div className="readyBtn">
             {ready ? <div className="ready">{waiting_msg}</div> : null}
-            <button ref = {buttonRefSubmit} onClick={(e) => {
+            <button ref={buttonRefSubmit} onClick={(e) => {
                 onClick();
                 socket!.emit("experiment:ready", "receiver");
                 setReady(true);
@@ -243,10 +243,10 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
 }
 
 
-async function fetchTeamname() {
-    const teamname = await fetch("/api/teamname").then(res => res.json()).catch(e => {
+async function fetchTeamname(language: string) {
+    const teamname = await fetch("/api/teamname?language=" + language).then(res => res.json()).catch(e => {
         // console.log(e);
-        return fetchTeamname();
+        return fetchTeamname(language);
     });
     return teamname["team_name"];
 }
@@ -261,8 +261,8 @@ async function fetchTeamnameUsed(teamname: string) {
 }
 
 
-async function updateTeamnamePlaceholder() {
-    const teamname = await fetchTeamname();
+async function updateTeamnamePlaceholder(language: string) {
+    const teamname = await fetchTeamname(language);
     // console.log(teamname);
     (document.getElementById("input_teamname") as HTMLInputElement).value = teamname;
 }
