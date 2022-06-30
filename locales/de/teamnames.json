@@ -1,0 +1,350 @@
+{
+    "animals": {
+        "A": [
+            "Ameisenbären",
+            "Amseln",
+            "Alligatoren",
+            "Alpacas",
+            "Anacondas",
+            "Antilopen"
+        ],
+        "B": [
+            "Bären",
+            "Blaumeisen",
+            "Bergziegen",
+            "Bienen",
+            "Blindschleichen",
+            "Biber"
+        ],
+        "C": [
+            "Clownfische",
+            "Chihuahuas"
+        ],
+        "D": [
+            "Dachse",
+            "Dackel",
+            "Delfine",
+            "Dromedare"
+        ],
+        "E": [
+            "Eisbären",
+            "Elefanten",
+            "Eichhörnchen",
+            "Elche",
+            "Esel"
+        ],
+        "F": [
+            "Fische",
+            "Flamingos",
+            "Fledermäuse",
+            "Füchse",
+            "Falken"
+        ],
+        "G": [
+            "Giraffen",
+            "Guppis",
+            "Glühwürmchen",
+            "Gürteltiere"
+        ],
+        "H": [
+            "Hunde",
+            "Hasen",
+            "Hirsche",
+            "Haifische",
+            "Heuschrecken",
+            "Hyänen"
+        ],
+        "I": [
+            "Igel",
+            "Insekten"
+        ],
+        "J": [
+            "Junikäfer",
+            "Jaguare",
+            "Jakobsmuscheln"
+        ],
+        "K": [
+            "Krokodile",
+            "Käfer",
+            "Kamele",
+            "Kätzchen",
+            "Kühe",
+            "Königspinguine",
+            "Klapperschlangen"
+        ],
+        "L": [
+            "Löwen",
+            "Luchse",
+            "Lachse",
+            "Leoparden"
+        ],
+        "M": [
+            "Mäuse",
+            "Meerschweinchen",
+            "Maultiere",
+            "Maikäfer",
+            "Mopse",
+            "Maulwürfe",
+            "Murmeltiere"
+        ],
+        "N": [
+            "Nilpferde",
+            "Nagetiere",
+            "Nachtfalter",
+            "Nashörner"
+        ],
+        "O": [
+            "Okapis",
+            "Orcas",
+            "Otter"
+        ],
+        "P": [
+            "Pudel",
+            "Pinguine",
+            "Pelikane",
+            "Pferde"
+        ],
+        "Q": [
+            "Quallen"
+        ],
+        "R": [
+            "Regenwürmer",
+            "Rentiere",
+            "Robben",
+            "Rehe"
+        ],
+        "S": [
+            "Schafe",
+            "Schmetterlinge",
+            "Schneeeulen",
+            "Schweine",
+            "Schnecken"
+        ],
+        "T": [
+            "Tiger",
+            "Trampeltiere",
+            "Tapire"
+        ],
+        "U": [
+            "Uferkrebse",
+            "Urtierchen"
+        ],
+        "V": [
+            "Vögel",
+            "Vogelspinnen"
+        ],
+        "W": [
+            "Wühlmäuse",
+            "Warzenschweine",
+            "Wölfe",
+            "Wespen"
+        ],
+        "Z": [
+            "Ziegen",
+            "Zebras"
+        ]
+    },
+    "adjectives": {
+        "A": [
+            "Abenteuerlustig",
+            "Achtsame",
+            "Achtungswerte",
+            "Adrette",
+            "Agile",
+            "Akkurate",
+            "Aktive",
+            "Ambitionierte",
+            "Anerkannte",
+            "Anmutige",
+            "Anpassungsfähige",
+            "Anständige",
+            "Anziehende",
+            "Atemberaubende",
+            "Athletische",
+            "Aufmerksame",
+            "Ausdrucksstark"
+        ],
+        "B": [
+            "Barmherzige",
+            "Beachtenswerte",
+            "Beeindruckende",
+            "Begabte",
+            "Begehrenswerte",
+            "Begeisternde",
+            "beglückend",
+            "Begnadete",
+            "Beharrliche",
+            "Belastbare",
+            "Beliebte",
+            "Besonnene",
+            "Bezaubernde",
+            "Bildhübsche",
+            "Bodenständige"
+        ],
+        "C": [
+            "Charakterstarke",
+            "Charismatische",
+            "Charmante"
+        ],
+        "D": [
+            "Diszipliniert",
+            "Durchsetzungsstarke",
+            "Dynamische"
+        ],
+        "E": [
+            "Edele",
+            "Ehrbare",
+            "Ehrenhafte",
+            "Eifrige",
+            "Einfallsreiche",
+            "Einfühlsame",
+            "Einzigartige",
+            "Energiegeladene",
+            "Erfahrene",
+            "Elegante",
+            "Engagierte"
+        ],
+        "F": [
+            "Fachkundige",
+            "Fantasiereiche",
+            "Fantasievolle",
+            "Fähige",
+            "Feinfühlige",
+            "Fleißige",
+            "Freundliche",
+            "Fröhliche",
+            "Flexibele",
+            "Flinke",
+            "Faire"
+        ],
+        "G": [
+            "Galante",
+            "Geduldige",
+            "Geachtete",
+            "Gefühlvolle",
+            "Geistreiche",
+            "Gelassene",
+            "Geniale",
+            "Gepflegte",
+            "Geschickte",
+            "Glückliche",
+            "Grandiose",
+            "Großartige",
+            "Großzügige",
+            "Gewissenhafte",
+            "Gründlich",
+            "Gutherzig",
+            "Gütige"
+        ],
+        "H": [
+            "Harmonische",
+            "Heitere",
+            "Heldenhafte",
+            "Hilfsbereite",
+            "Hochanständige",
+            "Hochbegabte",
+            "Hochgeschätzte",
+            "Höfliche",
+            "Hübsche",
+            "Humorvolle"
+        ],
+        "I": [
+            "Idealistische",
+            "Ideenreiche",
+            "Imposante",
+            "Innovative",
+            "Intellektuelle",
+            "Intelligente"
+        ],
+        "J": [
+            "Jüngliche",
+            "Jubelhafte"
+        ],
+        "K": [
+            "Kerngesunde",
+            "Kluge",
+            "Kommunikative",
+            "Kompetente",
+            "Kompromissbereite",
+            "Kerngesunde",
+            "Kreative",
+            "Kultivierte",
+            "Kühne"
+        ],
+        "L": [
+            "Lebensfrohe",
+            "Lebhafte",
+            "Lernbereite",
+            "Leistungsstarke",
+            "Loyale",
+            "Lustige"
+        ],
+        "M": [
+            "Mächtige",
+            "Meinungsstarke",
+            "Musikalische",
+            "Modische",
+            "Mutige"
+        ],
+        "N": [
+            "Nette",
+            "Niedliche",
+            "Nützliche"
+        ],
+        "O": [
+            "Optimistische",
+            "Ordentliche"
+        ],
+        "P": [
+            "Pfiffige",
+            "Präzise",
+            "Professionelle",
+            "Pünktliche"
+        ],
+        "Q": [
+            "Quicklebendige",
+            "Quirlige"
+        ],
+        "R": [
+            "Rechtschaffende",
+            "Redegewandte",
+            "Reizende",
+            "Ritterliche"
+        ],
+        "S": [
+            "Sachkundige",
+            "Selbstlose",
+            "Seriöse",
+            "Sportliche",
+            "Standhafte",
+            "Starke",
+            "Stilbewusste"
+        ],
+        "T": [
+            "Talentierte",
+            "Treue",
+            "Tatkräftige"
+        ],
+        "U": [
+            "Umsichtige",
+            "Unsterbliche",
+            "Unwiderstehliche",
+            "Unterhaltsame"
+        ],
+        "V": [
+            "Vitale",
+            "Vorbildliche",
+            "Vernünftige"
+        ],
+        "W": [
+            "Wachsame",
+            "Wagemutige",
+            "Willensstarke",
+            "Witzige"
+        ],
+        "Z": [
+            "Zauberhafte",
+            "Zuverlässige"
+        ]
+    }
+}
