@@ -12,6 +12,10 @@
     echo 'var $LANG = ' . json_encode($LANG) . ';';
     echo 'var $locale = "' . $locale . '";';
     echo '</script>';
+
+    if (isset($_GET['update_every']))
+        header("Refresh: " . $_GET['update_every']);
+
 ?>
 
 <head>
@@ -39,18 +43,19 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-end mt-2">
             <div class="languageSelector">
-                <a id="lang-de-btn"
-                    href = "index.php?lang=de"
-                    <?php if ($locale == 'de') echo 'hidden'; ?>
-                    >
-                    <img src="./public/gb.svg"></img>
-                </a>
-                <a id="lang-en-btn"
-                    href = "index.php?lang=en"
-                    <?php if ($locale == 'en') echo 'hidden'; ?>
-                    >
-                    <img src="./public/de.svg"></img>
-                </a>
+                <!-- set the href to only update the lang part of url -->
+                <?php
+                    echo '<a ';
+                    // make a copy of current query
+                    $query = $_GET;
+                    if ($locale == 'de') $query['lang'] = 'en';
+                    else $query['lang'] = 'de';
+                    echo 'href="?'. http_build_query($query) .'" ';
+                    echo 'id="lang-' . $locale . '-btn">';
+                    if ($locale == 'de') echo '<img src="./public/de.svg"></img>';
+                    else echo '<img src="./public/gb.svg"></img>';
+                    echo '</a>';
+                ?>
             </div>
         </div>
     </div>

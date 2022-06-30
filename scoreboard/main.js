@@ -134,9 +134,21 @@ async function main() {
                 // select the row matching the teamname that has the highest rank
                 if (queries.teamname) {
                     console.log(queries.teamname)
+
                     // search teamname occurences in data. since we ordered by rank,
                     // first occurence is highest rank already
-                    let team_index = data.findIndex(d => d["team_name"] == queries.teamname);
+                    var team_index = data.findIndex(d => d["team_name"] == queries.teamname);
+
+                    // pass %leading to keep the rank 0 highlighted
+                    if (queries.teamname == "\\leading") {
+                        team_index = 0;
+                    // pass %latest to show the team that finished the most recently
+                    } else if (queries.teamname == "\\latest") {
+                        let latest = data.reduce((a, b) => (a["start_last_event"] > b["start_last_event"] ? a : b));
+                        team_index = data.findIndex(d => d["team_name"] == latest["team_name"]);
+                    }
+
+
 
                     if (team_index != -1) {
                         let pageSize = dataTable.page.len();

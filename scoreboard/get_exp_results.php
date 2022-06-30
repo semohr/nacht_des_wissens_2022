@@ -24,6 +24,9 @@
             "mi_bits_s" => abs($json["mi_bits_s"][0]),
             "team_name" => $json["team_name"],
             "duration" => array_sum($json["duration"][0])/1000.0,
+            // we can use this to highlight in the table the team that did the
+            // latest experiment.
+            "start_last_event" => $json["start_last_event"],
         );
         array_push($results, $row);
     }
