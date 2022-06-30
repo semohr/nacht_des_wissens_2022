@@ -1,15 +1,35 @@
 import useTranslation from "next-translate/useTranslation"
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useRef } from "react";
 
 export default function StartButton() {
     const { t } = useTranslation("common");
-
     const router = useRouter();
     const begin = t("Begin");
+    const buttonRef = useRef(null);
+
+    // handle keyboard input
+    const handleKeyPress = useCallback((event) => {
+        // console.log("key " + event.key);
+        // console.log("code " + event.code);
+        if (! (event.key === "Enter")) {
+            return;
+        }
+        buttonRef.current.click();
+    }, []);
+
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener("keydown", handleKeyPress);
+        // remove the event listener
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     return (
         <div className="beginBtn">
-            <button className="btn btn-lg btn-primary" onClick={() => { router.push("/experiment") }}>
+            <button ref={buttonRef} className="btn btn-lg btn-primary" onClick={() => { router.push("/experiment") }}>
                 {begin}
             </button>
         </div>

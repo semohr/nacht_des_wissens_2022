@@ -254,7 +254,7 @@ export default SocketHandler
  *
  * @param map
  */
-function calculate_mutual_information(map: Data) {
+export function calculate_mutual_information(map: Data) {
     for (let i = 0; i < NUM_BLOCKS; i++) {
 
         // evaluate the joint probability distribution from the recorded events

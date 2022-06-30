@@ -9,9 +9,12 @@
     "title": "Wilkommen!",
     "introduction_emitter": "Stell dir vor du bist ein Forscher auf einer abgelegenen Forschungsstation in der Antarktis. Über die letzte Woche hast du viele wichtige Messungen getätigt - Temperatur, Windgeschwindigkeiten etc. - die du nun an deine Kollegen in der Basisstation weiterleiten möchtest. Dafür steht euch allerdings nur ein verrauschtes Funkgerät zur Verfügung, und Zeit ist teuer: Schaffst du es dass die andere Person alle Zahlen richtig versteht? Wie schnell könnt ihr die Informationen übermitteln?",
     "introduction_receiver": "Stell dir vor du bist ein Forscher in der Basisstation einer Antarktis-Expedition. Über die letzte Woche hat dein Kollege bzw. deine Kollegin auf einem Außenposten viele wichtige Messungen getätigt - Temperatur, Windgeschwindigkeiten etc. - die er/sie nun an dich weiterleiten möchte. Dafür steht euch allerdings nur ein verrauschtes Funkgerät zur Verfügung, und Zeit ist teuer: Schaffst du es alle Zahlen richtig zu verstehen? Wie schnell könnt ihr die Informationen übermitteln?",
-    "thank_you_msg": "danke fürs Mitspielen! Wir hoffen, es hat euch gefallen.",
+    "thank_you_msg": "danke fürs Mitspielen!",
     "thank_you_results": "Ihr habt eine Genauigkeit von {{accuracy}}% erreicht und es hat {{duration}}s gedauert alle Nummern zu kommunizieren.",
     "thank_you_results_more": "Für mehr Details und eine Erklärung der Ergebnisse, könnt Ihr https://information-theory.ds.mpg.de besuchen oder den QR-code scannen.",
     "Accuracy": "Übertragungsqualität:",
-    "Duration": "Dauer des Experiments:"
+    "Duration": "Dauer des Experiments:",
+    "InformationRate": "Informationsrate:"
+
+
 }

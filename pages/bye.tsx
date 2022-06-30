@@ -16,6 +16,7 @@ export default function Bye() {
     );
     const [accuracy, setAccuracy] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
+    const [informationRate, setInformationRate] = useState<number>(0);
     const img_ref = useRef<HTMLImageElement>(null);
     // workaround for hydartion bug
     const [role, setRole] = useState("");
@@ -55,6 +56,7 @@ export default function Bye() {
                 duration += data.duration[0][i];
             }
             accuracy = accuracy / data.emitted[0].length;
+            setInformationRate(data.mi_bits_s);
             setAccuracy(accuracy);
             setDuration(duration);
         };
@@ -90,6 +92,7 @@ export default function Bye() {
     const end = t("end");
     const accuracy_msg = t("Accuracy")
     const duration_msg = t("Duration")
+    const ir_msg = t("InformationRate")
 
     var buttons_to_retry_em = null;
     var buttons_to_retry_rec = <p></p>;
@@ -131,7 +134,6 @@ export default function Bye() {
         console.log("role not defined");
     }
 
-
     return (
         <>
             <div className="container-fluid p-3 vh-100 ">
@@ -143,8 +145,9 @@ export default function Bye() {
                     <h1>{teamname},</h1>
                     <h2 className="mb-5">{thank_you_msg}</h2>
                     {/* <h2 dangerouslySetInnerHTML={{ __html: {thank_you_msg} }}></h2> */}
-                    <h2>{accuracy_msg} <b>{(accuracy * 100).toFixed(0)}%</b> </h2>
-                    <h2 className="mb-3">{duration_msg} <b>{(duration / 1000).toFixed(1)}</b>s</h2>
+                    <h2>{accuracy_msg} <b>{(accuracy * 100).toFixed(0)}&thinsp;%</b> </h2>
+                    <h2 className="">{duration_msg} <b>{(duration / 1000).toFixed(1)}&thinsp;s</b></h2>
+                    <h2 className="mb-3">{ir_msg} <b>{Math.abs(informationRate).toFixed(1)}&thinsp;bits/s</b></h2>
                     <div className="m-2 d-flex flex-row align-items-center">
                         <p className="m-0" style={{ width: "200px" }}>{more_details}</p>
                         <img ref={img_ref} height={"200px"} width={"200px"} />

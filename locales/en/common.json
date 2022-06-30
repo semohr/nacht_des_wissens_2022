@@ -13,5 +13,6 @@
     "thank_you_results": "You achieved an accuracy of {{accuracy}}% and it took you {{duration}}s to transmit all numbers.",
     "thank_you_results_more": "For a more detailed look into your results, visit http://information-theory.ds.mpg.de or scan our QR-code.",
     "Accuracy": "Your transmission quality was",
-    "Duration": "and you took"
+    "Duration": "and you took",
+    "InformationRate": "Your information rate was"
 }

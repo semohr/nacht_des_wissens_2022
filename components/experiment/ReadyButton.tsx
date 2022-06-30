@@ -5,7 +5,7 @@
 import useSocket from "lib/useSocket";
 import useTranslation from "next-translate/useTranslation";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useLocalStorage from "react-use/lib/useLocalStorage";
 
 
@@ -48,6 +48,28 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
         status_feedback = <div className="invalid-feedback" style={{ display: "block" }}>{error_msg}</div>
     }
 
+
+    // handle keyboard
+    const buttonRefSubmit = useRef(null);
+    const buttonRefTeamname = useRef(null);
+    // handle keyboard input
+    const handleKeyPress = useCallback((event) => {
+        // event.preventDefault();
+        // console.log(event.code)
+        if (event.key === "Enter") {
+            buttonRefSubmit.current.click();
+        } else if (event.key == " ") {
+            buttonRefTeamname.current.click();
+        }
+    }, []);
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener("keydown", handleKeyPress);
+        // remove the event listener
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
 
     return (
@@ -110,6 +132,7 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                         onInput={e => e.preventDefault()}
                     />
                     <button
+                        ref={buttonRefTeamname}
                         id="button_newname"
                         className="btn btn-outline-secondary rotate-outer"
                         type="button"
@@ -124,10 +147,12 @@ export function ReadyBtnEmitter({ onClick = () => { }, initial = false, force_te
                 </div>
                 {status_feedback}
                 <div className="readyBtn">
-                    <button id="button_ready" type="submit" onClick={(e) => {
-                        onClick();
-                    }
-                    } className="btn btn-lg btn-primary" >{ready_str}</button>
+                    <button ref={buttonRefSubmit}
+                        id="button_ready" type="submit"
+                        onClick={onClick}
+                        className="btn btn-lg btn-primary" >
+                        {ready_str}
+                    </button>
                 </div >
             </form>
         </div>
@@ -139,16 +164,34 @@ export function ReadyBtnReceiver({ onClick = () => { }, initial = false }) {
     const socket = useSocket();
     const [ready, setReady] = useState(initial);
 
-
     //Translations
     const { t } = useTranslation("common");
     const ready_str = t("ready");
     const waiting_msg = t("waiting_msg");
 
+    // handle keyboard
+    const buttonRefSubmit = useRef(null);
+    // handle keyboard input
+    const handleKeyPress = useCallback((event) => {
+        // event.preventDefault();
+        // console.log(event.code)
+        if (event.key === "Enter") {
+            buttonRefSubmit.current.click();
+        }
+    }, []);
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener("keydown", handleKeyPress);
+        // remove the event listener
+        return () => {
+            document.removeEventListener("keydown", handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     return (
         <div className="readyBtn">
             {ready ? <div className="ready">{waiting_msg}</div> : null}
-            <button onClick={(e) => {
+            <button ref = {buttonRefSubmit} onClick={(e) => {
                 onClick();
                 socket!.emit("experiment:ready", "receiver");
                 setReady(true);
@@ -202,7 +245,7 @@ export function ReadyBtnWithTeamname({ onClick = () => { }, initial = false }) {
 
 async function fetchTeamname() {
     const teamname = await fetch("/api/teamname").then(res => res.json()).catch(e => {
-        console.log(e);
+        // console.log(e);
         return fetchTeamname();
     });
     return teamname["team_name"];
@@ -211,7 +254,7 @@ async function fetchTeamname() {
 async function fetchTeamnameUsed(teamname: string) {
     const valid = await fetch("/api/teamname_is_used?teamname=" + teamname).then(res => res.json()).catch(
         e => {
-            console.log(e);
+            // console.log(e);
             return false;
         });
     return valid["used"];
@@ -220,7 +263,7 @@ async function fetchTeamnameUsed(teamname: string) {
 
 async function updateTeamnamePlaceholder() {
     const teamname = await fetchTeamname();
-    console.log(teamname);
+    // console.log(teamname);
     (document.getElementById("input_teamname") as HTMLInputElement).value = teamname;
 }
 
