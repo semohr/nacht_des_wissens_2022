@@ -171,14 +171,4 @@
 
 <script type="text/javascript" src="main.js?rndstr=<%= getRandomStr() %>""></script>
 
-<!-- if we query `collapse`, unfold all text boxes -->
-<?php
-    if (isset($_GET['collapse']) and ($_GET['collapse'] == 0) ) {
-        echo '<script>
-            console.log("foo");
-            $(".collapse").collapse("show");
-        </script>';
-    }
-?>
-
 </html>
