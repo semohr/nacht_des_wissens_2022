@@ -6,7 +6,7 @@ $LANG = array(
     "leaderboard_info" => "Your rank is determined by your Mutual Information per second. Click on your team name to see in the figures how you compare to other teams!",
     //
     "mi_title" => "Transmission quality <b>Q</b>",
-    "mi_info" => "English info to MI/Entropy, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis, dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis deserunt maxime adipisci natus praesentium obcaecati.",
+    "mi_info" => "The transmission quality is defined as the proportion of messages which have been reconstructed correctly by the listener.",
     "mi_xlabel" => "Fraction of correct transmissions Q",
     "mi_ylabel" => "Probability",
     //
@@ -14,7 +14,7 @@ $LANG = array(
     //"mips_ylabel" => "IR in bits/s",
     //
     "scatter_title" => "Correlation between<br>information rate and transmission quality",
-    "scatter_info" => "Deutsche Info zur MI, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis, dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis deserunt maxime adipisci natus praesentium obcaecati.",
+    "scatter_info" => "This plot illustrates the tradeoff between transmission quality and information rate, which captures the speed of information transmission. Can you increase the rate while keeping the transmission quality high?",
     "scatter_xlabel" => "Fraction of correct transmissions Q",
     "scatter_ylabel" => "Information rate in bits/s",
     //

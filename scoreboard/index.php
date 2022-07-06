@@ -16,6 +16,12 @@
     if (isset($_GET['update_every']))
         header("Refresh: " . $_GET['update_every']);
 
+    // we want to be able to show or hide the info text via url
+    $collapse_classes = "collapse";
+    if (isset($_GET['collapse']) and ($_GET['collapse'] == 0) ) {
+        $collapse_classes = "collapse show";
+    }
+
 ?>
 
 <head>
@@ -78,7 +84,11 @@
                         </button>
                     </h5>
                     <div class="card-body px-0 py-2">
-                            <div class="collapse mx-2" id="leaderboard_info">
+                            <div
+                            <?php
+                                echo 'class="' . $collapse_classes . ' mx-2"';
+                            ?>
+                             id="leaderboard_info">
                                 <div class="card card-body mb-2">
                                     <?php echo $LANG["leaderboard_info"]; ?>
                                 </div>
@@ -106,7 +116,11 @@
                             </h5>
                             <div class="card-body py-0"></div>
 
-                                <div class="collapse" id="MI_info">
+                                <div
+                                    <?php
+                                        echo 'class="' . $collapse_classes . '"';
+                                    ?>
+                                    id="MI_info">
                                     <div class="card card-body m-2">
                                         <?php echo $LANG["mi_info"]; ?>
                                     </div>
@@ -133,7 +147,11 @@
                             </h5>
                             <div class="card-body py-0"></div>
 
-                                <div class="collapse" id="scatter_info">
+                                <div
+                                    <?php
+                                        echo 'class="' . $collapse_classes . '"';
+                                    ?>
+                                    id="scatter_info">
                                     <div class="card card-body m-2">
                                         <?php echo $LANG["scatter_info"]; ?>
                                     </div>
@@ -152,5 +170,15 @@
 </body>
 
 <script type="text/javascript" src="main.js?rndstr=<%= getRandomStr() %>""></script>
+
+<!-- if we query `collapse`, unfold all text boxes -->
+<?php
+    if (isset($_GET['collapse']) and ($_GET['collapse'] == 0) ) {
+        echo '<script>
+            console.log("foo");
+            $(".collapse").collapse("show");
+        </script>';
+    }
+?>
 
 </html>

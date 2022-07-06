@@ -6,7 +6,7 @@ $LANG = array(
     "leaderboard_info" => "Der Rang in der Liste wird durch Eure Informationsrate (\"IR\") ermittelt. Klickt auf Euren Teamnamen, um in den Abbildungen zu sehen wie Ihr abgeschnitten habt.",
 
     "mi_title" => "Übertragunsqualität <b>Q</b>",
-    "mi_info" => "Deutsche Info zur Genauigkeit als MI/Entropy, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis, dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis deserunt maxime adipisci natus praesentium obcaecati.",
+    "mi_info" => "Die Übertragungsqualität ist definiert als der Anteil der Nachrichten, welche vom Höhrer korrekt rekonstruiert wurden.",
     "mi_xlabel" => "Anteil richtiger Übertragungen Q",
     "mi_ylabel" => "Häufigkeit",
     //
@@ -14,7 +14,7 @@ $LANG = array(
     //"mips_ylabel" => "IR in bits/s",
     //
     "scatter_title" => "Korrelation zwischen<br>Informationsrate und Übertragunsqualität",
-    "scatter_info" => "Deutsche Info zur MI, Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur totam cumque quaerat, quos quia maxime corporis dignissimos tenetur natus consectetur repellat provident ipsa nam accusamus et labore sequi praesentium expedita nobis, dicta cum voluptate. Nam necessitatibus aliquid laboriosam, cum accusantium recusandae eveniet aspernatur blanditiis deserunt maxime adipisci natus praesentium obcaecati.",
+    "scatter_info" => "Diese Grafik illustriert den Zielkonflikt zwischen der Übertragungsqualität und der Informationsrate, welche die Geschwindigkeit der Informationsübertragung misst. Schafft ihr es die Rate zu erhöhen ohne dabei Übertragungsqualität einzubüßen?",
     "scatter_xlabel" => "Anteil richtiger Übertragungen Q",
     "scatter_ylabel" => "Informationsrate in bits/s",
     //
