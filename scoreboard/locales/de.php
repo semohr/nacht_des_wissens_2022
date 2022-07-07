@@ -5,6 +5,7 @@ $LANG = array(
     "leaderboard_title" => "Rangliste",
     "leaderboard_info" => "Der Rang in der Liste wird durch Eure Informationsrate (\"IR\") ermittelt. Klickt auf Euren Teamnamen, um in den Abbildungen zu sehen wie Ihr abgeschnitten habt.",
 
+    "page_heading" => "Antarktis Experiment: Gestörtes Funkgerät",
     "mi_title" => "Übertragunsqualität <b>Q</b>",
     "mi_info" => "Die Übertragungsqualität ist definiert als der Anteil der Nachrichten, welche vom Höhrer korrekt rekonstruiert wurden.",
     "mi_xlabel" => "Anteil richtiger Übertragungen Q",

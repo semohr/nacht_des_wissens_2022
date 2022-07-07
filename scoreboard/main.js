@@ -42,7 +42,7 @@ async function main() {
     column_labels = column_ids.map(id => { return $LANG[id] });
 
     // create table in html
-    let dataTable = create_table(data, keys = column_ids, row_first = true);
+    dataTable = create_table(data, keys = column_ids, row_first = true);
     dataTable.id = "leaderboard";
     dataTable.style.width = "100%";
     document.getElementById("leaderboard-container").appendChild(dataTable);
@@ -110,7 +110,7 @@ async function main() {
             ),
             select: 'single',
             scrollX: true,
-            pageLength: 25,
+            pageLength: 10,
             language: {
                 // url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/English.json",
                 url: "//cdn.datatables.net/plug-ins/1.10.18/i18n/" + $LANG['language'] + ".json",

@@ -5,6 +5,7 @@ $LANG = array(
     "leaderboard_title" => "Leaderboard",
     "leaderboard_info" => "Your rank is determined by your Mutual Information per second. Click on your team name to see in the figures how you compare to other teams!",
     //
+    "page_heading" => "Antarctica Radio Communication Experiment",
     "mi_title" => "Transmission quality <b>Q</b>",
     "mi_info" => "The transmission quality is defined as the proportion of messages which have been reconstructed correctly by the listener.",
     "mi_xlabel" => "Fraction of correct transmissions Q",
