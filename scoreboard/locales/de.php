@@ -7,7 +7,7 @@ $LANG = array(
 
     "page_heading" => "Antarktis Experiment: Gestörtes Funkgerät",
     "mi_title" => "Übertragunsqualität <b>Q</b>",
-    "mi_info" => "Die Übertragungsqualität ist definiert als der Anteil der Nachrichten, welche vom Höhrer korrekt rekonstruiert wurden.",
+    "mi_info" => "Die Übertragungsqualität ist definiert als der Anteil der Nachrichten, welche vom Hörer korrekt rekonstruiert wurden.",
     "mi_xlabel" => "Anteil richtiger Übertragungen Q",
     "mi_ylabel" => "Häufigkeit",
     //
